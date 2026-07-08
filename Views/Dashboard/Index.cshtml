@@ -1,0 +1,192 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 text-center">
+        Employee Management Dashboard
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5>Total Employees</h5>
+                    <h2>@ViewBag.TotalEmployees</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5>Total Departments</h5>
+                    <h2>@ViewBag.TotalDepartments</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5>Average Salary</h5>
+                    <h2>₹ @ViewBag.AverageSalary</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+    <div class="row mb-5">
+
+        <!-- Bar Chart -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📊 Employees per Department</h5>
+                </div>
+
+                <div class="card-body d-flex justify-content-center align-items-center">
+
+                    <canvas id="departmentChart"
+                            style="height:320px; max-height:320px;"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">🥧 Department Distribution</h5>
+                </div>
+
+                <div class="card-body d-flex justify-content-center align-items-center">
+
+                    <canvas id="pieChart"
+                            style="height:320px; max-height:320px;"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+   
+
+</div>
+@section Scripts
+{
+    <script>
+
+        const departmentNames =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.DepartmentNames));
+
+        const employeeCounts =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.EmployeeCounts));
+
+        // BAR CHART
+              new Chart(document.getElementById('departmentChart'), {
+
+            type: 'bar',
+
+            data: {
+                labels: departmentNames,
+                datasets: [{
+                    label: 'Employees',
+                    data: employeeCounts,
+                    backgroundColor: [
+                        '#0d6efd',
+                        '#198754',
+                        '#ffc107',
+                        '#dc3545',
+                        '#6f42c1',
+                        '#20c997'
+                    ],
+                    borderRadius: 10,
+                    borderSkipped: false
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+        // PIE CHART
+               new Chart(document.getElementById('pieChart'), {
+
+            type: 'pie',
+
+            data: {
+
+                labels: departmentNames,
+
+                datasets: [{
+
+                    data: employeeCounts,
+
+                    backgroundColor: [
+                        '#0d6efd',
+                        '#198754',
+                        '#ffc107',
+                        '#dc3545',
+                        '#6f42c1',
+                        '#20c997'
+                    ]
+
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        position: 'bottom'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+}

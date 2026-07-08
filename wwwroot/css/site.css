@@ -1,0 +1,149 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* ========================= */
+/* LANDING PAGE ANIMATIONS   */
+/* ========================= */
+
+/* Page Fade In */
+body {
+    animation: fadeIn .8s ease-in-out;
+}
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Hero Section */
+.hero-section {
+    animation: heroZoom 1s ease;
+}
+
+@keyframes heroZoom {
+
+    from {
+        transform: scale(.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Hero Title */
+.display-4 {
+    animation: slideDown 1s ease;
+}
+
+@keyframes slideDown {
+
+    from {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Login Button */
+
+.btn-lg {
+    transition: .3s;
+}
+
+    .btn-lg:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(0,0,0,.25);
+    }
+
+/* Feature Cards */
+
+.card {
+    transition: .4s;
+    border-radius: 15px;
+    animation: popUp .8s ease;
+}
+
+    .card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0,0,0,.2);
+    }
+
+@keyframes popUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Navbar */
+
+.nav-link {
+    position: relative;
+    transition: .3s;
+}
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        left: 0;
+        bottom: -5px;
+        background: white;
+        transition: .3s;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+html {
+    scroll-behavior: smooth;
+}
