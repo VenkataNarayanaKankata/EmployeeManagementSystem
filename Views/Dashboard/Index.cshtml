@@ -10,37 +10,69 @@
         Employee Management Dashboard
     </h2>
 
-    <div class="row">
+    <div class="row g-4">
 
+        <!-- Total Employees -->
         <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
+            <div class="card bg-primary text-white shadow border-0 rounded-4">
                 <div class="card-body">
-                    <h5>Total Employees</h5>
+                    <h6>👨‍💼 Total Employees</h6>
                     <h2>@ViewBag.TotalEmployees</h2>
                 </div>
             </div>
         </div>
 
+        <!-- Total Departments -->
         <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
+            <div class="card bg-success text-white shadow border-0 rounded-4">
                 <div class="card-body">
-                    <h5>Total Departments</h5>
+                    <h6>🏢 Total Departments</h6>
                     <h2>@ViewBag.TotalDepartments</h2>
                 </div>
             </div>
         </div>
 
+        <!-- Average Salary -->
         <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
+            <div class="card bg-warning text-white shadow border-0 rounded-4">
                 <div class="card-body">
-                    <h5>Average Salary</h5>
+                    <h6>💰 Average Salary</h6>
                     <h2>₹ @ViewBag.AverageSalary</h2>
                 </div>
             </div>
         </div>
 
-    </div>
+        <!-- Highest Salary -->
+        <div class="col-md-4">
+            <div class="card bg-info text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h6>📈 Highest Salary</h6>
+                    <h2>₹ @ViewBag.HighestSalary</h2>
+                </div>
+            </div>
+        </div>
 
+        <!-- Lowest Salary -->
+        <div class="col-md-4">
+            <div class="card bg-danger text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h6>📉 Lowest Salary</h6>
+                    <h2>₹ @ViewBag.LowestSalary</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Joined This Month -->
+        <div class="col-md-4">
+            <div class="card bg-secondary text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h6>📅 Joined This Month</h6>
+                    <h2>@ViewBag.JoinedThisMonth</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <hr />
     <div class="row mb-5">
 
@@ -84,10 +116,65 @@
 
         </div>
 
+
     </div>
    
 
 </div>
+
+    <!-- Quick Actions -->
+    <div class="card shadow border-0 rounded-4 my-4">
+
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">⚡ Quick Actions</h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row text-center">
+
+                <div class="col-md-3 mb-3">
+                    <a asp-controller="Employee"
+                       asp-action="Create"
+                       class="btn btn-primary w-100 py-3">
+                        ➕<br />
+                        Add Employee
+                    </a>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <a asp-controller="Department"
+                       asp-action="Create"
+                       class="btn btn-success w-100 py-3">
+                        🏢<br />
+                        Add Department
+                    </a>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <a asp-controller="Employee"
+                       asp-action="ExportToExcel"
+                       class="btn btn-warning text-dark w-100 py-3">
+                        📊<br />
+                        Export Excel
+                    </a>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <a asp-controller="Employee"
+                       asp-action="ExportToPdf"
+                       class="btn btn-danger w-100 py-3">
+                        📄<br />
+                        Export PDF
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 @section Scripts
 {
     <script>

@@ -14,5 +14,6 @@ namespace EmployeeManagementSystem.Data
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
     }
 }

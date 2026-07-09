@@ -5,6 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using ClosedXML.Excel;
+using QuestPDF.Fluent;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using EmployeeManagementSystem.Documents;
+using EmployeeManagementSystem.Helpers;
+using System.IO;
 
 [Authorize]
 public class EmployeeController : Controller
@@ -32,8 +39,9 @@ public class EmployeeController : Controller
         ViewBag.SearchString = searchString;
 
         var employees = _context.Employees
-            .Include(e => e.Department)
-            .AsQueryable();
+     .Include(e => e.Department)
+     .Where(e => !e.IsDeleted)
+     .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchString))
         {
@@ -74,7 +82,78 @@ public class EmployeeController : Controller
 
         return View(employee);
     }
+    // GET: Employee/Import
+  
+    [HttpGet]
+    public IActionResult Import()
+    {
+        return View();
+    }
+    // POST: Employee/Import
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Import(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            TempData["Error"] = "Please select an Excel file.";
+            return RedirectToAction(nameof(Import));
+        }
 
+        using var stream = new MemoryStream();
+
+        await file.CopyToAsync(stream);
+
+        using var workbook = new XLWorkbook(stream);
+
+        var worksheet = workbook.Worksheet(1);
+
+        int lastRow = worksheet.LastRowUsed().RowNumber();
+
+        TempData["Success"] = $"Excel contains {lastRow - 1} employee(s).";
+
+        return RedirectToAction(nameof(Import));
+    }
+    // GET: Employee/DownloadTemplate
+    public IActionResult DownloadTemplate()
+    {
+        using (var workbook = new XLWorkbook())
+        {
+            var worksheet = workbook.Worksheets.Add("Employees");
+
+            // Headers
+            worksheet.Cell(1, 1).Value = "FirstName";
+            worksheet.Cell(1, 2).Value = "LastName";
+            worksheet.Cell(1, 3).Value = "Email";
+            worksheet.Cell(1, 4).Value = "Phone";
+            worksheet.Cell(1, 5).Value = "Salary";
+            worksheet.Cell(1, 6).Value = "JoiningDate";
+            worksheet.Cell(1, 7).Value = "Department";
+
+            // Sample Data
+            worksheet.Cell(2, 1).Value = "Venkat";
+            worksheet.Cell(2, 2).Value = "Narayana";
+            worksheet.Cell(2, 3).Value = "venkat@gmail.com";
+            worksheet.Cell(2, 4).Value = "9876543210";
+            worksheet.Cell(2, 5).Value = 50000;
+            worksheet.Cell(2, 6).Value = DateTime.Today;
+            worksheet.Cell(2, 7).Value = "IT";
+
+            worksheet.Columns().AdjustToContents();
+
+            using (var stream = new MemoryStream())
+            {
+                workbook.SaveAs(stream);
+
+                return File(
+                    stream.ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "EmployeeTemplate.xlsx");
+            }
+        }
+    }
+ 
+    
     // GET: EMPLOYEES/Create
     // GET: EMPLOYEES/Create
     public IActionResult Create()
@@ -128,6 +207,11 @@ public class EmployeeController : Controller
 
             _context.Add(employee);
             await _context.SaveChangesAsync();
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Added Employee: {employee.FirstName} {employee.LastName}");
 
             return RedirectToAction(nameof(Index));
         }
@@ -233,6 +317,10 @@ public class EmployeeController : Controller
                 }
 
                 await _context.SaveChangesAsync();
+                await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    $"Updated Employee: {existingEmployee.FirstName} {existingEmployee.LastName}");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -274,7 +362,8 @@ public class EmployeeController : Controller
         return View(employee);
     }
 
-    
+
+    // POST: EMPLOYEES/Delete/5
     // POST: EMPLOYEES/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
@@ -284,7 +373,94 @@ public class EmployeeController : Controller
 
         if (employee != null)
         {
-            // Delete photo from uploads folder
+            // Soft Delete
+            employee.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Moved Employee to Recycle Bin: {employee.FirstName} {employee.LastName}");
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> ExportToExcel()
+    {
+        var employees = await _context.Employees
+            .Include(e => e.Department)
+            .ToListAsync();
+
+        var document = new EmployeeExcelDocument(employees);
+
+        byte[] excel = document.GenerateExcel();
+        await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Exported Employees to Excel");
+
+        return File(
+            excel,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Employees.xlsx");
+    }
+    public async Task<IActionResult> ExportToPdf()
+    {
+        var employees = await _context.Employees
+            .Include(e => e.Department)
+            .ToListAsync();
+
+        var document = new EmployeePdfDocument(employees);
+
+        byte[] pdf = document.GeneratePdf();
+        await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Exported Employees to PDF");
+
+        return File(
+            pdf,
+            "application/pdf",
+            "EmployeeReport.pdf");
+    }
+    public async Task<IActionResult> RecycleBin()
+    {
+        var deletedEmployees = await _context.Employees
+            .Include(e => e.Department)
+            .Where(e => e.IsDeleted)
+            .OrderByDescending(e => e.EmployeeId)
+            .ToListAsync();
+
+        return View(deletedEmployees);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+
+        if (employee != null)
+        {
+            employee.IsDeleted = false;
+
+            await _context.SaveChangesAsync();
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Restored Employee: {employee.FirstName} {employee.LastName}");
+        }
+
+        return RedirectToAction(nameof(RecycleBin));
+    }
+    [HttpPost]
+    public async Task<IActionResult> PermanentDelete(int id)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+
+        if (employee != null)
+        {
+            // Delete photo
             if (!string.IsNullOrEmpty(employee.PhotoPath))
             {
                 string imagePath = Path.Combine(
@@ -298,12 +474,19 @@ public class EmployeeController : Controller
                 }
             }
 
-            // Delete employee from database
+            string employeeName = employee.FirstName + " " + employee.LastName;
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Permanently Deleted Employee: {employeeName}");
+
             _context.Employees.Remove(employee);
+
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(RecycleBin));
     }
 
     private bool EmployeeExists(int? id)

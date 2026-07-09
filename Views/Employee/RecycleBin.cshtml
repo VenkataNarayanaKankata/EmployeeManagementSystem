@@ -1,0 +1,147 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "Recycle Bin";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger">
+                🗑️ Employee Recycle Bin
+            </h2>
+
+            <p class="text-muted">
+                Restore deleted employees or permanently remove them.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-primary">
+            ← Back to Employees
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                Deleted Employees
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered mb-0">
+
+                <thead class="table-danger">
+
+                    <tr>
+
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th width="220">Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    @if (!string.IsNullOrEmpty(item.PhotoPath))
+                                    {
+                                        <img src="~/uploads/@item.PhotoPath"
+                                             width="60"
+                                             height="60"
+                                             style="border-radius:50%;object-fit:cover;" />
+                                    }
+
+                                </td>
+
+                                <td>
+                                    @item.FirstName @item.LastName
+                                </td>
+
+                                <td>
+                                    @item.Email
+                                </td>
+
+                                <td>
+                                    @item.Department?.DepartmentName
+                                </td>
+
+                                <td>
+
+                                    <form asp-action="Restore"
+                                          asp-route-id="@item.EmployeeId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        <button class="btn btn-success btn-sm">
+
+                                            ♻ Restore
+
+                                        </button>
+
+                                    </form>
+
+                                    <form asp-action="PermanentDelete"
+                                          asp-route-id="@item.EmployeeId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        <button class="btn btn-danger btn-sm">
+
+                                            ❌ Delete Forever
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="5"
+                                class="text-center py-4">
+
+                                <h5 class="text-muted">
+
+                                    🎉 Recycle Bin is Empty
+
+                                </h5>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

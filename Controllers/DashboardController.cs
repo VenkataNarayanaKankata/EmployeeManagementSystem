@@ -21,6 +21,20 @@ namespace EmployeeManagementSystem.Controllers
             ViewBag.TotalEmployees = _context.Employees.Count();
 
             ViewBag.TotalDepartments = _context.Departments.Count();
+            // Highest Salary
+            ViewBag.HighestSalary = _context.Employees.Any()
+                ? _context.Employees.Max(e => e.Salary)
+                : 0;
+
+            // Lowest Salary
+            ViewBag.LowestSalary = _context.Employees.Any()
+                ? _context.Employees.Min(e => e.Salary)
+                : 0;
+
+            // Employees Joined This Month
+            ViewBag.JoinedThisMonth = _context.Employees.Count(e =>
+                e.JoiningDate.Month == DateTime.Now.Month &&
+                e.JoiningDate.Year == DateTime.Now.Year);
 
             decimal avgSalary = _context.Employees.Any()
        ? _context.Employees.Average(e => e.Salary)
@@ -29,6 +43,9 @@ namespace EmployeeManagementSystem.Controllers
             CultureInfo indianCulture = new CultureInfo("en-IN");
 
             ViewBag.AverageSalary = string.Format(indianCulture, "{0:N0}", avgSalary);
+            ViewBag.HighestSalary = string.Format(indianCulture, "{0:N0}", ViewBag.HighestSalary);
+
+            ViewBag.LowestSalary = string.Format(indianCulture, "{0:N0}", ViewBag.LowestSalary);
 
             var recentEmployees = _context.Employees
                 .Include(e => e.Department)

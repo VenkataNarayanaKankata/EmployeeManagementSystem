@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "Import Employees";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+                        📥 Import Employees from Excel
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["Error"]
+                        </div>
+                    }
+
+                    <form asp-controller="Import"
+                          asp-action="UploadEmployees"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+                                Select Excel File
+                            </label>
+
+                            <input type="file"
+                                   name="file"
+                                   accept=".xlsx"
+                                   class="form-control" />
+                            <div id="filePreview"
+                                 class="alert alert-info mt-3"
+                                 style="display:none;">
+
+                                <h5>📄 Import Preview</h5>
+
+                                <hr />
+
+                                <p>
+                                    <strong>File Name :</strong>
+                                    <span id="fileName"></span>
+                                </p>
+
+                                <p>
+                                    <strong>Total Employees :</strong>
+                                    <span id="totalEmployees"></span>
+                                </p>
+
+                                <p>
+                                    <strong>Total Departments :</strong>
+                                    <span id="totalDepartments"></span>
+                                </p>
+
+                                <hr />
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <h6 class="text-success">✅ Existing Departments</h6>
+                                        <ul id="existingDepartments" class="list-group"></ul>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">🆕 New Departments</h6>
+                                        <ul id="newDepartments" class="list-group"></ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button type="submit"
+                                id="uploadBtn"
+                                class="btn btn-success"
+                                disabled>
+
+                            📤 Upload Employees
+
+                        </button>
+
+                        <a asp-action="DownloadTemplate"
+                           class="btn btn-primary ms-2">
+
+                            📄 Download Sample
+
+                        </a>
+
+                    </form>
+
+                    <hr />
+
+                    <h5>Instructions</h5>
+
+                    <ul>
+
+                        <li>Upload only <b>.xlsx</b> files.</li>
+
+                        <li>Department names can be new or existing.</li>
+
+                        <li>Existing departments will be reused automatically.</li>
+
+                        <li>New departments will be created automatically.</li>
+
+                        <li>Duplicate departments will not be created.</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@section Scripts
+{
+    <script>
+
+        const fileInput = document.querySelector('input[type="file"]');
+
+        fileInput.addEventListener('change', async function () {
+
+            if (this.files.length === 0)
+                return;
+
+            let formData = new FormData();
+
+            formData.append("file", this.files[0]);
+
+            const response = await fetch("/Import/PreviewImport", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+
+                document.getElementById("filePreview").style.display = "block";
+
+                document.getElementById("fileName").innerText = result.fileName;
+
+                document.getElementById("totalEmployees").innerText = result.totalEmployees;
+
+                document.getElementById("totalDepartments").innerText = result.totalDepartments;
+
+                document.getElementById("uploadBtn").disabled = false;
+
+                let existingList = document.getElementById("existingDepartments");
+                let newList = document.getElementById("newDepartments");
+
+                existingList.innerHTML = "";
+                newList.innerHTML = "";
+
+                result.existingDepartments.forEach(function (department) {
+                    existingList.innerHTML += `<li class="list-group-item">${department}</li>`;
+                });
+
+                result.newDepartments.forEach(function (department) {
+                    newList.innerHTML += `<li class="list-group-item">${department}</li>`;
+                });
+            }
+
+        });
+
+    </script>
+}

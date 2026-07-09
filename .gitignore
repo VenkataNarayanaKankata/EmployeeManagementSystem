@@ -8,6 +8,8 @@ obj/
 *.suo
 *.userosscache
 *.sln.docstates
+*.tmp
+*.Backup.*
 
 # Rider
 .idea/
@@ -17,7 +19,7 @@ obj/
 
 # ASP.NET Core
 wwwroot/lib/
-
+wwwroot/uploads/
 # Logs
 *.log
 

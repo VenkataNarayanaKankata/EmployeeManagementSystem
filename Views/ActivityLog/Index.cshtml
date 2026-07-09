@@ -1,0 +1,87 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "Activity Logs";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">📜 Activity Logs</h2>
+            <p class="text-muted mb-0">
+                View all administrator activities performed in the system.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">System Activity History</h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered align-middle mb-0">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th width="80">#</th>
+
+                        <th>User</th>
+
+                        <th>Activity</th>
+
+                        <th width="220">Date & Time</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @{
+                        int count = 1;
+                    }
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@count</td>
+
+                            <td>
+                                <span class="badge bg-primary">
+                                    @item.Username
+                                </span>
+                            </td>
+
+                            <td>
+                                @item.Action
+                            </td>
+
+                            <td>
+                                @item.ActivityDate.ToString("dd-MMM-yyyy hh:mm tt")
+                            </td>
+
+                        </tr>
+
+                        count++;
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

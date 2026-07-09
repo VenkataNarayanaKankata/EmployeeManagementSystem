@@ -36,5 +36,6 @@ namespace EmployeeManagementSystem.Models
         // Navigation Property
         [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

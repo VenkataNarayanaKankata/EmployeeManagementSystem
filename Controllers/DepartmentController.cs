@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using EmployeeManagementSystem.Models;
 using EmployeeManagementSystem.Data;
 using Microsoft.AspNetCore.Authorization;
+using EmployeeManagementSystem.Helpers;
 [Authorize]
 public class DepartmentController : Controller
 {
@@ -56,6 +57,12 @@ public class DepartmentController : Controller
         {
             _context.Add(department);
             await _context.SaveChangesAsync();
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Added Department: {department.DepartmentName}");
+
             return RedirectToAction(nameof(Index));
         }
         return View(department);
@@ -97,6 +104,10 @@ public class DepartmentController : Controller
             {
                 _context.Update(department);
                 await _context.SaveChangesAsync();
+                await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    $"Updated Department: {department.DepartmentName}");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -139,12 +150,34 @@ public class DepartmentController : Controller
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var department = await _context.Departments.FindAsync(id);
-        if (department != null)
+
+        if (department == null)
         {
-            _context.Departments.Remove(department);
+            return NotFound();
         }
 
+        // Check whether employees are assigned to this department
+        bool hasEmployees = await _context.Employees
+            .AnyAsync(e => e.DepartmentId == id && !e.IsDeleted);
+
+        if (hasEmployees)
+        {
+            TempData["Error"] =
+                "Cannot delete this department because employees are assigned to it.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // No employees → delete department
+        _context.Departments.Remove(department);
+
         await _context.SaveChangesAsync();
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            $"Deleted Department: {department.DepartmentName}");
+
         return RedirectToAction(nameof(Index));
     }
 

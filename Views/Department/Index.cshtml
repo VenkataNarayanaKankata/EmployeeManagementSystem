@@ -1,35 +1,162 @@
 @model IEnumerable<EmployeeManagementSystem.Models.Department>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Department Management";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DepartmentName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.DepartmentName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>⚠ Warning!</strong> @TempData["Error"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">
+                🏢 Department Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage your departments and organize employees efficiently.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+            ➕ Add Department
+        </a>
+
+    </div>
+
+    <!-- Department Table -->
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                🏢 Department List
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered align-middle mb-0">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th width="80">#</th>
+
+                        <th>Department Name</th>
+
+                        <th width="260" class="text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @{
+                        int count = 1;
+                    }
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    @count
+                                </td>
+
+                                <td>
+                                    <span class="fw-semibold">
+                                        @item.DepartmentName
+                                    </span>
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.DepartmentId"
+                                       class="btn btn-warning btn-sm me-1">
+                                         Edit
+                                    </a>
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.DepartmentId"
+                                       class="btn btn-info btn-sm text-white me-1">
+                                         Details
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.DepartmentId"
+                                       class="btn btn-danger btn-sm">
+                                         Delete
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="3" class="text-center py-4">
+
+                                <h5 class="text-muted">
+                                    No Departments Found
+                                </h5>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table tbody tr:hover {
+            background-color: transparent !important;
+        }
+
+</style>

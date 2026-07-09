@@ -1,124 +1,312 @@
 @model IEnumerable<EmployeeManagementSystem.Models.Employee>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Employee Management";
 }
 
-<h1>Index</h1>
-<form asp-action="Index" method="get" class="mb-3">
-    <div class="row g-2 align-items-end">
+<div class="container mt-4">
 
-        <!-- Search -->
-        <div class="col-md-4">
-            <label class="form-label">Search</label>
-            <input type="text"
-                   name="searchString"
-                   class="form-control"
-                   value="@Context.Request.Query["searchString"]"
-                   placeholder="Search Employee..." />
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">
+                👨‍💼 Employee Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage employee records easily.
+            </p>
         </div>
 
-        <!-- Search Button -->
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-primary w-100">
-                Search
-            </button>
-        </div>
+        <div>
 
-        <!-- Department -->
-        <div class="col-md-3">
-            <label class="form-label">Department</label>
-            <select name="departmentId"
-                    asp-items="ViewBag.DepartmentId"
-                    class="form-select">
-                <option value="">All Departments</option>
-            </select>
-        </div>
-
-        <!-- Filter Button -->
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-success w-100">
-                Filter
-            </button>
-        </div>
-
-        <!-- Clear Button -->
-        <div class="col-md-1">
-            <a asp-action="Index" class="btn btn-secondary w-100">
-                Clear
+            <a asp-action="ExportToExcel"
+               class="btn btn-success me-2">
+                📊 Export Excel
             </a>
+            <a asp-action="ExportToPdf"
+               class="btn btn-danger me-2">
+                📄 Export PDF
+            </a>
+            <a asp-controller="Import"
+               asp-action="EmployeeImport"
+               class="btn btn-success">
+                📥 Import Excel
+            </a>
+
+            <a asp-action="Create"
+               class="btn btn-primary">
+                ➕ Add Employee
+            </a>
+            <a asp-action="RecycleBin"
+               class="btn btn-danger">
+
+                🗑️ Recycle Bin
+
+            </a>
+
         </div>
 
     </div>
-</form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+    <!-- Search Card -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                🔍 Search & Filter
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Index" method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-5">
+
+                        <label class="form-label">
+                            Employee Name
+                        </label>
+
+                        <input type="text"
+                               name="searchString"
+                               class="form-control"
+                               value="@Context.Request.Query["searchString"]"
+                               placeholder="Search Employee..." />
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Department
+                        </label>
+
+                        <select name="departmentId"
+                                asp-items="ViewBag.DepartmentId"
+                                class="form-select">
+
+                            <option value="">
+                                All Departments
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <button type="submit"
+                                class="btn btn-primary me-2">
+                            🔍 Search
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-success me-2">
+                            📂 Filter
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-secondary">
+                            🔄 Reset
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Employee Table -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                Employee List
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered align-middle mb-0">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>Photo</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Joining Date</th>
+                        <th>Department</th>
+                        <th style="width:240px;">Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JoiningDate)
-            </th>
-            <th>
-                Department
-            </th>
-            <th>Photo</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
+
             <td>
-                @Html.DisplayFor(model => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Salary)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.JoiningDate)
-            </td>
-                <td>
-                    @item.Department?.DepartmentName
-                </td>
-            <td>
+
                 @if (!string.IsNullOrEmpty(item.PhotoPath))
                 {
-                    <img src="~/uploads/@item.PhotoPath" alt="Photo" class="img-thumbnail" style="max-width: 100px;" />
+                    <img src="~/uploads/@item.PhotoPath"
+                         style="width:60px;
+                                height:60px;
+                                object-fit:cover;
+                                border-radius:50%;
+                                border:2px solid #0d6efd;" />
                 }
+                else
+                {
+                    <span class="text-muted">
+                        No Photo
+                    </span>
+                }
+
             </td>
+
+            <td>@item.FirstName</td>
+
+            <td>@item.LastName</td>
+
+            <td>@item.Email</td>
+
+            <td>@item.Phone</td>
+
             <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                ₹ @item.Salary.ToString("N0")
             </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+            <td>
+                @item.JoiningDate.ToString("dd MMM yyyy")
+            </td>
+
+            <td>
+
+                <span class="badge bg-primary">
+                    @item.Department?.DepartmentName
+                </span>
+
+            </td>
+
+            <td>
+
+                <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.EmployeeId"
+                                           class="btn btn-warning btn-sm">
+                                            Edit
+                                        </a>
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.EmployeeId"
+                                           class="btn btn-info btn-sm text-white">
+                                            Details
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.EmployeeId"
+                                           class="btn btn-danger btn-sm">
+                                             Delete
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="9" class="text-center py-5">
+
+                                <h5 class="text-muted">
+                                    No Employees Found
+                                </h5>
+
+                                <p class="text-muted">
+                                    Click "Add Employee" to create your first employee.
+                                </p>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .card-header {
+        font-weight: 600;
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 8px;
+    }
+
+    .table th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background: transparent !important;
+    }
+
+    .badge {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    img {
+        display: block;
+        margin: auto;
+    }
+
+</style>
