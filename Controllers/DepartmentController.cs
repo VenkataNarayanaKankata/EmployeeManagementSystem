@@ -5,7 +5,7 @@ using EmployeeManagementSystem.Models;
 using EmployeeManagementSystem.Data;
 using Microsoft.AspNetCore.Authorization;
 using EmployeeManagementSystem.Helpers;
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class DepartmentController : Controller
 {
     private readonly ApplicationDbContext _context;

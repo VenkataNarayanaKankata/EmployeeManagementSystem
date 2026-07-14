@@ -1,61 +1,229 @@
-﻿@model EmployeeManagementSystem.ViewModels.ProfileViewModel
-
-@{
-    ViewData["Title"] = "My Profile";
+﻿@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="container mt-5">
+<!-- =====================================================
+                    HERO SECTION
+====================================================== -->
+<section class="hero-section">
 
-    <div class="row justify-content-center">
+    <div class="container-fluid px-5">
 
-        <div class="col-md-6">
+        <div class="hero-circle hero-circle-1"></div>
 
-            <div class="card shadow">
+        <div class="hero-circle hero-circle-2"></div>
 
-                <div class="card-header bg-primary text-white text-center">
+        <div class="hero-circle hero-circle-3"></div>
 
-                    <h3>👤 My Profile</h3>
+    </div>
+
+    <div class="container-fluid px-5">
+
+        <div class="row align-items-center gy-5">
+
+            <!-- ===========================
+                    LEFT CONTENT
+            ============================ -->
+
+            <div class="col-lg-6">
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="hero-badge">
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                        <span>
+
+                            Welcome Back,
+
+                            <strong>
+
+                                @User.Identity?.Name
+
+                            </strong>
+
+                        </span>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="hero-badge">
+
+                        <i class="bi bi-buildings-fill"></i>
+
+                        <span>
+
+                            Employee Management System
+
+                        </span>
+
+                    </div>
+                }
+
+                <h1 class="hero-title">
+
+                    Manage Your
+
+                    <span>
+
+                        Workforce
+
+                    </span>
+
+                    Efficiently
+
+                </h1>
+
+                <p class="hero-description">
+
+                    Simplify employee management through a modern
+                    platform that combines employee records,
+                    department management, analytics, reporting,
+                    and activity monitoring into one professional
+                    application.
+
+                </p>
+
+                <div class="hero-buttons">
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+
+                        <a asp-controller="Dashboard"
+                           asp-action="Index"
+                           class="btn btn-primary hero-btn">
+
+                            <i class="bi bi-speedometer2 me-2"></i>
+
+                            Dashboard
+
+                        </a>
+
+                        <a asp-controller="Employee"
+                           asp-action="Index"
+                           class="btn btn-outline-primary hero-btn">
+
+                            <i class="bi bi-people me-2"></i>
+
+                            Employees
+
+                        </a>
+
+                    }
+                    else
+                    {
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="btn btn-primary hero-btn">
+
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                            Login
+
+                        </a>
+
+                    }
 
                 </div>
 
-                <div class="card-body">
+                <!-- ======================
+                        HERO FEATURES
+                ======================= -->
 
-                    <div class="text-center mb-4">
+                <div class="hero-mini-features">
 
-                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                             width="120" />
+                    <div>
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Secure
 
                     </div>
 
-                    <table class="table table-borderless">
+                    <div>
 
-                        <tr>
+                        <i class="bi bi-lightning-charge"></i>
 
-                            <th>Username</th>
+                        Fast
 
-                            <td>@Model.Username</td>
+                    </div>
 
-                        </tr>
+                    <div>
 
-                        <tr>
+                        <i class="bi bi-phone"></i>
 
-                            <th>Role</th>
+                        Responsive
 
-                            <td>@Model.Role</td>
+                    </div>
 
-                        </tr>
+                </div>
 
-                    </table>
+            </div>
 
-                    <div class="text-center">
+            <!-- ===========================
+                    RIGHT CONTENT
+            ============================ -->
 
-                        <a asp-controller="Account"
-                           asp-action="ChangePassword"
-                           class="btn btn-warning">
+            <div class="col-lg-6">
 
-                            🔒 Change Password
+                <div class="hero-image-wrapper">
 
-                        </a>
+                    <div class="hero-image-card">
+
+                        <img src="~/images/hr-dashboard.png"
+                             alt="Employee Management Dashboard"
+                             class="img-fluid hero-image">
+
+                    </div>
+
+                    <!-- Floating Card -->
+
+                    <div class="floating-card floating-card-1">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        <div>
+
+                            <strong>
+
+                                Employee Records
+
+                            </strong>
+
+                            <small>
+
+                                Smart Management
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Floating Card -->
+
+                    <div class="floating-card floating-card-2">
+
+                        <i class="bi bi-bar-chart-line-fill"></i>
+
+                        <div>
+
+                            <strong>
+
+                                Live Analytics
+
+                            </strong>
+
+                            <small>
+
+                                Business Insights
+
+                            </small>
+
+                        </div>
 
                     </div>
 
@@ -67,4 +235,814 @@
 
     </div>
 
-</div>
+</section>
+<!-- =====================================================
+                STATISTICS SECTION
+====================================================== -->
+<section class="stats-section">
+
+    <div class="container-fluid px-5">
+
+        <div class="stats-grid">
+
+
+            <!-- Employees -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <h3>
+                        250+
+                    </h3>
+
+                    <p>
+                        Employees Managed
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Departments -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-building-fill"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <h3>
+                        25+
+                    </h3>
+
+                    <p>
+                        Departments
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Reports -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <h3>
+                        100+
+                    </h3>
+
+                    <p>
+                        Reports Generated
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Activity -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-activity"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <h3>
+                        24/7
+                    </h3>
+
+                    <p>
+                        Activity Monitoring
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<!-- =====================================================
+                FEATURES SECTION
+====================================================== -->
+
+<section class="features-section">
+
+    <div class="container-fluid px-5">
+
+
+        <!-- Header -->
+
+        <div class="section-heading text-center">
+
+            <span class="section-badge">
+
+                Powerful Features
+
+            </span>
+
+
+            <h2>
+
+                Everything You Need To Manage Employees
+
+            </h2>
+
+
+            <p>
+
+                A complete workforce management platform
+                designed to simplify daily operations.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="row g-4">
+
+
+            <!-- Feature 1 -->
+
+            <div class="col-lg-3 col-md-6">
+
+
+                <div class="feature-card">
+
+
+                    <div class="feature-icon">
+
+                        <i class="bi bi-person-lines-fill"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        Employee Management
+
+                    </h4>
+
+
+                    <p>
+
+                        Create, update and manage employee
+                        information from one centralized place.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- Feature 2 -->
+
+            <div class="col-lg-3 col-md-6">
+
+
+                <div class="feature-card">
+
+
+                    <div class="feature-icon">
+
+                        <i class="bi bi-diagram-3-fill"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        Department Control
+
+                    </h4>
+
+
+                    <p>
+
+                        Organize employees into departments
+                        and maintain company structure.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- Feature 3 -->
+
+            <div class="col-lg-3 col-md-6">
+
+
+                <div class="feature-card">
+
+
+                    <div class="feature-icon">
+
+                        <i class="bi bi-bar-chart-line-fill"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        Analytics Dashboard
+
+                    </h4>
+
+
+                    <p>
+
+                        Visualize important workforce data
+                        using interactive charts.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <!-- Feature 4 -->
+
+            <div class="col-lg-3 col-md-6">
+
+
+                <div class="feature-card">
+
+
+                    <div class="feature-icon">
+
+                        <i class="bi bi-file-earmark-check-fill"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        Smart Reports
+
+                    </h4>
+
+
+                    <p>
+
+                        Generate and export professional
+                        employee reports easily.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+<!-- =====================================================
+                WHY CHOOSE EMS SECTION
+====================================================== -->
+
+<section class="why-section">
+
+    <div class="container-fluid px-5">
+
+        <div class="row align-items-center gy-5">
+
+
+            <!-- Image -->
+
+            <div class="col-lg-6">
+
+                <div class="why-image-wrapper">
+
+                    <img src="~/images/office-team.png"
+                         class="img-fluid why-image"
+                         alt="Employee Management Team">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Content -->
+
+            <div class="col-lg-6">
+
+
+                <span class="section-badge">
+
+                    Why Choose EMS
+
+                </span>
+
+
+                <h2 class="why-title">
+
+                    A Smarter Way To Manage Your Workforce
+
+                </h2>
+
+
+                <p class="why-description">
+
+                    Employee Management System provides a
+                    centralized solution to manage employees,
+                    departments, analytics and reports with a
+                    simple and professional experience.
+
+                </p>
+
+
+
+                <div class="benefit-list">
+
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5>
+
+                                Secure Authentication
+
+                            </h5>
+
+
+                            <p>
+
+                                Protect your employee data with
+                                secure login and authentication.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-speedometer2"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5>
+
+                                Powerful Dashboard
+
+                            </h5>
+
+
+                            <p>
+
+                                Get quick insights through charts,
+                                analytics and reports.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-cloud-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5>
+
+                                Centralized Management
+
+                            </h5>
+
+
+                            <p>
+
+                                Manage employee information from
+                                one organized platform.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+<!-- =====================================================
+                QUICK ACCESS SECTION
+====================================================== -->
+
+
+<section class="quick-section">
+
+    <div class="container-fluid px-5">
+
+
+        <div class="section-heading text-center">
+
+
+            <span class="section-badge">
+
+                Quick Access
+
+            </span>
+
+
+            <h2>
+
+                Navigate Your Workspace Faster
+
+            </h2>
+
+
+            <p>
+
+                Access frequently used modules directly
+                from the home page.
+
+            </p>
+
+
+        </div>
+
+
+
+
+        <div class="quick-grid">
+
+
+
+            <!-- Dashboard -->
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="quick-action-card">
+
+
+                <div class="quick-icon">
+
+                    <i class="bi bi-speedometer2"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+
+                        Dashboard
+
+                    </h4>
+
+
+                    <p>
+
+                        View company statistics and analytics.
+
+                    </p>
+
+
+                </div>
+
+
+                <i class="bi bi-arrow-right arrow-icon"></i>
+
+
+            </a>
+
+
+
+
+
+            <!-- Employees -->
+
+            <a asp-controller="Employee"
+               asp-action="Index"
+               class="quick-action-card">
+
+
+                <div class="quick-icon">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+
+                        Employees
+
+                    </h4>
+
+
+                    <p>
+
+                        Manage employee records.
+
+                    </p>
+
+
+                </div>
+
+
+                <i class="bi bi-arrow-right arrow-icon"></i>
+
+
+            </a>
+
+
+
+
+
+            <!-- Departments -->
+
+            <a asp-controller="Department"
+               asp-action="Index"
+               class="quick-action-card">
+
+
+                <div class="quick-icon">
+
+                    <i class="bi bi-building-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+
+                        Departments
+
+                    </h4>
+
+
+                    <p>
+
+                        Organize company structure.
+
+                    </p>
+
+
+                </div>
+
+
+                <i class="bi bi-arrow-right arrow-icon"></i>
+
+
+            </a>
+
+
+
+
+
+            <!-- Reports -->
+
+            <a asp-controller="Reports"
+               asp-action="Index"
+               class="quick-action-card">
+
+
+                <div class="quick-icon">
+
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+
+                        Reports
+
+                    </h4>
+
+
+                    <p>
+
+                        Generate employee reports.
+
+                    </p>
+
+
+                </div>
+
+
+                <i class="bi bi-arrow-right arrow-icon"></i>
+
+
+            </a>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+<!-- =====================================================
+                FINAL CTA SECTION
+====================================================== -->
+
+<section class="cta-section">
+
+    <div class="container-fluid px-5">
+
+
+        <div class="cta-card">
+
+
+            <div class="cta-content">
+
+
+                <span class="section-badge light">
+
+                    Employee Management System
+
+                </span>
+
+
+                <h2>
+
+                    Ready To Manage Your Workforce Better?
+
+                </h2>
+
+
+                <p>
+
+                    Experience a simple, secure and efficient
+                    way to manage employees, departments,
+                    reports and business activities.
+
+                </p>
+
+
+
+                <div class="cta-buttons">
+
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+
+                        <a asp-controller="Dashboard"
+                           asp-action="Index"
+                           class="btn btn-light">
+
+                            <i class="bi bi-speedometer2 me-2"></i>
+
+                            Go To Dashboard
+
+                        </a>
+
+
+                    }
+                    else
+                    {
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="btn btn-light">
+
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                            Get Started
+
+                        </a>
+
+                    }
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="cta-decoration">
+
+
+                <div class="cta-circle circle-one"></div>
+
+                <div class="cta-circle circle-two"></div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>

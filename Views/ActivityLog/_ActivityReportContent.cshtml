@@ -1,0 +1,113 @@
+﻿@model EmployeeManagementSystem.ViewModels.ActivityReportViewModel
+<div class="card shadow border-0">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            System Activity History
+        </h5>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover table-bordered align-middle mb-0">
+
+                <thead class="table-primary sticky-top">
+
+                    <tr>
+
+                        <th width="70" class="text-center">
+                            #
+                        </th>
+
+                        <th width="180">
+                            User
+                        </th>
+
+                        <th>
+                            Activity
+                        </th>
+
+                        <th width="220">
+                            Date & Time
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Activities.Any())
+                    {
+                        int count = 1;
+
+                        @foreach (var item in Model.Activities)
+                        {
+                            <tr>
+
+                                <td class="text-center">
+                                    @count
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary fs-6">
+                                        @item.Username
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @item.Action
+                                </td>
+
+                                <td>
+                                    @item.ActivityDate.ToString("dd-MMM-yyyy hh:mm tt")
+                                </td>
+
+                            </tr>
+
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <partial name="_NoRecordsFound" />
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="card-footer bg-light">
+
+        <div class="d-flex justify-content-between">
+
+            <strong>
+
+                Total Activities :
+                @Model.Activities.Count
+
+            </strong>
+
+            <span class="text-muted">
+
+                Employee Management System
+
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

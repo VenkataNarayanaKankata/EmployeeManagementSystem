@@ -13,7 +13,7 @@ using EmployeeManagementSystem.Documents;
 using EmployeeManagementSystem.Helpers;
 using System.IO;
 
-[Authorize]
+[Authorize(Roles = "Admin,HR")]
 public class EmployeeController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -39,9 +39,10 @@ public class EmployeeController : Controller
         ViewBag.SearchString = searchString;
 
         var employees = _context.Employees
-     .Include(e => e.Department)
-     .Where(e => !e.IsDeleted)
-     .AsQueryable();
+    .Include(e => e.Department)
+    .Include(e => e.Role)
+    .Where(e => !e.IsDeleted)
+    .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchString))
         {
@@ -72,8 +73,9 @@ public class EmployeeController : Controller
         }
 
         var employee = await _context.Employees
-            .Include(e => e.Department)
-            .FirstOrDefaultAsync(m => m.EmployeeId == id);
+    .Include(e => e.Department)
+    .Include(e => e.Role)
+    .FirstOrDefaultAsync(m => m.EmployeeId == id);
 
         if (employee == null)
         {
@@ -126,18 +128,22 @@ public class EmployeeController : Controller
             worksheet.Cell(1, 2).Value = "LastName";
             worksheet.Cell(1, 3).Value = "Email";
             worksheet.Cell(1, 4).Value = "Phone";
-            worksheet.Cell(1, 5).Value = "Salary";
-            worksheet.Cell(1, 6).Value = "JoiningDate";
-            worksheet.Cell(1, 7).Value = "Department";
+            worksheet.Cell(1, 5).Value = "Gender";
+            worksheet.Cell(1, 6).Value = "Salary";
+            worksheet.Cell(1, 7).Value = "JoiningDate";
+            worksheet.Cell(1, 8).Value = "Department";
+            worksheet.Cell(1, 9).Value = "Role";
 
             // Sample Data
             worksheet.Cell(2, 1).Value = "Venkat";
             worksheet.Cell(2, 2).Value = "Narayana";
             worksheet.Cell(2, 3).Value = "venkat@gmail.com";
             worksheet.Cell(2, 4).Value = "9876543210";
-            worksheet.Cell(2, 5).Value = 50000;
-            worksheet.Cell(2, 6).Value = DateTime.Today;
-            worksheet.Cell(2, 7).Value = "IT";
+            worksheet.Cell(2, 5).Value = "Male";
+            worksheet.Cell(2, 6).Value = 50000;
+            worksheet.Cell(2, 7).Value = DateTime.Today;
+            worksheet.Cell(2, 8).Value = "IT";
+            worksheet.Cell(2, 9).Value = "Employee";
 
             worksheet.Columns().AdjustToContents();
 
@@ -152,8 +158,8 @@ public class EmployeeController : Controller
             }
         }
     }
- 
-    
+
+
     // GET: EMPLOYEES/Create
     // GET: EMPLOYEES/Create
     public IActionResult Create()
@@ -162,6 +168,11 @@ public class EmployeeController : Controller
             _context.Departments,
             "DepartmentId",
             "DepartmentName");
+
+        ViewData["RoleId"] = new SelectList(
+     _context.Roles,
+     "RoleId",
+     "RoleName");
 
         return View();
     }
@@ -172,7 +183,7 @@ public class EmployeeController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Salary,JoiningDate,DepartmentId")] Employee employee,
+    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,DepartmentId,RoleId")] Employee employee,
     IFormFile? PhotoFile)
     {
         if (ModelState.IsValid)
@@ -217,10 +228,16 @@ public class EmployeeController : Controller
         }
 
         ViewData["DepartmentId"] = new SelectList(
-            _context.Departments,
-            "DepartmentId",
-            "DepartmentName",
-            employee.DepartmentId);
+    _context.Departments,
+    "DepartmentId",
+    "DepartmentName",
+    employee.DepartmentId);
+
+        ViewData["RoleId"] = new SelectList(
+            _context.Roles,
+            "RoleId",
+            "RoleName",
+            employee.RoleId);
 
         return View(employee);
     }
@@ -239,10 +256,16 @@ public class EmployeeController : Controller
             return NotFound();
         }
         ViewData["DepartmentId"] = new SelectList(
-    _context.Departments,
-    "DepartmentId",
-    "DepartmentName",
-    employee.DepartmentId);
+     _context.Departments,
+     "DepartmentId",
+     "DepartmentName",
+     employee.DepartmentId);
+
+        ViewData["RoleId"] = new SelectList(
+            _context.Roles,
+            "RoleId",
+            "RoleName",
+            employee.RoleId);
 
         return View(employee);
     }
@@ -254,7 +277,7 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
     int id,
-    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Salary,JoiningDate,DepartmentId,PhotoPath")] Employee employee,
+    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,DepartmentId,RoleId,PhotoPath")] Employee employee,
     IFormFile? PhotoFile)
     {
         if (id != employee.EmployeeId)
@@ -280,6 +303,7 @@ public class EmployeeController : Controller
                 existingEmployee.Salary = employee.Salary;
                 existingEmployee.JoiningDate = employee.JoiningDate;
                 existingEmployee.DepartmentId = employee.DepartmentId;
+                existingEmployee.RoleId = employee.RoleId;
 
                 // Upload new photo if selected
                 if (PhotoFile != null && PhotoFile.Length > 0)
@@ -336,10 +360,16 @@ public class EmployeeController : Controller
         }
 
         ViewData["DepartmentId"] = new SelectList(
-            _context.Departments,
-            "DepartmentId",
-            "DepartmentName",
-            employee.DepartmentId);
+    _context.Departments,
+    "DepartmentId",
+    "DepartmentName",
+    employee.DepartmentId);
+
+        ViewData["RoleId"] = new SelectList(
+            _context.Roles,
+            "RoleId",
+            "RoleName",
+            employee.RoleId);
 
         return View(employee);
     }
@@ -389,8 +419,9 @@ public class EmployeeController : Controller
     public async Task<IActionResult> ExportToExcel()
     {
         var employees = await _context.Employees
-            .Include(e => e.Department)
-            .ToListAsync();
+    .Include(e => e.Department)
+    .Include(e => e.Role)
+    .ToListAsync();
 
         var document = new EmployeeExcelDocument(employees);
 
@@ -408,8 +439,9 @@ public class EmployeeController : Controller
     public async Task<IActionResult> ExportToPdf()
     {
         var employees = await _context.Employees
-            .Include(e => e.Department)
-            .ToListAsync();
+    .Include(e => e.Department)
+    .Include(e => e.Role)
+    .ToListAsync();
 
         var document = new EmployeePdfDocument(employees);
 

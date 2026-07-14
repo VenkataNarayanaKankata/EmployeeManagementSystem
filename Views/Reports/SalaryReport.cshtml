@@ -1,0 +1,238 @@
+﻿@model EmployeeManagementSystem.ViewModels.SalaryReportViewModel
+<nav aria-label="breadcrumb" class="mb-3 no-print">
+
+    <ol class="breadcrumb">
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Home"
+               asp-action="Index">
+
+                🏠 Home
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Reports"
+               asp-action="Index">
+
+                📊 Reports
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item active"
+            aria-current="page">
+
+            Salary Report
+
+        </li>
+
+    </ol>
+
+</nav>
+@{
+    ViewData["Title"] = "Salary Report";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">
+                💰 Salary Report
+            </h2>
+
+            <p class="text-muted">
+                Salary statistics and department-wise salary analysis.
+            </p>
+        </div>
+
+      <div class="no-print">
+
+    <a asp-controller="Reports"
+       asp-action="Index"
+       class="btn btn-secondary me-2">
+
+        ←Back to Reports
+
+    </a>
+
+
+    <button type="button"
+            class="btn btn-success"
+            onclick="window.print();">
+
+        🖨 Print Report
+
+    </button>
+
+</div>
+
+    </div>
+   <form id="salaryFilterForm"
+      asp-action="SalaryReport"
+      method="get"
+      class="no-print">
+
+        <div class="card shadow border-0 mb-4">
+
+            <div class="card-header bg-secondary text-white">
+
+                <h5 class="mb-0">
+                    🔍 Search Filters
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- Department -->
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Department
+                        </label>
+
+                        <select asp-for="Filter.DepartmentId"
+                                name="departmentId"
+                                asp-items="Model.DepartmentList"
+                                class="form-select">
+
+                            <option value="">
+                                All Departments
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Salary From -->
+
+                    <div class="col-lg-2 col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Salary From
+                        </label>
+
+                        <input asp-for="Filter.SalaryFrom"
+                               name="salaryFrom"
+                               type="number"
+                               class="form-control"
+                               placeholder="0" />
+
+                    </div>
+
+                    <!-- Salary To -->
+
+                    <div class="col-lg-2 col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Salary To
+                        </label>
+
+                        <input asp-for="Filter.SalaryTo"
+                               name="salaryTo"
+                               type="number"
+                               class="form-control"
+                               placeholder="100000" />
+
+                    </div>
+
+                    <!-- Sort -->
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Sort By
+                        </label>
+
+                        <select asp-for="Filter.SortBy"
+                                name="sortBy"
+                                class="form-select">
+
+                            <option value="">
+                                Department Name
+                            </option>
+
+                            <option value="HighestSalary">
+                                Highest Total Salary
+                            </option>
+
+                            <option value="LowestSalary">
+                                Lowest Total Salary
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Buttons -->
+
+                    <div class="col-lg-2 col-md-12 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary me-2">
+
+                            🔍 Search
+
+                        </button>
+
+                        <a asp-action="SalaryReport"
+                           class="btn btn-secondary">
+
+                            Clear
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+   
+  <div id="reportContent"
+     class="print-content">
+
+    <partial name="_SalaryReportContent"
+             model="Model" />
+
+</div>
+
+
+</div>
+@section Scripts
+{
+    @if (ViewBag.Print == true)
+    {
+        <script>
+
+            window.addEventListener("load", function () {
+
+                setTimeout(function () {
+
+                    window.print();
+
+                }, 800);
+
+            });
+
+        </script>
+    }
+        <script>
+                setupAjaxFilter("salaryFilterForm", "reportContent");
+
+        </script>
+}

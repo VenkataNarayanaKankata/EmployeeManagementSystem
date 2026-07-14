@@ -12,5 +12,13 @@ namespace EmployeeManagementSystem.Models
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(50)]
+        public string Role { get; set; } = "Admin";
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime? LastLogin { get; set; }
     }
 }

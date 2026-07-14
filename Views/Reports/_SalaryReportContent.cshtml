@@ -1,0 +1,164 @@
+﻿@model EmployeeManagementSystem.ViewModels.SalaryReportViewModel
+<!-- Statistics Cards -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">Highest Salary</h6>
+
+                <h3 class="text-success">
+
+                    ₹ @Model.HighestSalary.ToString("N0")
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">Lowest Salary</h6>
+
+                <h3 class="text-danger">
+
+                    ₹ @Model.LowestSalary.ToString("N0")
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">Average Salary</h6>
+
+                <h3 class="text-primary">
+
+                    ₹ @Model.AverageSalary.ToString("N0")
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">Total Salary</h6>
+
+                <h3 class="text-warning">
+
+                    ₹ @Model.TotalSalary.ToString("N0")
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Department Salary Table -->
+<!-- Department Salary Table -->
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            🏢 Department Wise Salary
+
+        </h5>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-striped table-hover mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Department</th>
+
+                    <th>Total Salary</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model.Departments.Any())
+                {
+                    int count = 1;
+
+                    @foreach (var item in Model.Departments)
+                    {
+                        <tr>
+
+                            <td>@count</td>
+
+                            <td>@item.DepartmentName</td>
+
+                            <td class="fw-bold text-success">
+
+                                ₹ @item.TotalSalary.ToString("N0")
+
+                            </td>
+
+                        </tr>
+
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="3">
+
+                            <partial name="_NoRecordsFound" />
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

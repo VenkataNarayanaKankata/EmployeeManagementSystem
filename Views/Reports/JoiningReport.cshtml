@@ -1,0 +1,227 @@
+﻿@model EmployeeManagementSystem.ViewModels.JoiningReportViewModel
+<nav aria-label="breadcrumb" class="mb-3 no-print">
+
+    <ol class="breadcrumb">
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Home"
+               asp-action="Index">
+
+                🏠 Home
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Reports"
+               asp-action="Index">
+
+                📊 Reports
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item active"
+            aria-current="page">
+
+            Joining Report
+
+        </li>
+
+    </ol>
+
+</nav>
+@{
+    ViewData["Title"] = "Joining Report";
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-primary">
+                📅 Joining Report
+            </h2>
+
+            <p class="text-muted mb-0">
+                Employee joining statistics and recent joining details.
+            </p>
+
+        </div>
+
+       <div class="no-print">
+
+    <a asp-controller="Reports"
+       asp-action="Index"
+       class="btn btn-secondary me-2">
+
+        ←Back to Reports
+
+    </a>
+
+<button type="button"
+        class="btn btn-success"
+        onclick="window.print();">
+
+    🖨 Print Report
+
+</button>
+
+</div>
+
+    </div>
+
+    <!-- Filters -->
+   <form id="joiningFilterForm"
+      asp-action="JoiningReport"
+      method="get"
+      class="no-print">
+
+        <div class="card shadow border-0 mb-4">
+
+            <div class="card-header bg-secondary text-white">
+
+                <h5 class="mb-0">
+                    🔍 Search Filters
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-bold">
+                            Department
+                        </label>
+
+                        <select asp-for="Filter.DepartmentId"
+                                asp-items="Model.DepartmentList"
+                                name="departmentId"
+                                class="form-select">
+
+                            <option value="">
+                                All Departments
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label class="form-label fw-bold">
+                            From
+                        </label>
+
+                        <input asp-for="Filter.FromDate"
+                               name="fromDate"
+                               type="date"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label class="form-label fw-bold">
+                            To
+                        </label>
+
+                        <input asp-for="Filter.ToDate"
+                               name="toDate"
+                               type="date"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-bold">
+                            Sort By
+                        </label>
+
+                        <select asp-for="Filter.SortBy"
+                                name="sortBy"
+                                class="form-select">
+
+                            <option value="">Newest First</option>
+
+                            <option value="Oldest">
+                                Oldest First
+                            </option>
+
+                            <option value="EmployeeName">
+                                Employee Name
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-end">
+
+                        <button class="btn btn-primary me-2">
+
+                            🔍 Search
+
+                        </button>
+
+                        <a asp-action="JoiningReport"
+                           class="btn btn-secondary">
+
+                            Clear
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+  <div id="reportContent"
+     class="print-content">
+
+    <partial name="_JoiningReportContent"
+             model="Model" />
+
+</div>
+
+</div>
+
+@section Scripts
+{
+    @if (ViewBag.Print == true)
+    {
+        <script>
+
+            window.addEventListener("load", function () {
+
+                setTimeout(function () {
+
+                    window.print();
+
+                }, 800);
+
+            });
+
+        </script>
+    }
+    <script>
+        setupAjaxFilter("joiningFilterForm", "reportContent");
+    </script>
+}

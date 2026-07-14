@@ -1,0 +1,881 @@
+﻿/*=========================================================
+    EMS PRO HOME PAGE
+    FIXED SCREEN DESIGN
+    PART 1 - LAYOUT + HERO
+=========================================================*/
+
+
+
+/* ===============================
+      HOME PAGE WRAPPER
+================================ */
+
+
+.ems-home-page {
+    min-height: calc(100vh - 80px);
+    padding: 25px 35px;
+    background: #F8FAFC;
+    overflow: hidden;
+}
+
+
+
+
+
+
+
+/* ===============================
+      HERO SECTION
+================================ */
+
+
+.ems-hero {
+    height: 330px;
+    width: 100%;
+    padding: 45px 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 30px;
+    background: linear-gradient( 135deg, #2563EB, #4F46E5 );
+    color: white;
+    box-shadow: 0 20px 40px rgba(37,99,235,.20);
+}
+
+
+
+
+
+
+
+/* ===============================
+      HERO CONTENT
+================================ */
+
+
+.ems-hero-content {
+    max-width: 650px;
+}
+
+
+
+
+
+
+
+.ems-badge {
+    display: inline-flex;
+    padding: 8px 18px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.18);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+
+
+
+
+
+.ems-hero-content h1 {
+    margin: 18px 0;
+    font-size: 42px;
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+
+
+
+
+
+
+    .ems-hero-content h1 span {
+        color: #DBEAFE;
+    }
+
+
+
+
+
+
+
+.ems-hero-content p {
+    margin: 0;
+    max-width: 560px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255,255,255,.85);
+}
+
+
+
+
+
+
+
+/* ===============================
+      BUTTONS
+================================ */
+
+
+.ems-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+
+
+
+
+.ems-btn-primary,
+.ems-btn-secondary {
+    padding: 12px 25px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .3s;
+}
+
+
+
+
+
+.ems-btn-primary {
+    background: white;
+    color: #2563EB;
+}
+
+
+
+
+
+    .ems-btn-primary:hover {
+        transform: translateY(-3px);
+    }
+
+
+
+
+
+
+
+.ems-btn-secondary {
+    border: 2px solid rgba(255,255,255,.7);
+    color: white;
+}
+
+
+
+
+
+    .ems-btn-secondary:hover {
+        background: white;
+        color: #2563EB;
+    }
+
+
+
+
+
+
+
+/* ===============================
+      HERO ICON
+================================ */
+
+
+.ems-hero-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+.ems-icon-box {
+    width: 160px;
+    height: 160px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.25);
+}
+
+
+
+
+
+
+
+    .ems-icon-box i {
+        font-size: 80px;
+        color: white;
+    }
+/*=========================================================
+    EMS PRO HOME PAGE
+    FIXED SCREEN DESIGN
+    PART 2 - MODULE CARDS
+=========================================================*/
+
+
+
+/* ===============================
+      MODULE SECTION
+================================ */
+
+
+.ems-modules {
+    margin-top: 35px;
+}
+
+
+
+
+
+
+
+/* ===============================
+      MODULE HEADER
+================================ */
+
+
+.ems-module-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+
+
+
+
+    .ems-module-header span {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 30px;
+        background: #DBEAFE;
+        color: #2563EB;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+
+
+
+    .ems-module-header h2 {
+        margin-top: 10px;
+        font-size: 26px;
+        font-weight: 800;
+        color: #0F172A;
+    }
+
+
+
+
+
+
+
+/* ===============================
+      CARD CONTAINER
+================================ */
+
+
+.ems-card-container {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+}
+
+
+
+
+
+
+
+/* ===============================
+      CARD
+================================ */
+
+
+.ems-card {
+    height: 185px;
+    padding: 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #0F172A;
+    position: relative;
+    overflow: hidden;
+    transition: .3s ease;
+}
+
+
+
+
+
+
+
+    .ems-card:hover {
+        transform: translateY(-8px);
+    }
+
+
+
+
+
+
+
+    /* ===============================
+      CARD COLORS
+================================ */
+
+
+    .ems-card.employee {
+        background: #EFF6FF;
+    }
+
+
+
+
+
+    .ems-card.department {
+        background: #F0FDF4;
+    }
+
+
+
+
+
+    .ems-card.reports {
+        background: #FFF7ED;
+    }
+
+
+
+
+
+    .ems-card.activity {
+        background: #FAF5FF;
+    }
+
+
+
+
+
+
+
+/* ===============================
+      ICON
+================================ */
+
+
+.ems-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+
+
+
+
+
+
+.employee .ems-card-icon {
+    background: #2563EB;
+}
+
+
+
+
+
+.department .ems-card-icon {
+    background: #16A34A;
+}
+
+
+
+
+
+.reports .ems-card-icon {
+    background: #F59E0B;
+}
+
+
+
+
+
+.activity .ems-card-icon {
+    background: #9333EA;
+}
+
+
+
+
+
+
+
+/* ===============================
+      CARD TEXT
+================================ */
+
+
+.ems-card h3 {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+
+
+
+
+
+
+.ems-card p {
+    font-size: 14px;
+    color: #64748B;
+    line-height: 1.5;
+    max-width: 220px;
+}
+
+
+
+
+
+
+
+/* ===============================
+      ARROW
+================================ */
+
+
+.ems-card-arrow {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #2563EB;
+    transition: .3s;
+}
+
+
+
+
+
+
+
+.ems-card:hover .ems-card-arrow {
+    transform: translateX(6px);
+}
+
+
+
+
+
+
+
+
+
+/*=========================================================
+    EMS PRO HOME PAGE
+    FIXED SCREEN DESIGN
+    PART 4 - RESPONSIVE
+=========================================================*/
+
+
+
+/* ===============================
+      LARGE LAPTOP
+================================ */
+
+
+@media(max-width:1200px) {
+
+
+    .ems-hero {
+        padding: 40px;
+    }
+
+
+
+
+
+    .ems-card-container {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+
+
+
+
+
+/* ===============================
+      TABLET
+================================ */
+
+
+@media(max-width:992px) {
+
+
+
+    .ems-home-page {
+        overflow: auto;
+        height: auto;
+    }
+
+
+
+
+
+
+
+    .ems-hero {
+        height: auto;
+        flex-direction: column;
+        text-align: left;
+        padding: 35px;
+    }
+
+
+
+
+
+
+
+    .ems-hero-icon {
+        width: 100%;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+
+
+
+
+
+
+    .ems-card-container {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+
+
+
+
+
+
+    .ems-footer-container {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+
+
+
+
+
+/* ===============================
+      MOBILE
+================================ */
+
+
+@media(max-width:768px) {
+
+
+
+    .ems-home-page {
+        padding: 20px;
+    }
+
+
+
+
+
+
+
+    .ems-hero {
+        border-radius: 22px;
+        padding: 30px;
+    }
+
+
+
+
+
+
+
+    .ems-hero-content h1 {
+        font-size: 32px;
+    }
+
+
+
+
+
+
+
+    .ems-hero-content p {
+        font-size: 14px;
+    }
+
+
+
+
+
+
+
+    .ems-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+
+
+
+
+
+
+    .ems-btn-primary,
+    .ems-btn-secondary {
+        justify-content: center;
+        width: 100%;
+    }
+
+
+
+
+
+
+
+    .ems-card-container {
+        grid-template-columns: 1fr;
+    }
+
+
+
+
+
+
+
+    .ems-card {
+        height: 170px;
+    }
+
+
+
+
+
+
+
+    .ems-footer-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+
+
+
+/* ===============================
+      SMALL MOBILE
+================================ */
+
+
+@media(max-width:480px) {
+
+
+
+    .ems-hero-content h1 {
+        font-size: 28px;
+    }
+
+
+
+
+
+
+
+    .ems-icon-box {
+        width: 120px;
+        height: 120px;
+    }
+
+
+
+
+
+
+
+        .ems-icon-box i {
+            font-size: 60px;
+        }
+}
+/*=========================================================
+        EMS FOOTER DESIGN
+=========================================================*/
+
+
+.ems-footer {
+    width: 100%;
+    margin-top: 35px;
+    padding: 30px 45px 15px;
+    background: linear-gradient( 135deg, #0F172A, #1E293B );
+    color: white;
+    border-radius: 25px 25px 0 0;
+}
+
+
+
+
+
+
+/* Footer Columns */
+
+
+.ems-footer-container {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 50px;
+}
+
+
+
+
+
+
+/* Footer Titles */
+
+
+.ems-footer h3 {
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+
+
+
+
+
+
+/* Footer Description */
+
+
+.ems-footer p {
+    color: #CBD5E1;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+/* Footer Links */
+
+
+.ems-footer a {
+    display: block;
+    color: #CBD5E1;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 15px;
+    transition: .3s ease;
+}
+
+
+
+
+
+    .ems-footer a:hover {
+        color: white;
+        transform: translateX(5px);
+    }
+
+
+
+
+
+
+
+/* Footer Icons */
+
+
+.ems-footer i {
+    color: #60A5FA;
+    margin-right: 8px;
+}
+
+
+
+
+
+
+
+/* Copyright */
+
+
+.ems-footer-bottom {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,.15);
+    text-align: center;
+    color: #94A3B8;
+    font-size: 14px;
+}
+
+
+
+
+
+
+/* Responsive */
+
+
+@media(max-width:768px) {
+
+
+    .ems-footer-container {
+        grid-template-columns: 1fr;
+    }
+
+
+
+    .ems-footer {
+        padding: 25px 20px;
+    }
+}

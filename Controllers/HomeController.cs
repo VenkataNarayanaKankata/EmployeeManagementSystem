@@ -7,9 +7,14 @@ namespace EmployeeManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        // Public Landing Page
         [AllowAnonymous]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult DashboardHome()
         {
             return View();
         }
@@ -28,6 +33,17 @@ namespace EmployeeManagementSystem.Controllers
             {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
+        }
+        public IActionResult Features()
+        {
+            return View();
+        }
+
+
+
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }

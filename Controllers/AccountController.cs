@@ -25,7 +25,10 @@ namespace EmployeeManagementSystem.Controllers
         {
             return View();
         }
-
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
         // POST
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -49,12 +52,23 @@ namespace EmployeeManagementSystem.Controllers
                 ModelState.AddModelError("", "Invalid Username or Password");
                 return View(model);
             }
+            if (!admin.IsActive)
+            {
+                ModelState.AddModelError("", "Your account has been deactivated.");
+                return View(model);
+            }
+
+            admin.LastLogin = DateTime.Now;
+
+            _context.Update(admin);
+
+            await _context.SaveChangesAsync();
 
             // Create claims
             var claims = new List<Claim>
 {
     new Claim(ClaimTypes.Name, admin.Username),
-    new Claim(ClaimTypes.Role, "Admin")
+    new Claim(ClaimTypes.Role, admin.Role)
 };
 
             // Create identity
@@ -75,7 +89,7 @@ namespace EmployeeManagementSystem.Controllers
                 admin.Username,
                 "Logged In");
 
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
         [HttpGet]
         public IActionResult ChangePassword()
@@ -110,10 +124,14 @@ namespace EmployeeManagementSystem.Controllers
             admin.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
 
             _context.Update(admin);
+
+            await _context.SaveChangesAsync();
+
             await ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    "Changed Password");
+                _context,
+                User.Identity?.Name,
+                "Changed Password");
+
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -121,7 +139,7 @@ namespace EmployeeManagementSystem.Controllers
 
             return RedirectToAction("Login");
         }
-        [HttpGet]
+       
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

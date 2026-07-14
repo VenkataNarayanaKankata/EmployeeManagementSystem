@@ -1,0 +1,274 @@
+﻿@model EmployeeManagementSystem.ViewModels.UserManagementViewModel
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-person-gear"></i>
+                User Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage system users and roles
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-person-plus-fill"></i>
+            Create User
+        </a>
+
+    </div>
+
+    <!-- Summary Cards -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Users
+                    </h6>
+
+                    <h2 class="fw-bold text-primary">
+                        @Model.TotalUsers
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Active Users
+                    </h6>
+
+                    <h2 class="fw-bold text-success">
+                        @Model.ActiveUsers
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Inactive Users
+                    </h6>
+
+                    <h2 class="fw-bold text-danger">
+                        @Model.InactiveUsers
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Search -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form method="get">
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <input name="search"
+                               value="@Model.Search"
+                               class="form-control"
+                               placeholder="Search Username..." />
+
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+
+                        <button class="btn btn-primary">
+
+                            <i class="bi bi-search"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="card shadow border-0">
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Username</th>
+
+                        <th>Role</th>
+
+                        <th>Status</th>
+
+                        <th>Last Login</th>
+
+                        <th class="text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Users.Any())
+                    {
+                        foreach (var user in Model.Users)
+                        {
+                            <tr>
+
+                                <td class="fw-semibold">
+                                    @user.Username
+                                </td>
+
+                                <td>
+
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Admin
+                                        </span>
+                                    }
+                                    else if (user.Role == "HR")
+                                    {
+                                        <span class="badge bg-success">
+                                            HR
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary">
+                                            @user.Role
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">
+                                            Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            Inactive
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @(user.LastLogin?.ToString("dd MMM yyyy hh:mm tt")
+                                        ?? "Never Logged In")
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@user.AdminId"
+                                       class="btn btn-sm btn-warning">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                    <a asp-action="ResetPassword"
+                                       asp-route-id="@user.AdminId"
+                                       class="btn btn-sm btn-info text-white">
+
+                                        <i class="bi bi-key-fill"></i>
+
+                                    </a>
+                                    <a asp-action="Delete"
+   asp-route-id="@user.AdminId"
+   class="btn btn-sm btn-danger">
+
+    <i class="bi bi-trash-fill"></i>
+
+</a>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="5"
+                                class="text-center text-muted">
+
+                                No users found.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

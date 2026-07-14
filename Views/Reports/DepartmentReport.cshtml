@@ -1,0 +1,337 @@
+﻿@model EmployeeManagementSystem.ViewModels.DepartmentReportViewModel
+<nav aria-label="breadcrumb" class="mb-3 no-print">
+
+    <ol class="breadcrumb">
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Home"
+               asp-action="Index">
+
+                🏠 Home
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item">
+
+            <a asp-controller="Reports"
+               asp-action="Index">
+
+                📊 Reports
+
+            </a>
+
+        </li>
+
+        <li class="breadcrumb-item active"
+            aria-current="page">
+
+            Department Report
+
+        </li>
+
+    </ol>
+
+</nav>
+@{
+    ViewData["Title"] = "Department Report";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-primary">
+                🏢 Department Report
+            </h2>
+
+            <p class="text-muted">
+                Department-wise employee statistics and salary analysis.
+            </p>
+
+        </div>
+
+       <div class="no-print">
+
+    <a asp-controller="Reports"
+       asp-action="Index"
+       class="btn btn-secondary me-2">
+
+        ←Back to Reports
+
+    </a>
+
+    <button type="button"
+            class="btn btn-success"
+            onclick="window.print();">
+
+        🖨 Print Report
+
+    </button>
+
+</div>
+
+    </div>
+    <form asp-action="DepartmentReport"
+      method="get"
+      class="no-print">
+
+        <div class="card shadow border-0 mb-4">
+
+            <div class="card-header bg-secondary text-white">
+
+                <h5 class="mb-0">
+                    🔍 Search Filters
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- Department -->
+
+                    <div class="col-md-5">
+
+                        <label class="form-label fw-bold">
+                            Department Name
+                        </label>
+
+                        <input asp-for="Filter.DepartmentName"
+                               name="departmentName"
+                               class="form-control"
+                               placeholder="Search department..." />
+
+                    </div>
+
+                    <!-- Sort -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-bold">
+                            Sort By
+                        </label>
+
+                        <select asp-for="Filter.SortBy"
+                                name="sortBy"
+                                class="form-select">
+
+                            <option value="">
+                                Department Name
+                            </option>
+
+                            <option value="Employees">
+                                Employee Count
+                            </option>
+
+                            <option value="AverageSalary">
+                                Average Salary
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Buttons -->
+
+                    <div class="col-md-3 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary me-2">
+
+                            🔍 Search
+
+                        </button>
+
+                        <a asp-action="DepartmentReport"
+                           class="btn btn-secondary">
+
+                            Clear
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <!-- Summary Cards -->
+    <div class="print-content">
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+
+                        Total Departments
+
+                    </h6>
+
+                    <h2 class="text-primary">
+
+                        @Model.TotalDepartments
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+
+                        Total Employees
+
+                    </h6>
+
+                    <h2 class="text-success">
+
+                        @Model.TotalEmployees
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Department Table -->
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                Department Statistics
+
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-striped mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Department</th>
+
+                        <th>Employees</th>
+
+                        <th>Average Salary</th>
+
+                        <th>Highest Salary</th>
+
+                        <th>Lowest Salary</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @{
+                        int count = 1;
+                    }
+
+                    @foreach (var item in Model.Departments)
+                    {
+                        <tr>
+
+                            <td>@count</td>
+
+                            <td>
+
+                                <span class="badge bg-primary fs-6">
+
+                                    @item.DepartmentName
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                @item.EmployeeCount
+
+                            </td>
+
+                            <td class="text-primary fw-bold">
+
+                                ₹ @item.AverageSalary.ToString("N0")
+
+                            </td>
+
+                            <td class="text-success fw-bold">
+
+                                ₹ @item.HighestSalary.ToString("N0")
+
+                            </td>
+
+                            <td class="text-danger fw-bold">
+
+                                ₹ @item.LowestSalary.ToString("N0")
+
+                            </td>
+
+                        </tr>
+
+                        count++;
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+    </div>
+</div>
+@section Scripts
+{
+    @if (ViewBag.Print == true)
+    {
+        <script>
+            window.addEventListener("load", function () {
+
+                setTimeout(function () {
+
+                    window.print();
+
+                }, 800);
+
+            });
+        </script>
+    }
+}

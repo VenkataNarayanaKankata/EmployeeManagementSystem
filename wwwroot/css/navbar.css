@@ -1,0 +1,767 @@
+﻿
+.ems-navbar {
+    width: 100%;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 5px 20px rgba(15,23,42,.06);
+}
+
+
+
+
+
+/*=========================================================
+    NAV CONTAINER
+=========================================================*/
+
+
+.ems-nav-container {
+    width: 100%;
+    padding: 12px 35px;
+    display: flex;
+    align-items: center;
+   
+}
+
+
+
+
+
+/*=========================================================
+    BRAND
+=========================================================*/
+
+
+.ems-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+
+
+
+
+.ems-logo {
+    width: 55px;
+    height: 55px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient( 135deg, #2563EB, #4F46E5 );
+    color: white;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
+}
+
+
+
+
+
+    .ems-logo i {
+        font-size: 25px;
+    }
+
+
+
+
+
+.ems-brand-text h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+}
+
+
+
+
+
+.ems-brand-text span {
+    font-size: 12px;
+    color: #64748B;
+}
+
+
+
+
+
+/*=========================================================
+    MENU
+=========================================================*/
+
+
+.ems-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+
+    .ems-menu li a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #475569;
+        font-size: 15px;
+        font-weight: 600;
+        transition: .3s ease;
+    }
+
+
+
+
+
+        .ems-menu li a i {
+            font-size: 17px;
+        }
+
+
+
+
+
+        .ems-menu li a:hover {
+            background: #EFF6FF;
+            color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+
+
+
+
+        /*=========================================================
+    ACTIVE MENU
+=========================================================*/
+
+
+        .ems-menu li a.active {
+            background: #2563EB;
+            color: white;
+            box-shadow: 0 8px 20px rgba(37,99,235,.25);
+        }
+/*=========================================================
+    EMS PRO v3.0
+    NAVBAR CSS
+    PART 2 - PROFILE & ACTIONS
+=========================================================*/
+
+
+
+/*=========================================================
+    RIGHT MENU
+=========================================================*/
+
+
+.ems-right-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+
+
+/*=========================================================
+    LOGIN BUTTON
+=========================================================*/
+
+
+.ems-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    border-radius: 14px;
+    background: #2563EB;
+    color: white !important;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
+    transition: .3s ease;
+}
+
+
+
+
+
+    .ems-login-btn:hover {
+        background: #1D4ED8;
+        transform: translateY(-3px);
+    }
+
+
+
+
+
+/*=========================================================
+    NOTIFICATION
+=========================================================*/
+
+
+.ems-notification {
+    position: relative;
+}
+
+
+
+
+
+    .ems-notification a {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #F8FAFC;
+        color: #475569;
+        text-decoration: none;
+        transition: .3s ease;
+    }
+
+
+
+
+
+        .ems-notification a:hover {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+
+
+
+
+    .ems-notification i {
+        font-size: 20px;
+    }
+
+
+
+
+
+    .ems-notification span {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #EF4444;
+        color: white;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+
+
+
+
+
+/*=========================================================
+    PROFILE
+=========================================================*/
+
+
+.ems-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #0F172A;
+}
+
+
+
+
+
+    .ems-profile:hover {
+        background: #F8FAFC;
+    }
+
+
+
+
+
+.ems-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient( 135deg, #2563EB, #4F46E5 );
+    color: white;
+    font-size: 20px;
+}
+
+
+
+
+
+
+/*=========================================================
+    USER DETAILS
+=========================================================*/
+
+
+.ems-user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+
+
+
+
+    .ems-user-info strong {
+        font-size: 14px;
+        color: #0F172A;
+    }
+
+
+
+
+
+    .ems-user-info small {
+        font-size: 12px;
+        color: #64748B;
+    }
+
+
+
+
+
+
+/*=========================================================
+    DROPDOWN
+=========================================================*/
+
+
+.dropdown-menu {
+    margin-top: 15px !important;
+    padding: 10px;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(15,23,42,.12);
+}
+
+
+
+
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+}
+
+
+
+
+
+    .dropdown-item:hover {
+        background: #EFF6FF;
+        color: #2563EB;
+    }
+
+
+
+
+
+    .dropdown-item i {
+        font-size: 17px;
+    }
+/*=========================================================
+    EMS PRO v3.0
+    NAVBAR CSS
+    PART 3 - RESPONSIVE & FINAL POLISH
+=========================================================*/
+
+
+/*=========================================================
+    NAVBAR ANIMATION
+=========================================================*/
+
+
+.ems-navbar {
+    animation: navbarFade .5s ease;
+}
+
+
+
+@keyframes navbarFade {
+
+
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+/*=========================================================
+    TOGGLER BUTTON
+=========================================================*/
+
+
+.navbar-toggler {
+    border: none;
+    background: #F8FAFC;
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+    .navbar-toggler i {
+        font-size: 24px;
+        color: #2563EB;
+    }
+
+
+
+
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+
+
+
+
+
+
+
+/*=========================================================
+    LARGE SCREEN
+=========================================================*/
+
+
+@media(max-width:1200px) {
+
+
+
+    .ems-nav-container {
+        padding: 12px 20px;
+    }
+
+
+
+
+    .ems-menu {
+        gap: 3px;
+    }
+
+
+
+
+
+        .ems-menu li a {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+
+
+
+    .ems-brand-text h3 {
+        font-size: 18px;
+    }
+}
+
+
+
+
+
+
+
+
+
+/*=========================================================
+    TABLET
+=========================================================*/
+
+
+@media(max-width:992px) {
+
+
+
+    .ems-nav-container {
+        flex-wrap: wrap;
+    }
+
+
+
+
+
+    .navbar-collapse {
+        width: 100%;
+        margin-top: 15px;
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(15,23,42,.10);
+    }
+
+
+
+
+
+
+    .ems-menu {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+
+
+
+
+
+        .ems-menu li a {
+            width: 100%;
+        }
+
+
+
+
+
+
+    .ems-right-menu {
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+
+
+
+
+
+    .ems-login-btn {
+        justify-content: center;
+    }
+
+
+
+
+
+
+    .ems-profile {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+/*=========================================================
+    MOBILE
+=========================================================*/
+
+
+@media(max-width:768px) {
+
+
+
+    .ems-nav-container {
+        padding: 10px 15px;
+    }
+
+
+
+
+
+
+    .ems-logo {
+        width: 45px;
+        height: 45px;
+    }
+
+
+
+
+
+        .ems-logo i {
+            font-size: 20px;
+        }
+
+
+
+
+
+
+    .ems-brand-text h3 {
+        font-size: 16px;
+    }
+
+
+
+
+
+    .ems-brand-text span {
+        display: none;
+    }
+
+
+
+
+
+
+    .ems-user-info {
+        display: flex;
+    }
+}
+
+
+
+
+
+
+
+
+
+/*=========================================================
+    SMALL MOBILE
+=========================================================*/
+
+
+@media(max-width:576px) {
+
+
+
+    .ems-brand-text h3 {
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+
+
+
+
+    .ems-navbar {
+        width: 100%;
+    }
+}
+/* FIX DESKTOP NAVBAR ALIGNMENT */
+
+
+.ems-nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.navbar-collapse {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+
+
+
+
+.ems-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+
+
+
+
+.ems-right-menu {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+.navbar-toggler {
+    display: none;
+}
+
+
+
+
+@media(max-width:1200px) {
+
+
+    .navbar-toggler {
+        display: flex;
+    }
+
+
+    .navbar-collapse {
+        display: none !important;
+    }
+
+
+        .navbar-collapse.show {
+            display: block !important;
+        }
+}

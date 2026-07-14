@@ -1,165 +1,678 @@
 ﻿@{
-    ViewData["Title"] = "Employee Management System";
+    ViewData["Title"] = "Home";
 }
 
-<div class="container-fluid p-0">
 
-    <!-- Hero Section -->
-    <section class="hero-section bg-primary text-white text-center py-5">
+<div class="ems-home-page">
 
-        <div class="container">
 
-            <h1 class="display-4 fw-bold">
-                Employee Management System
-            </h1>
+@if (User.Identity?.IsAuthenticated == true)
+    {
 
-            <p class="lead mt-3">
-                Manage employees, departments and HR operations
-                with a secure ASP.NET Core MVC application.
-            </p>
 
-            <a asp-controller="Account"
-               asp-action="Login"
-               class="btn btn-light btn-lg mt-4 px-5">
-                🔐 Admin Login
-            </a>
+        <!-- ===========================
+        AFTER LOGIN HERO
+        ============================ -->
 
-        </div>
 
-    </section>
+        <section class="ems-hero">
 
-    <!-- Features -->
-    <section class="container py-5">
 
-        <div class="text-center mb-5">
+            <div class="ems-hero-content">
 
-            <h2>Our Features</h2>
 
-            <p class="text-muted">
-                Everything required for managing employees efficiently.
-            </p>
+                <span class="ems-badge">
+                    Welcome Back 👋
+                </span>
 
-        </div>
 
-        <div class="row">
 
-            <div class="col-md-4 mb-4">
+                <h1>
 
-                <div class="card shadow h-100">
+                    Manage Your Workforce
 
-                    <div class="card-body text-center">
+                    <br />
 
-                        <h1>👨‍💼</h1>
+                    <span>
+                        Efficiently
+                    </span>
 
-                        <h4>Employee Management</h4>
+                </h1>
 
-                        <p class="text-muted">
-                            Add, edit, delete and manage employee records with profile photos.
-                        </p>
 
-                    </div>
 
-                </div>
 
-            </div>
+                <p>
 
-            <div class="col-md-4 mb-4">
+                    Access employee records, departments,
+                    reports and workforce analytics from one
+                    centralized platform.
 
-                <div class="card shadow h-100">
-
-                    <div class="card-body text-center">
-
-                        <h1>🏢</h1>
-
-                        <h4>Department Management</h4>
-
-                        <p class="text-muted">
-                            Organize employees by department with easy administration.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-4">
-
-                <div class="card shadow h-100">
-
-                    <div class="card-body text-center">
-
-                        <h1>🔐</h1>
-
-                        <h4>Secure Authentication</h4>
-
-                        <p class="text-muted">
-                            Cookie authentication with BCrypt password hashing.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- Why Choose -->
-    <section class="bg-light py-5">
-
-        <div class="container">
-
-            <div class="text-center">
-
-                <h2>Why Choose Our System?</h2>
-
-                <p class="text-muted mb-5">
-                    A modern Employee Management solution built with ASP.NET Core MVC.
                 </p>
 
+
+
+
+
+                <div class="ems-buttons">
+
+
+                    <a asp-controller="Dashboard"
+                    asp-action="Index"
+                    class="ems-btn-primary">
+
+
+                        <i class="bi bi-speedometer2"></i>
+
+                        Open Dashboard
+
+
+                    </a>
+
+
+
+
+                    <a asp-controller="Employee"
+                    asp-action="Index"
+                    class="ems-btn-secondary">
+
+
+                        <i class="bi bi-people"></i>
+
+                        Manage Employees
+
+
+                    </a>
+
+
+
+                </div>
+
+
             </div>
 
-            <div class="row text-center">
 
-                <div class="col-md-3">
 
-                    <h3>✔</h3>
 
-                    <h5>Employee Records</h5>
 
-                </div>
+            <div class="ems-hero-icon">
 
-                <div class="col-md-3">
 
-                    <h3>✔</h3>
+                <div class="ems-icon-box">
 
-                    <h5>Department Management</h5>
+
+                    <i class="bi bi-buildings-fill"></i>
+
 
                 </div>
 
-                <div class="col-md-3">
-
-                    <h3>✔</h3>
-
-                    <h5>Reports & Analytics</h5>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <h3>✔</h3>
-
-                    <h5>Secure Login</h5>
-
-                </div>
 
             </div>
 
-        </div>
 
-    </section>
 
-</div>  
+
+        </section>
+
+        <!-- ===========================
+        AFTER LOGIN MODULES
+        ============================ -->
+
+
+        <section class="ems-modules">
+
+
+            <div class="ems-module-header">
+
+
+                <span>
+                    Manage Your Modules
+                </span>
+
+
+                <h2>
+                    Quickly access important employee management features.
+                </h2>
+
+
+            </div>
+
+
+
+
+
+            <div class="ems-card-container">
+
+
+
+                <!-- EMPLOYEES -->
+
+
+                <a asp-controller="Employee"
+                asp-action="Index"
+                class="ems-card employee">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Employees
+                    </h3>
+
+
+
+                    <p>
+                        Manage employee details and records.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- DEPARTMENTS -->
+
+
+                <a asp-controller="Department"
+                asp-action="Index"
+                class="ems-card department">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-building-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Departments
+                    </h3>
+
+
+
+                    <p>
+                        Organize company departments.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- REPORTS -->
+
+
+                <a asp-controller="Reports"
+                asp-action="Index"
+                class="ems-card reports">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Reports
+                    </h3>
+
+
+
+                    <p>
+                        View workforce analytics and reports.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- ACTIVITY -->
+
+
+                <a asp-controller="ActivityLog"
+                asp-action="Index"
+                class="ems-card activity">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-clock-history"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Activity
+                    </h3>
+
+
+
+                    <p>
+                        Track system activities and history.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+            </div>
+
+
+
+        </section>
+
+    }
+    else
+    {
+
+        <!-- ===========================
+        BEFORE LOGIN HERO
+        ============================ -->
+
+
+        <section class="ems-hero">
+
+
+            <div class="ems-hero-content">
+
+
+                <span class="ems-badge">
+                    Welcome to EMS Pro
+                </span>
+
+
+
+
+                <h1>
+
+                    Manage Your Workforce
+
+                    <br />
+
+                    <span>
+                        Efficiently
+                    </span>
+
+                </h1>
+
+
+
+
+
+                <p>
+
+                    A centralized platform to manage
+                    employees, departments, reports
+                    and workforce analytics from one
+                    secure application.
+
+                </p>
+
+
+
+
+
+
+                <div class="ems-buttons">
+
+
+                    <a asp-controller="Account"
+                    asp-action="Login"
+                    class="ems-btn-primary">
+
+
+                        <i class="bi bi-rocket-takeoff"></i>
+
+
+                        Get Started
+
+
+                    </a>
+
+
+
+
+
+                    <a asp-controller="Home"
+                    asp-action="Features"
+                    class="ems-btn-secondary">
+
+
+                        <i class="bi bi-stars"></i>
+
+
+                        Explore Features
+
+
+                    </a>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <div class="ems-hero-icon">
+
+
+                <div class="ems-icon-box">
+
+
+                    <i class="bi bi-buildings-fill"></i>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+        </section>
+
+
+
+
+
+
+        <!-- ===========================
+        BEFORE LOGIN MODULES
+        ============================ -->
+
+
+        <section class="ems-modules">
+
+
+            <div class="ems-module-header">
+
+
+                <span>
+                    Why Choose EMS
+                </span>
+
+
+
+                <h2>
+                    Powerful tools to manage your workforce.
+                </h2>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="ems-card-container">
+
+
+
+
+
+                <!-- EMPLOYEE MANAGEMENT -->
+
+
+                <a asp-controller="Home"
+                asp-action="Features"
+                class="ems-card employee">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Employee Management
+                    </h3>
+
+
+
+                    <p>
+                        Manage employee profiles and workforce data.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- DEPARTMENTS -->
+
+
+                <a asp-controller="Home"
+                asp-action="Features"
+                class="ems-card department">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-building-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Departments
+                    </h3>
+
+
+
+                    <p>
+                        Organize company structure easily.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- REPORTS -->
+
+
+                <a asp-controller="Home"
+                asp-action="Features"
+                class="ems-card reports">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Reports & Analytics
+                    </h3>
+
+
+
+                    <p>
+                        Generate workforce insights and reports.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+
+
+
+                <!-- SECURITY -->
+
+
+                <a asp-controller="Home"
+                asp-action="About"
+                class="ems-card activity">
+
+
+
+                    <div class="ems-card-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+
+
+                    <h3>
+                        Secure System
+                    </h3>
+
+
+
+                    <p>
+                        Protected authentication and access.
+                    </p>
+
+
+
+                    <div class="ems-card-arrow">
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </div>
+
+
+
+                </a>
+
+
+
+
+            </div>
+
+
+        </section>
+    }
+    <!-- ===============================
+                FOOTER
+        ================================ -->
+    @await Html.PartialAsync("_Footer")
+
+    
+  

@@ -1,0 +1,84 @@
+﻿/* =====================================
+        GLOBAL PRINT STYLE
+===================================== */
+
+
+@media print {
+
+
+    /* Hide unnecessary elements */
+
+    .no-print {
+        display: none !important;
+    }
+    @media print {
+
+        @page {
+            size: landscape;
+            margin: 15mm;
+        }
+    }
+
+
+    /* Main print area */
+
+    .print-content {
+        width: 100% !important;
+        overflow: visible !important;
+    }
+
+
+
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+
+
+    /* Table */
+
+    table {
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+
+
+    th,
+    td {
+        border: 1px solid #333;
+        padding: 6px;
+        font-size: 11px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+
+
+    th {
+        background: #eee !important;
+    }
+
+
+
+
+
+    /* Remove buttons */
+
+    button {
+        display: none !important;
+    }
+
+
+
+    /* Remove links */
+
+    a {
+        color: black !important;
+        text-decoration: none;
+    }
+}

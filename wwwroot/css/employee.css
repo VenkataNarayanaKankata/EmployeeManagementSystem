@@ -1,0 +1,394 @@
+﻿/*==========================================================
+EMPLOYEE HEADER
+==========================================================*/
+
+.employee-title{
+    font-size:52px;
+    font-weight:700;
+    color:#1E293B;
+    margin:10px 0;
+}
+
+.employee-subtitle{
+    color:#64748B;
+    font-size:18px;
+}
+
+.page-badge{
+    display:inline-block;
+    background:#EEF2FF;
+    color:#4F46E5;
+    padding:8px 18px;
+    border-radius:30px;
+    font-weight:600;
+    margin-bottom:12px;
+}
+
+.employee-actions{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.employee-actions .btn{
+    min-width:170px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+@media(max-width:991px){
+
+    .employee-actions{
+        justify-content:flex-start;
+        margin-top:20px;
+    }
+
+}
+/*==========================================================
+CREATE EMPLOYEE PAGE
+==========================================================*/
+
+.employee-form-header {
+    margin-bottom: 35px;
+}
+
+    .employee-form-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #1E293B;
+        margin: 12px 0;
+    }
+
+    .employee-form-header p {
+        font-size: 18px;
+        color: #64748B;
+        margin-bottom: 0;
+    }
+
+.page-badge {
+    display: inline-block;
+    background: #EEF2FF;
+    color: #4F46E5;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 30px;
+    border-left: 5px solid #2563EB;
+    padding-left: 15px;
+}
+
+.card {
+    border-radius: 22px;
+}
+
+.card-body {
+    padding: 40px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    min-height: 54px;
+    border: 1px solid #D1D5DB;
+    transition: .3s;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 .2rem rgba(37,99,235,.15);
+    }
+
+.text-danger {
+    font-size: 14px;
+}
+/*==========================================================
+PHOTO PREVIEW
+==========================================================*/
+
+.employee-preview-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 3px solid #E2E8F0;
+    background: #F8FAFC;
+    transition: .3s;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+    .employee-preview-img:hover {
+        transform: scale(1.03);
+    }
+
+/*==========================================================
+BUTTONS
+==========================================================*/
+
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-lg {
+    padding: 12px 30px;
+}
+
+.btn-primary {
+    background: #2563EB;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #1D4ED8;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(37,99,235,.25);
+    }
+
+.btn-outline-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/*==========================================================
+CARD EFFECT
+==========================================================*/
+
+.card {
+    transition: .3s;
+}
+
+    .card:hover {
+        box-shadow: 0 18px 45px rgba(0,0,0,.08) !important;
+    }
+
+/*==========================================================
+FORM SPACING
+==========================================================*/
+
+.row.g-4 > div {
+    margin-bottom: 10px;
+}
+
+hr {
+    opacity: .12;
+}
+
+/*==========================================================
+RESPONSIVE
+==========================================================*/
+
+@media(max-width:992px) {
+
+    .employee-form-header h1 {
+        font-size: 38px;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .employee-preview-img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media(max-width:768px) {
+
+    .employee-form-header {
+        text-align: center;
+    }
+
+        .employee-form-header h1 {
+            font-size: 32px;
+        }
+
+    .section-title {
+        text-align: center;
+        border: none;
+        padding-left: 0;
+    }
+
+    .employee-preview-img {
+        width: 130px;
+        height: 130px;
+    }
+
+    .d-flex.justify-content-end {
+        justify-content: center !important;
+        flex-direction: column;
+    }
+
+    .btn-lg {
+        width: 100%;
+    }
+}
+/*==========================================================
+ADD EMPLOYEE PAGE
+==========================================================*/
+
+.employee-create-page {
+    max-width: 1400px;
+    margin: 40px auto;
+}
+
+.create-header {
+    margin-bottom: 40px;
+}
+
+    .create-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #1E293B;
+        margin: 12px 0;
+    }
+
+    .create-header p {
+        font-size: 18px;
+        color: #64748B;
+    }
+
+.create-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 45px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.08);
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #1E293B;
+}
+
+.photo-card {
+    background: #F8FAFC;
+    border: 2px dashed #CBD5E1;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    height: 100%;
+}
+
+    .photo-card h4 {
+        margin-bottom: 25px;
+        font-weight: 700;
+    }
+
+.photo-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .photo-preview img {
+        width: 250px;
+        height: 250px;
+        border-radius: 20px;
+        object-fit: cover;
+        background: #fff;
+        border: 4px solid #E2E8F0;
+        transition: .3s;
+    }
+
+        .photo-preview img:hover {
+            transform: scale(1.03);
+        }
+
+.photo-card input {
+    margin-top: 25px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-control,
+.form-select {
+    height: 55px;
+    border-radius: 12px;
+    border: 1px solid #D1D5DB;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 .2rem rgba(37,99,235,.15);
+    }
+
+.btn-lg {
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #2563EB;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #1D4ED8;
+        transform: translateY(-2px);
+    }
+
+.btn-outline-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.text-danger {
+    font-size: 14px;
+}
+
+@media(max-width:991px) {
+
+    .create-card {
+        padding: 30px;
+    }
+
+    .photo-card {
+        margin-bottom: 35px;
+    }
+
+    .create-header h1 {
+        font-size: 38px;
+    }
+}
+
+@media(max-width:768px) {
+
+    .create-header {
+        text-align: center;
+    }
+
+    .photo-preview img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .text-end {
+        text-align: center !important;
+    }
+
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

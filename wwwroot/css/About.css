@@ -1,0 +1,840 @@
+﻿.about-page {
+    width: 100%;
+    padding: 40px 0;
+}
+.about-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 55px;
+    border-radius: 32px;
+    background: linear-gradient( 135deg, #2563EB, #4F46E5 );
+    color: white;
+    box-shadow: 0 20px 45px rgba(37,99,235,.25);
+    margin-bottom: 60px;
+}
+.about-hero-content {
+    max-width: 750px;
+}
+.about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.18);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+.about-hero h1 {
+    margin: 25px 0;
+    font-size: clamp(2.2rem,4vw,3.5rem);
+    line-height: 1.15;
+    font-weight: 800;
+}
+.about-hero p {
+    max-width: 650px;
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(255,255,255,.85);
+}
+.about-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+.about-buttons .btn {
+        padding: 13px 28px;
+        border-radius: 14px;
+        font-weight: 700;
+    }
+.about-buttons .btn-primary {
+        background: white;
+        color: #2563EB;
+        border: none;
+    }
+.about-buttons .btn-primary:hover {
+            background: #EFF6FF;
+        }
+.about-buttons .btn-outline-primary {
+        color: white;
+        border: 2px solid white;
+    }
+.about-buttons .btn-outline-primary:hover {
+            background: white;
+            color: #2563EB;
+        }
+.about-hero-icon {
+    width: 180px;
+    height: 180px;
+    border-radius: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(10px);
+}
+.about-hero-icon i {
+        font-size: 90px;
+        color: white;
+    }
+.about-intro {
+    margin-bottom: 60px;
+}
+.about-intro-card {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 35px;
+    background: white;
+    border-radius: 28px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+}
+.intro-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #DBEAFE;
+    color: #2563EB;
+    font-size: 32px;
+}
+.about-intro-card h2 {
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #0F172A;
+}
+.about-intro-card p {
+    margin: 0;
+    color: #64748B;
+    line-height: 1.8;
+}
+.about-section-header {
+    text-align: center;
+    margin-bottom: 45px;
+}
+.about-section-header span {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 50px;
+        background: #EFF6FF;
+        color: #2563EB;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+
+
+    .about-section-header h2 {
+        margin: 18px 0 10px;
+        font-size: 34px;
+        font-weight: 800;
+        color: #0F172A;
+    }
+
+
+
+    .about-section-header p {
+        margin: 0;
+        color: #64748B;
+        font-size: 16px;
+    }
+
+
+
+
+
+/*=========================================================
+    MISSION SECTION
+=========================================================*/
+
+
+.about-mission {
+    margin-bottom: 60px;
+}
+
+
+
+.mission-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 28px;
+}
+
+
+
+
+
+/*=========================================================
+    MISSION CARD
+=========================================================*/
+
+
+.mission-card {
+    position: relative;
+    background: white;
+    padding: 35px;
+    border-radius: 28px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    transition: .35s ease;
+    overflow: hidden;
+}
+
+
+
+
+
+    .mission-card::before {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #EFF6FF;
+        right: -50px;
+        top: -50px;
+        transition: .35s ease;
+    }
+
+
+
+
+
+    .mission-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(15,23,42,.12);
+    }
+
+
+
+
+
+        .mission-card:hover::before {
+            transform: scale(1.4);
+        }
+
+
+
+
+
+/*=========================================================
+    MISSION ICON
+=========================================================*/
+
+
+.mission-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+
+
+    .mission-icon.blue {
+        background: linear-gradient( 135deg, #2563EB, #3B82F6 );
+    }
+
+
+
+    .mission-icon.green {
+        background: linear-gradient( 135deg, #16A34A, #22C55E );
+    }
+
+
+
+    .mission-icon.purple {
+        background: linear-gradient( 135deg, #9333EA, #A855F7 );
+    }
+
+
+
+
+
+.mission-card h4 {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 12px;
+    font-size: 21px;
+    font-weight: 800;
+    color: #0F172A;
+}
+
+
+
+
+
+.mission-card p {
+    position: relative;
+    z-index: 1;
+    color: #64748B;
+    line-height: 1.7;
+    margin: 0;
+}
+
+
+
+
+
+/*=========================================================
+    BENEFITS SECTION
+=========================================================*/
+
+
+.about-benefits {
+    margin-bottom: 60px;
+}
+
+
+
+
+
+.benefits-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 45px;
+    background: white;
+    border-radius: 30px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+}
+
+
+
+
+
+.benefits-content {
+    max-width: 650px;
+}
+
+
+
+
+
+    .benefits-content h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 15px;
+    }
+
+
+
+
+
+    .benefits-content p {
+        color: #64748B;
+        line-height: 1.8;
+    }
+
+
+
+
+
+    .benefits-content ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 25px;
+    }
+
+
+
+
+
+    .benefits-content li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+        color: #475569;
+        font-weight: 600;
+    }
+
+
+
+
+
+        .benefits-content li i {
+            color: #16A34A;
+            font-size: 18px;
+        }
+
+
+
+
+
+/*=========================================================
+    BENEFITS ICON
+=========================================================*/
+
+
+.benefits-image {
+    width: 170px;
+    height: 170px;
+    border-radius: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #EFF6FF;
+    color: #2563EB;
+}
+
+
+
+
+
+    .benefits-image i {
+        font-size: 85px;
+    }
+/*=========================================================
+    EMS PRO v2.0
+    ABOUT CSS
+    PART 3 - TECHNOLOGY & CTA
+=========================================================*/
+
+
+
+/*=========================================================
+    TECHNOLOGY SECTION
+=========================================================*/
+
+
+.about-technology {
+    margin-bottom: 60px;
+}
+
+
+
+.technology-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 25px;
+}
+
+
+
+
+
+/*=========================================================
+    TECHNOLOGY CARD
+=========================================================*/
+
+
+.technology-card {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    border: 1px solid #E5E7EB;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    transition: .35s ease;
+}
+
+
+
+
+
+    .technology-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(15,23,42,.12);
+    }
+
+
+
+
+
+    .technology-card i {
+        width: 65px;
+        height: 65px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+        border-radius: 20px;
+        background: #EFF6FF;
+        color: #2563EB;
+        font-size: 30px;
+    }
+
+
+
+
+
+    .technology-card h4 {
+        margin-bottom: 12px;
+        font-size: 20px;
+        font-weight: 800;
+        color: #0F172A;
+    }
+
+
+
+
+
+    .technology-card p {
+        margin: 0;
+        color: #64748B;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+
+
+
+
+
+
+/*=========================================================
+    FINAL CTA SECTION
+=========================================================*/
+
+
+.about-cta {
+    margin-bottom: 40px;
+    padding: 55px;
+    border-radius: 32px;
+    text-align: center;
+    background: linear-gradient( 135deg, #EFF6FF, #DBEAFE );
+    border: 1px solid #BFDBFE;
+}
+
+
+
+
+
+    .about-cta h2 {
+        font-size: 36px;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 15px;
+    }
+
+
+
+
+
+    .about-cta p {
+        max-width: 650px;
+        margin: 0 auto 30px;
+        color: #64748B;
+        font-size: 17px;
+        line-height: 1.7;
+    }
+
+
+
+
+
+    .about-cta .btn {
+        padding: 14px 35px;
+        border-radius: 14px;
+        font-weight: 700;
+        background: #2563EB;
+        border: none;
+        box-shadow: 0 10px 25px rgba(37,99,235,.25);
+        transition: .3s ease;
+    }
+
+
+
+
+
+        .about-cta .btn:hover {
+            background: #1D4ED8;
+            transform: translateY(-3px);
+        }
+
+
+
+
+
+
+
+/*=========================================================
+    PAGE ANIMATION
+=========================================================*/
+
+
+.about-page section {
+    animation: aboutFade .5s ease;
+}
+
+
+
+
+
+@keyframes aboutFade {
+
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/*=========================================================
+    EMS PRO v2.0
+    ABOUT CSS
+    PART 4 - RESPONSIVE DESIGN
+=========================================================*/
+
+
+
+/*=========================================================
+    LARGE SCREEN
+=========================================================*/
+
+
+@media(max-width:1200px) {
+
+
+    .technology-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+
+
+    .mission-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+
+
+
+
+/*=========================================================
+    TABLET VIEW
+=========================================================*/
+
+
+@media(max-width:992px) {
+
+
+
+    .about-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 40px;
+    }
+
+
+
+    .about-hero-icon {
+        width: 140px;
+        height: 140px;
+    }
+
+
+
+        .about-hero-icon i {
+            font-size: 70px;
+        }
+
+
+
+    .benefits-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+
+
+    .benefits-image {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+
+
+
+
+
+
+/*=========================================================
+    MOBILE VIEW
+=========================================================*/
+
+
+@media(max-width:768px) {
+
+
+
+    .about-page {
+        padding: 20px 0;
+    }
+
+
+
+
+    .about-hero {
+        border-radius: 22px;
+        padding: 30px;
+    }
+
+
+
+
+        .about-hero h1 {
+            font-size: 2.2rem;
+        }
+
+
+
+
+        .about-hero p {
+            font-size: 15px;
+        }
+
+
+
+
+
+    .about-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+
+
+
+
+        .about-buttons .btn {
+            width: 100%;
+        }
+
+
+
+
+
+    .about-intro-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 25px;
+    }
+
+
+
+
+
+    .mission-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+
+
+
+    .technology-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+
+
+
+    .benefits-card {
+        padding: 30px;
+    }
+
+
+
+
+
+    .benefits-content h2 {
+        font-size: 26px;
+    }
+
+
+
+
+
+    .about-cta {
+        padding: 35px 20px;
+    }
+
+
+
+
+
+        .about-cta h2 {
+            font-size: 28px;
+        }
+}
+
+
+
+
+
+
+
+/*=========================================================
+    SMALL MOBILE
+=========================================================*/
+
+
+@media(max-width:576px) {
+
+
+
+    .about-hero {
+        padding: 25px;
+    }
+
+
+
+
+
+    .about-badge {
+        font-size: 13px;
+    }
+
+
+
+
+
+    .about-section-header h2 {
+        font-size: 26px;
+    }
+
+
+
+
+
+    .mission-card {
+        padding: 25px;
+    }
+
+
+
+
+
+    .technology-card {
+        padding: 25px;
+    }
+}

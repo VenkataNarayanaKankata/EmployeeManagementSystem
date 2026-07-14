@@ -24,11 +24,13 @@ namespace EmployeeManagementSystem.Documents
                 worksheet.Cell(1, 3).Value = "Last Name";
                 worksheet.Cell(1, 4).Value = "Email";
                 worksheet.Cell(1, 5).Value = "Phone";
-                worksheet.Cell(1, 6).Value = "Salary";
-                worksheet.Cell(1, 7).Value = "Joining Date";
-                worksheet.Cell(1, 8).Value = "Department";
+                worksheet.Cell(1, 6).Value = "Gender";
+                worksheet.Cell(1, 7).Value = "Salary";
+                worksheet.Cell(1, 8).Value = "Joining Date";
+                worksheet.Cell(1, 9).Value = "Department";
+                worksheet.Cell(1, 10).Value = "Role";
 
-                var header = worksheet.Range("A1:H1");
+                var header = worksheet.Range("A1:J1");
 
                 header.Style.Font.Bold = true;
                 header.Style.Fill.BackgroundColor = XLColor.SteelBlue;
@@ -43,9 +45,11 @@ namespace EmployeeManagementSystem.Documents
                     worksheet.Cell(row, 3).Value = employee.LastName;
                     worksheet.Cell(row, 4).Value = employee.Email;
                     worksheet.Cell(row, 5).Value = employee.Phone;
-                    worksheet.Cell(row, 6).Value = employee.Salary;
-                    worksheet.Cell(row, 7).Value = employee.JoiningDate.ToString("dd-MMM-yyyy");
-                    worksheet.Cell(row, 8).Value = employee.Department?.DepartmentName;
+                    worksheet.Cell(row, 6).Value = employee.Gender;
+                    worksheet.Cell(row, 7).Value = employee.Salary;
+                    worksheet.Cell(row, 8).Value = employee.JoiningDate.ToString("dd-MMM-yyyy");
+                    worksheet.Cell(row, 9).Value = employee.Department?.DepartmentName;
+                    worksheet.Cell(row, 10).Value = employee.Role?.RoleName;
 
                     row++;
                 }

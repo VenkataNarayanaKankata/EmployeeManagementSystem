@@ -1,0 +1,173 @@
+﻿@model EmployeeManagementSystem.ViewModels.JoiningReportViewModel
+<!-- Summary Cards -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Today
+                </h6>
+
+                <h2 class="text-success">
+                    @Model.TodayJoining
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    This Month
+                </h6>
+
+                <h2 class="text-primary">
+                    @Model.ThisMonthJoining
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    This Year
+                </h6>
+
+                <h2 class="text-warning">
+                    @Model.ThisYearJoining
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Total Employees
+                </h6>
+
+                <h2 class="text-danger">
+                    @Model.TotalEmployees
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Employee Table -->
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            🆕 Recent Joining Employees
+        </h5>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover table-striped mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Name</th>
+
+                    <th>Department</th>
+
+                    <th>Email</th>
+
+                    <th>Joining Date</th>
+
+                </tr>
+
+            </thead>
+            <tbody>
+
+                @if (Model.RecentEmployees.Any())
+                {
+                    int count = 1;
+
+                    @foreach (var employee in Model.RecentEmployees)
+                    {
+                        <tr>
+
+                            <td>@count</td>
+
+                            <td>
+                                @employee.FirstName @employee.LastName
+                            </td>
+
+                            <td>
+                                @employee.Department?.DepartmentName
+                            </td>
+
+                            <td>
+                                @employee.Email
+                            </td>
+
+                            <td>
+                                @employee.JoiningDate.ToString("dd-MMM-yyyy")
+                            </td>
+
+                        </tr>
+
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="5">
+
+                            <partial name="_NoRecordsFound" />
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

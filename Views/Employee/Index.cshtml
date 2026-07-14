@@ -6,29 +6,34 @@
 
 <div class="container mt-4">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!--==========================================================
+    PAGE HEADER
+===========================================================-->
 
-        <div>
-            <h2 class="fw-bold text-primary">
+    <div class="employee-header mb-4">
+
+        <div class="employee-header-left">
+
+            <h1>
                 👨‍💼 Employee Management
-            </h2>
+            </h1>
 
-            <p class="text-muted mb-0">
-                Manage employee records easily.
+            <p>
+                Manage employee records, import/export data and perform employee operations.
             </p>
+
         </div>
 
-        <div>
+        <div class="employee-header-right">
 
-            <a asp-action="ExportToExcel"
-               class="btn btn-success me-2">
+            <a asp-action="ExportToExcel" class="btn btn-success">
                 📊 Export Excel
             </a>
-            <a asp-action="ExportToPdf"
-               class="btn btn-danger me-2">
+
+            <a asp-action="ExportToPdf" class="btn btn-danger">
                 📄 Export PDF
             </a>
+
             <a asp-controller="Import"
                asp-action="EmployeeImport"
                class="btn btn-success">
@@ -39,11 +44,10 @@
                class="btn btn-primary">
                 ➕ Add Employee
             </a>
+
             <a asp-action="RecycleBin"
-               class="btn btn-danger">
-
-                🗑️ Recycle Bin
-
+               class="btn btn-outline-danger">
+                🗑 Recycle Bin
             </a>
 
         </div>
@@ -145,10 +149,12 @@
                     <tr>
 
                         <th>Photo</th>
+                        <th>Role</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Gender</th>
                         <th>Salary</th>
                         <th>Joining Date</th>
                         <th>Department</th>
@@ -185,6 +191,7 @@
                 }
 
             </td>
+            <td>@item.Role?.RoleName</td>
 
             <td>@item.FirstName</td>
 
@@ -193,6 +200,7 @@
             <td>@item.Email</td>
 
             <td>@item.Phone</td>
+            <td>@item.Gender</td>
 
             <td>
                 ₹ @item.Salary.ToString("N0")
@@ -266,47 +274,3 @@
     </div>
 
 </div>
-
-<style>
-
-    .card {
-        border-radius: 12px;
-    }
-
-    .card-header {
-        font-weight: 600;
-    }
-
-    .btn {
-        border-radius: 8px;
-    }
-
-    .form-control,
-    .form-select {
-        border-radius: 8px;
-    }
-
-    .table th {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table tbody tr:hover {
-        background: transparent !important;
-    }
-
-    .badge {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    img {
-        display: block;
-        margin: auto;
-    }
-
-</style>

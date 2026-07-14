@@ -1,73 +1,274 @@
 @model EmployeeManagementSystem.Models.Employee
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add Employee";
 }
+<div class="employee-create-page">
 
-<h1>Create</h1>
+    <!-- Header -->
 
-<h4>Employee</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="create-header">
 
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
+        <span class="page-badge">
 
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+            Employee Module
 
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+        </span>
 
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
+        <h1>
 
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
+            👨‍💼 Add New Employee
 
-            <div class="form-group">
-                <label asp-for="JoiningDate" class="control-label"></label>
-                <input asp-for="JoiningDate" class="form-control" />
-                <span asp-validation-for="JoiningDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId"
-                        class="form-control"
-                        asp-items="ViewBag.DepartmentId">
-                    <option value="">-- Select Department --</option>
-                </select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Employee Photo</label>
-                <input type="file" name="PhotoFile" class="form-control" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </h1>
+
+        <p>
+
+            Create a new employee profile and assign them to your organization.
+
+        </p>
+
     </div>
+    <!--==========================================================
+    CREATE CARD
+===========================================================-->
+
+<div class="create-card">
+
+    <form asp-action="Create"
+          enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-4"></div>
+
+        <div class="row g-5">
+
+            <!--==========================================
+                LEFT : PHOTO
+            ===========================================-->
+
+            <div class="col-lg-4">
+
+                <div class="photo-card">
+
+                    <h4>
+                        Employee Photo
+                    </h4>
+
+                    <div class="photo-preview">
+
+                        <img id="previewImage"
+                             src="https://placehold.co/250x250?text=Upload"
+                             alt="Employee Photo" />
+
+                    </div>
+
+                    <input type="file"
+                           id="PhotoFile"
+                           name="PhotoFile"
+                           accept="image/*"
+                           class="form-control mt-4" />
+
+                    <small class="text-muted">
+
+                        JPG, PNG up to 5 MB
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!--==========================================
+                RIGHT : DETAILS
+            ===========================================-->
+
+            <div class="col-lg-8">
+
+                <h3 class="form-title">
+
+                    Personal Information
+
+                </h3>
+
+                <div class="row g-4">
+                        <!-- First Name -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="FirstName" class="form-label"></label>
+
+                            <input asp-for="FirstName" class="form-control" />
+
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                        </div>
+
+                        <!-- Last Name -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="LastName" class="form-label"></label>
+
+                            <input asp-for="LastName" class="form-control" />
+
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+
+                        </div>
+
+                        <!-- Email -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Email" class="form-label"></label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                        </div>
+
+                        <!-- Phone -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Phone" class="form-label"></label>
+
+                            <input asp-for="Phone" class="form-control" />
+
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+
+                        </div>
+                        <div class="mb-3">
+    <label asp-for="Gender" class="form-label"></label>
+    <select asp-for="Gender" class="form-select">
+        <option value="">-- Select Gender --</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+    <span asp-validation-for="Gender" class="text-danger"></span>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+                        <!-- Salary -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Salary" class="form-label"></label>
+
+                            <input asp-for="Salary" class="form-control" />
+
+                            <span asp-validation-for="Salary" class="text-danger"></span>
+
+                        </div>
+
+                        <!-- Joining Date -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="JoiningDate" class="form-label"></label>
+
+                            <input asp-for="JoiningDate"
+                                   type="date"
+                                   class="form-control" />
+
+                            <span asp-validation-for="JoiningDate" class="text-danger"></span>
+
+                        </div>
+
+                        <!-- Department -->
+
+                        <div class="col-12">
+
+                            <label asp-for="DepartmentId" class="form-label"></label>
+
+                            <select asp-for="DepartmentId"
+                                    asp-items="ViewBag.DepartmentId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Department --
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="DepartmentId"
+                                  class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <!-- Role -->
+
+<div class="col-12">
+
+    <label asp-for="RoleId" class="form-label">
+        Role
+    </label>
+
+    <select asp-for="RoleId"
+            asp-items="ViewBag.RoleId"
+            class="form-select">
+
+        <option value="">
+            -- Select Role --
+        </option>
+
+    </select>
+
+    <span asp-validation-for="RoleId"
+          class="text-danger"></span>
+
 </div>
+
+                    <hr class="my-5" />
+
+                    <div class="text-end">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary btn-lg me-3">
+
+                            ← Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-primary btn-lg">
+
+                            💾 Save Employee
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const photoInput = document.getElementById("PhotoFile");
+        const preview = document.getElementById("previewImage");
+
+        photoInput.addEventListener("change", function () {
+
+            if (this.files && this.files[0]) {
+
+                preview.src = URL.createObjectURL(this.files[0]);
+
+            }
+
+        });
+
+    </script>
+
+}

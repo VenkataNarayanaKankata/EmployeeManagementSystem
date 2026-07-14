@@ -1,177 +1,205 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Employee Management System</title>
 
-    <script type="importmap"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/EmployeeManagementSystem.styles.css" asp-append-version="true" />
+    <meta name="description"
+          content="Employee Management System" />
 
-    <style>
-        .navbar-brand {
-        font-weight: bold;
-        font-size: 22px;
-        }
+    <meta name="theme-color"
+          content="#2563EB" />
 
-        .nav-link {
-        font-size: 17px;
-        margin-right: 10px;
-        }
+    <title>
+        @(ViewData["Title"] ?? "Employee Management System")
+    </title>
 
-        footer {
-        margin-top: 40px;
-        }
-    </style>
+    <!-- ======================================
+            BOOTSTRAP
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+          <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <!-- ======================================
+            BOOTSTRAP ICONS
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- ======================================
+            GLOBAL DESIGN SYSTEM
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <!-- ======================================
+            NAVIGATION
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="~/css/navbar.css"
+          asp-append-version="true" />
+
+    <!-- ======================================
+            MODULE STYLES
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="~/css/home.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/dashboard.css"
+          asp-append-version="true" />
+          <!-- Features -->
+<link rel="stylesheet"
+      href="~/css/features.css"
+      asp-append-version="true" />
+
+
+<!-- About -->
+<link rel="stylesheet"
+      href="~/css/about.css"
+      asp-append-version="true" />
+      <link rel="stylesheet" href="~/css/print.css" />
+
+    <link rel="stylesheet"
+          href="~/css/employee.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/department.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/report.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/profile.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/activitylog.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/account.css"
+          asp-append-version="true" />
+
+    <!-- ======================================
+            GENERATED CSS
+    ======================================= -->
+
+    <link rel="stylesheet"
+          href="~/EmployeeManagementSystem.styles.css"
+          asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+
 </head>
 
 <body>
 
-    <header>
+    <!-- ======================================
+            APPLICATION
+    ======================================= -->
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="app-shell">
 
-            <div class="container">
+        <!-- ===============================
+                NAVIGATION
+        ================================ -->
 
-                <a class="navbar-brand"
-                   asp-controller="Home"
-                   asp-action="Index">
-                    🏢 Employee Management System
-                </a>
+        @await Html.PartialAsync("_Navbar")
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav">
+        <!-- ===============================
+                MAIN CONTENT
+        ================================ -->
 
-                    <span class="navbar-toggler-icon"></span>
+       <main>
 
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-
-                    <ul class="navbar-nav ms-auto">
-
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Dashboard"
-                                   asp-action="Index">
-                                    Dashboard
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Employee"
-                                   asp-action="Index">
-                                    Employees
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Department"
-                                   asp-action="Index">
-                                    Departments
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="ActivityLog"
-                                   asp-action="Index">
-                                    📜 Activity Logs
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <div class="dropdown">
-
-                                    <a class="nav-link dropdown-toggle text-white"
-                                       href="#"
-                                       role="button"
-                                       data-bs-toggle="dropdown">
-
-                                        👤 @User.Identity.Name
-
-                                    </a>
-
-                                    <ul class="dropdown-menu">
-
-                                        <li>
-                                            <a class="dropdown-item"
-                                               asp-controller="Profile"
-                                               asp-action="Index">
-                                                👤 My Profile
-                                            </a>
-                                        </li>
-
-                                        <li><hr class="dropdown-divider" /></li>
-
-                                        <li>
-                                            <a class="dropdown-item text-danger"
-                                               asp-controller="Account"
-                                               asp-action="Logout">
-                                                🚪 Logout
-                                            </a>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Account"
-                                   asp-action="Login">
-                                    Login
-                                </a>
-                            </li>
-                        }
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </nav>
-
-    </header>
-
-    <div class="container mt-4">
-
-        <main role="main">
             @RenderBody()
+
         </main>
+
 
     </div>
 
-    <footer class="footer bg-white text-center text-muted py-3">
-
-        <div class="container">
-
-            © 2026 Employee Management System
-
-        </div>
-
-    </footer>
+    <!-- ======================================
+            JAVASCRIPT
+    ======================================= -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
 
-    <!-- Chart.js -->
+    toastr.options = {
+
+        "closeButton": true,
+
+        "progressBar": true,
+
+        "positionClass": "toast-top-right",
+
+        "timeOut": "3000",
+
+        "extendedTimeOut": "1000"
+
+    };
+
+</script>
+   
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    <script src="~/js/report-ajax.js"
+            asp-append-version="true"></script>
+            @if (TempData["Success"] != null)
+{
+    <script>
+        toastr.success('@TempData["Success"]');
+    </script>
+}
+
+@if (TempData["Error"] != null)
+{
+    <script>
+        toastr.error('@TempData["Error"]');
+    </script>
+}
+
+@if (TempData["Warning"] != null)
+{
+    <script>
+        toastr.warning('@TempData["Warning"]');
+    </script>
+}
+
+@if (TempData["Info"] != null)
+{
+    <script>
+        toastr.info('@TempData["Info"]');
+    </script>
+}
+
+    @RenderSection("Scripts", required: false)
 
 </body>
+
 </html>

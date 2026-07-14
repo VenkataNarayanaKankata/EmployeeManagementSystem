@@ -1,0 +1,532 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+
+
+<nav class="ems-navbar">
+
+
+    <div class="ems-nav-container">
+
+
+
+        <!-- ===============================
+                LOGO SECTION
+        ================================= -->
+
+
+        <a class="ems-brand"
+           asp-controller="Home"
+           asp-action="Index">
+
+
+            <div class="ems-logo">
+
+
+                <i class="bi bi-buildings-fill"></i>
+
+
+            </div>
+
+
+
+            <div class="ems-brand-text">
+
+
+                <h3>
+
+                    Employee Management System
+
+                </h3>
+
+
+                <span>
+
+                    Manage Your Workforce Efficiently
+
+                </span>
+
+
+            </div>
+
+
+        </a>
+
+
+
+
+
+
+
+        <!-- MOBILE BUTTON -->
+
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#emsNavbar">
+
+
+            <i class="bi bi-list"></i>
+
+
+        </button>
+
+
+
+
+
+
+
+        <div class="collapse navbar-collapse"
+             id="emsNavbar">
+
+
+
+
+
+            <!-- ===============================
+                    MENU
+            ================================= -->
+
+
+            <ul class="ems-menu">
+
+
+
+                <li>
+
+
+                    <a class="@(currentController=="Home" ? "active":"")"
+                       asp-controller="Home"
+                       asp-action="Index">
+
+
+                        <i class="bi bi-house"></i>
+
+                        Home
+
+
+                    </a>
+
+
+                </li>
+
+
+
+
+
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+
+
+                    <li>
+
+
+                        <a class="@(currentController=="Dashboard" ? "active":"")"
+                           asp-controller="Dashboard"
+                           asp-action="Index">
+
+
+                            <i class="bi bi-speedometer2"></i>
+
+                            Dashboard
+
+
+                        </a>
+
+
+                    </li>
+
+
+
+
+
+
+                   @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+{
+    <li>
+
+        <a class="@(currentController=="Employee" ? "active":"")"
+           asp-controller="Employee"
+           asp-action="Index">
+
+            <i class="bi bi-people"></i>
+
+            Employees
+
+        </a>
+
+    </li>
+}
+
+
+
+
+
+
+                   @if (User.IsInRole("Admin"))
+{
+    <li>
+
+        <a class="@(currentController=="Department" ? "active":"")"
+           asp-controller="Department"
+           asp-action="Index">
+
+            <i class="bi bi-building"></i>
+
+            Departments
+
+        </a>
+
+    </li>
+}
+
+
+
+
+
+
+                   @if (User.IsInRole("Admin") ||
+    User.IsInRole("HR") ||
+    User.IsInRole("Manager"))
+{
+    <li>
+
+        <a class="@(currentController=="Reports" ? "active":"")"
+           asp-controller="Reports"
+           asp-action="Index">
+
+            <i class="bi bi-bar-chart"></i>
+
+            Reports
+
+        </a>
+
+    </li>
+}
+
+
+
+
+
+
+@if (User.IsInRole("Admin"))
+{
+    <li>
+
+        <a class="@(currentController=="ActivityLog" ? "active":"")"
+           asp-controller="ActivityLog"
+           asp-action="Index">
+
+            <i class="bi bi-clock-history"></i>
+
+            Activity
+
+        </a>
+
+    </li>
+}
+
+
+                }
+                else
+                {
+
+
+                    <li>
+
+
+                        <a class="@(ViewContext.RouteData.Values["action"]?.ToString()=="Features" ? "active":"")"
+                           asp-controller="Home"
+                           asp-action="Features">
+
+
+                            <i class="bi bi-stars"></i>
+
+                            Features
+
+
+                        </a>
+
+
+                    </li>
+
+
+
+
+
+
+                    <li>
+
+
+                        <a class="@(ViewContext.RouteData.Values["action"]?.ToString()=="About" ? "active":"")"
+                           asp-controller="Home"
+                           asp-action="About">
+
+
+                            <i class="bi bi-info-circle"></i>
+
+                            About Us
+
+
+                        </a>
+
+
+                    </li>
+
+
+                }
+
+
+            </ul>
+            <!-- ===============================
+                    RIGHT SECTION
+            ================================= -->
+
+
+            <ul class="ems-right-menu">
+
+
+
+
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+
+
+
+
+                    <!-- Notification -->
+
+
+                    <li class="ems-notification">
+
+
+                        <a href="#">
+
+
+                            <i class="bi bi-bell"></i>
+
+
+                            <span>
+
+                                3
+
+                            </span>
+
+
+                        </a>
+
+
+                    </li>
+
+
+
+
+
+
+
+                    <!-- USER PROFILE -->
+
+
+                    <li class="dropdown">
+
+
+
+                        <a class="ems-profile dropdown-toggle"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown">
+
+
+
+                            <div class="ems-avatar">
+
+
+                                <i class="bi bi-person-fill"></i>
+
+
+                            </div>
+
+
+
+
+
+                            <div class="ems-user-info">
+
+
+                                <strong>
+
+                                    @User.Identity?.Name
+
+                                </strong>
+
+
+                               <small>
+
+    @(User.IsInRole("Admin") ? "Administrator" :
+      User.IsInRole("HR") ? "HR" :
+      User.IsInRole("Manager") ? "Manager" :
+      User.IsInRole("Employee") ? "Employee" :
+      "User")
+
+</small>
+
+                            </div>
+
+
+
+                        </a>
+
+
+
+
+
+
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+
+
+                            <li>
+
+
+                                <a class="dropdown-item"
+                                   asp-controller="Profile"
+                                   asp-action="Index">
+
+
+                                    <i class="bi bi-person-circle"></i>
+
+                                    My Profile
+
+
+                                </a>
+
+
+                            </li>
+
+
+
+
+
+
+                            <li>
+
+
+                                <a class="dropdown-item"
+                                   asp-controller="Account"
+                                   asp-action="ChangePassword">
+
+
+                                    <i class="bi bi-shield-lock"></i>
+
+                                    Change Password
+
+
+                                </a>
+
+
+                            </li>
+
+
+
+
+
+
+                            <li>
+
+
+                                <hr class="dropdown-divider" />
+
+
+                            </li>
+
+
+
+
+
+
+
+                            <li>
+
+
+                                <a class="dropdown-item text-danger"
+                                   asp-controller="Account"
+                                   asp-action="Logout">
+
+
+                                    <i class="bi bi-box-arrow-right"></i>
+
+                                    Logout
+
+
+                                </a>
+
+
+                            </li>
+
+
+
+
+                        </ul>
+
+
+
+                    </li>
+
+
+
+
+                }
+
+                else
+
+                {
+
+
+                    <!-- LOGIN BUTTON -->
+
+
+                    <li>
+
+
+                        <a class="ems-login-btn"
+                           asp-controller="Account"
+                           asp-action="Login">
+
+
+                            <i class="bi bi-box-arrow-in-right"></i>
+
+
+                            Login
+
+
+                        </a>
+
+
+                    </li>
+
+
+
+                }
+
+
+
+
+
+            </ul>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</nav>

@@ -1,0 +1,134 @@
+﻿@model EmployeeManagementSystem.ViewModels.EditUserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container py-4">
+
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <div class="card-header bg-warning text-dark rounded-top-4 py-3">
+
+            <h2 class="mb-0">
+                <i class="bi bi-pencil-square"></i>
+                Edit User
+            </h2>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Edit">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="AdminId" />
+
+                <div class="row">
+
+                    <!-- Username -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="Username"
+                               class="form-label fw-semibold"></label>
+
+                        <input asp-for="Username"
+                               class="form-control" />
+
+                        <span asp-validation-for="Username"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <!-- Role -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="Role"
+                               class="form-label fw-semibold"></label>
+
+                        <select asp-for="Role"
+                                class="form-select">
+
+                            <option value="Admin">Admin</option>
+                            <option value="HR">HR</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Employee">Employee</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Last Login -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Last Login
+                        </label>
+
+                        <input class="form-control"
+                               value="@(Model.LastLogin?.ToString("dd MMM yyyy hh:mm tt") ?? "Never Logged In")"
+                               readonly />
+
+                    </div>
+
+                    <!-- Status -->
+
+                    <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                        <div class="form-check mt-4">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label fw-semibold">
+
+                                Active User
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        ← Back
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

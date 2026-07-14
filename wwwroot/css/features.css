@@ -1,0 +1,665 @@
+﻿/*=========================================================
+    EMS PRO v2.0
+    FEATURES CSS
+    PART 1 - HERO SECTION
+=========================================================*/
+
+
+
+/*=========================================================
+    FEATURES PAGE
+=========================================================*/
+
+
+.features-page {
+    width: 100%;
+    padding: 40px 0;
+}
+
+
+
+
+
+/*=========================================================
+    HERO SECTION
+=========================================================*/
+
+
+.features-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 55px;
+    border-radius: 32px;
+    background: linear-gradient( 135deg, #2563EB, #4F46E5 );
+    color: white;
+    box-shadow: 0 20px 45px rgba(37,99,235,.25);
+    margin-bottom: 60px;
+}
+
+
+
+
+
+.features-hero-content {
+    max-width: 750px;
+}
+
+
+
+
+
+/*=========================================================
+    BADGE
+=========================================================*/
+
+
+.features-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.18);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+
+
+
+/*=========================================================
+    HERO TITLE
+=========================================================*/
+
+
+.features-hero h1 {
+    margin: 25px 0;
+    font-size: clamp(2.2rem,4vw,3.5rem);
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+
+
+
+
+.features-hero p {
+    max-width: 650px;
+    color: rgba(255,255,255,.85);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+
+
+
+
+/*=========================================================
+    HERO BUTTONS
+=========================================================*/
+
+
+.features-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+
+
+
+
+    .features-buttons .btn {
+        padding: 13px 28px;
+        border-radius: 14px;
+        font-weight: 700;
+    }
+
+
+
+
+
+    .features-buttons .btn-primary {
+        background: white;
+        color: #2563EB;
+        border: none;
+    }
+
+
+
+
+
+        .features-buttons .btn-primary:hover {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+
+
+
+
+    .features-buttons .btn-outline-primary {
+        border: 2px solid white;
+        color: white;
+    }
+
+
+
+
+
+        .features-buttons .btn-outline-primary:hover {
+            background: white;
+            color: #2563EB;
+        }
+
+
+
+
+
+/*=========================================================
+    HERO ICON
+=========================================================*/
+
+
+.features-hero-icon {
+    width: 180px;
+    height: 180px;
+    border-radius: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(10px);
+}
+
+
+
+
+
+    .features-hero-icon i {
+        font-size: 90px;
+        color: white;
+    }
+
+
+
+
+
+/*=========================================================
+    SECTION HEADER
+=========================================================*/
+
+
+.features-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+
+
+
+
+    .features-heading span {
+        display: inline-block;
+        padding: 8px 18px;
+        background: #EFF6FF;
+        color: #2563EB;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+
+
+
+
+    .features-heading h2 {
+        margin: 18px 0 10px;
+        font-size: 34px;
+        font-weight: 800;
+        color: #0F172A;
+    }
+
+
+
+
+
+    .features-heading p {
+        color: #64748B;
+        font-size: 16px;
+    }
+/*=========================================================
+    EMS PRO v2.0
+    FEATURES CSS
+    PART 2 - FEATURE CARDS
+=========================================================*/
+
+
+
+/*=========================================================
+    FEATURE SECTION
+=========================================================*/
+
+
+.features-section {
+    margin-bottom: 60px;
+}
+
+
+
+
+
+/*=========================================================
+    FEATURE GRID
+=========================================================*/
+
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 28px;
+}
+
+
+
+
+
+/*=========================================================
+    FEATURE CARD
+=========================================================*/
+
+
+.feature-card {
+    position: relative;
+    background: white;
+    padding: 35px;
+    border-radius: 28px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    transition: .35s ease;
+    overflow: hidden;
+}
+
+
+
+
+
+    .feature-card::before {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #EFF6FF;
+        right: -50px;
+        top: -50px;
+        transition: .35s ease;
+    }
+
+
+
+
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 45px rgba(15,23,42,.12);
+    }
+
+
+
+
+
+        .feature-card:hover::before {
+            transform: scale(1.4);
+        }
+
+
+
+
+
+/*=========================================================
+    FEATURE ICON
+=========================================================*/
+
+
+.feature-icon {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    margin-bottom: 25px;
+    transition: .3s ease;
+}
+
+
+
+
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+
+
+
+
+/*=========================================================
+    ICON COLORS
+=========================================================*/
+
+
+.feature-icon.blue {
+    background: linear-gradient( 135deg, #2563EB, #3B82F6 );
+}
+
+
+
+
+.feature-icon.green {
+    background: linear-gradient( 135deg, #16A34A, #22C55E );
+}
+
+
+
+
+.feature-icon.orange {
+    background: linear-gradient( 135deg, #D97706, #F59E0B );
+}
+
+
+
+
+.feature-icon.red {
+    background: linear-gradient( 135deg, #DC2626, #EF4444 );
+}
+
+
+
+
+.feature-icon.purple {
+    background: linear-gradient( 135deg, #9333EA, #A855F7 );
+}
+
+
+
+
+.feature-icon.cyan {
+    background: linear-gradient( 135deg, #0891B2, #06B6D4 );
+}
+
+
+
+
+
+/*=========================================================
+    FEATURE CONTENT
+=========================================================*/
+
+
+.feature-card h4 {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 12px;
+    font-size: 21px;
+    font-weight: 800;
+    color: #0F172A;
+}
+
+
+
+
+
+.feature-card p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #64748B;
+    line-height: 1.7;
+    font-size: 15px;
+}
+/*=========================================================
+    EMS PRO v2.0
+    FEATURES CSS
+    PART 3 - CTA & RESPONSIVE
+=========================================================*/
+
+
+
+/*=========================================================
+    CTA SECTION
+=========================================================*/
+
+
+.features-cta {
+    margin-bottom: 40px;
+    padding: 55px;
+    border-radius: 32px;
+    text-align: center;
+    background: linear-gradient( 135deg, #EFF6FF, #DBEAFE );
+    border: 1px solid #BFDBFE;
+}
+
+
+
+
+
+.cta-content {
+    max-width: 750px;
+    margin: auto;
+}
+
+
+
+
+
+    .cta-content h2 {
+        font-size: 36px;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 15px;
+    }
+
+
+
+
+
+    .cta-content p {
+        color: #64748B;
+        font-size: 17px;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+
+
+
+
+    .cta-content .btn {
+        padding: 14px 35px;
+        border-radius: 14px;
+        font-weight: 700;
+        background: #2563EB;
+        border: none;
+        box-shadow: 0 10px 25px rgba(37,99,235,.25);
+    }
+
+
+
+
+
+        .cta-content .btn:hover {
+            background: #1D4ED8;
+            transform: translateY(-3px);
+        }
+
+
+
+
+
+/*=========================================================
+    PAGE ANIMATION
+=========================================================*/
+
+
+.features-page section {
+    animation: featureFade .5s ease;
+}
+
+
+
+
+
+@keyframes featureFade {
+
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+/*=========================================================
+    TABLET RESPONSIVE
+=========================================================*/
+
+
+@media(max-width:1200px) {
+
+
+    .features-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+
+
+
+/*=========================================================
+    MOBILE RESPONSIVE
+=========================================================*/
+
+
+@media(max-width:768px) {
+
+
+    .features-page {
+        padding: 20px 0;
+    }
+
+
+
+    .features-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px;
+    }
+
+
+
+        .features-hero h1 {
+            font-size: 2.2rem;
+        }
+
+
+
+    .features-hero-icon {
+        width: 120px;
+        height: 120px;
+    }
+
+
+
+        .features-hero-icon i {
+            font-size: 60px;
+        }
+
+
+
+    .features-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+
+
+        .features-buttons .btn {
+            width: 100%;
+        }
+
+
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+
+    .features-heading h2 {
+        font-size: 26px;
+    }
+
+
+
+    .features-cta {
+        padding: 35px 20px;
+    }
+
+
+
+    .cta-content h2 {
+        font-size: 28px;
+    }
+}
+
+
+
+
+
+/*=========================================================
+    SMALL MOBILE
+=========================================================*/
+
+
+@media(max-width:576px) {
+
+
+    .feature-card {
+        padding: 25px;
+    }
+
+
+
+    .features-hero {
+        border-radius: 22px;
+    }
+
+
+
+    .feature-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 24px;
+    }
+}

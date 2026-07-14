@@ -18,9 +18,15 @@ namespace EmployeeManagementSystem.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         public string Phone { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Gender is required.")]
+        [StringLength(10)]
+        public string Gender { get; set; } = string.Empty;
 
         [Required]
         public decimal Salary { get; set; }
@@ -37,5 +43,11 @@ namespace EmployeeManagementSystem.Models
         [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public int? RoleId { get; set; }
+
+        public Role? Role { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        public DateTime? LastLogin { get; set; }
     }
 }

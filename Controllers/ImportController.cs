@@ -114,9 +114,11 @@ namespace EmployeeManagementSystem.Controllers
                 string lastName = worksheet.Cell(row, 2).GetString().Trim();
                 string email = worksheet.Cell(row, 3).GetString().Trim();
                 string phone = worksheet.Cell(row, 4).GetString().Trim();
-                decimal salary = worksheet.Cell(row, 5).GetValue<decimal>();
-                DateTime joiningDate = worksheet.Cell(row, 6).GetDateTime();
-                string departmentName = worksheet.Cell(row, 7).GetString().Trim();
+                string gender = worksheet.Cell(row, 5).GetString().Trim();
+                decimal salary = worksheet.Cell(row, 6).GetValue<decimal>();
+                DateTime joiningDate = worksheet.Cell(row, 7).GetDateTime();
+                string departmentName = worksheet.Cell(row, 8).GetString().Trim();
+                string roleName = worksheet.Cell(row, 9).GetString().Trim();
 
                 // Skip duplicate employee
                 bool employeeExists = await _context.Employees
@@ -131,6 +133,14 @@ namespace EmployeeManagementSystem.Controllers
                 // Find Department
                 var department = await _context.Departments
                     .FirstOrDefaultAsync(d => d.DepartmentName == departmentName);
+                var role = await _context.Roles
+    .FirstOrDefaultAsync(r => r.RoleName == roleName);
+
+                if (role == null)
+                {
+                    skippedCount++;
+                    continue;
+                }
 
                 // Create Department if not exists
                 if (department == null)
@@ -153,9 +163,11 @@ namespace EmployeeManagementSystem.Controllers
                     LastName = lastName,
                     Email = email,
                     Phone = phone,
+                    Gender = gender,
                     Salary = salary,
                     JoiningDate = joiningDate,
-                    DepartmentId = department.DepartmentId
+                    DepartmentId = department.DepartmentId,
+                    RoleId = role.RoleId
                 };
 
                 _context.Employees.Add(employee);
@@ -164,6 +176,10 @@ namespace EmployeeManagementSystem.Controllers
             }
 
             await _context.SaveChangesAsync();
+            await Helpers.ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    $"Imported {importedCount} employee(s), Skipped {skippedCount}, Created {newDepartmentCount} new department(s).");
 
             TempData["Success"] =
                 $"Import Completed Successfully! " +

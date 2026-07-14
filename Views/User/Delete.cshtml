@@ -1,0 +1,126 @@
+﻿@model EmployeeManagementSystem.Models.Admin
+
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<div class="container py-4">
+
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <div class="card-header bg-danger text-white rounded-top-4 py-3">
+
+            <h2 class="mb-0">
+                <i class="bi bi-trash-fill"></i>
+                Delete User
+            </h2>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="alert alert-warning">
+
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                <strong>Warning!</strong>
+
+                This action cannot be undone.
+
+            </div>
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+                    Username
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Username
+                </dd>
+
+                <dt class="col-sm-3">
+                    Role
+                </dt>
+
+                <dd class="col-sm-9">
+
+                    @if (Model.Role == "Admin")
+                    {
+                        <span class="badge bg-danger">Admin</span>
+                    }
+                    else if (Model.Role == "HR")
+                    {
+                        <span class="badge bg-success">HR</span>
+                    }
+                    else if (Model.Role == "Manager")
+                    {
+                        <span class="badge bg-primary">Manager</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@Model.Role</span>
+                    }
+
+                </dd>
+
+                <dt class="col-sm-3">
+                    Status
+                </dt>
+
+                <dd class="col-sm-9">
+
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+
+                </dd>
+
+                <dt class="col-sm-3">
+                    Last Login
+                </dt>
+
+                <dd class="col-sm-9">
+
+                    @(Model.LastLogin?.ToString("dd MMM yyyy hh:mm tt")
+                        ?? "Never Logged In")
+
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            <form asp-action="Delete">
+
+                <input type="hidden"
+                       asp-for="AdminId" />
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    ← Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    <i class="bi bi-trash-fill"></i>
+
+                    Delete User
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
