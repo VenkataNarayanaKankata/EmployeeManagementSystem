@@ -1,11 +1,12 @@
 
+using EmployeeManagementSystem.Data;
+using EmployeeManagementSystem.Helpers;
+using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagementSystem.Models;
-using EmployeeManagementSystem.Data;
-using Microsoft.AspNetCore.Authorization;
-using EmployeeManagementSystem.Helpers;
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,HR,Manager")]
 public class DepartmentController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -16,9 +17,48 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string? search, bool? status)
     {
-        return View(await _context.Departments.ToListAsync());
+        var query = _context.Departments
+            .Include(d => d.Employees)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(d =>
+                d.DepartmentCode.Contains(search) ||
+                d.DepartmentName.Contains(search) ||
+                (d.Description ?? "").Contains(search));
+        }
+
+        if (status.HasValue)
+        {
+            query = query.Where(d => d.IsActive == status.Value);
+        }
+
+        var departments = await query
+            .OrderBy(d => d.DepartmentName)
+            .Select(d => new DepartmentViewModel
+            {
+                DepartmentId = d.DepartmentId,
+                DepartmentCode = d.DepartmentCode,
+                DepartmentName = d.DepartmentName,
+                Description = d.Description,
+                IsActive = d.IsActive,
+                EmployeeCount = d.Employees.Count(e => !e.IsDeleted),
+                ActiveEmployeeCount = d.Employees.Count(e => !e.IsDeleted && e.IsActive),
+                InactiveEmployeeCount = d.Employees.Count(e => !e.IsDeleted && !e.IsActive)
+            })
+            .ToListAsync();
+
+        ViewBag.Search = search;
+        ViewBag.Status = status;
+        ViewBag.TotalDepartments = departments.Count;
+        ViewBag.ActiveDepartments = departments.Count(x => x.IsActive);
+        ViewBag.InactiveDepartments = departments.Count(x => !x.IsActive);
+        ViewBag.TotalEmployees = departments.Sum(x => x.EmployeeCount);
+
+        return View(departments);
     }
 
     // GET: DEPARTMENTS/Details/5
@@ -41,6 +81,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS/Create
+    [Authorize(Roles = "Admin,HR")]
     public IActionResult Create()
     {
         return View();
@@ -49,26 +90,53 @@ public class DepartmentController : Controller
     // POST: DEPARTMENTS/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
     [HttpPost]
+    [Authorize(Roles = "Admin,HR")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("DepartmentId,DepartmentName")] Department department)
+    public async Task<IActionResult> Create(Department department)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
+            return View(department);
+
+        bool codeExists = await _context.Departments
+            .AnyAsync(d => d.DepartmentCode == department.DepartmentCode);
+
+        if (codeExists)
         {
-            _context.Add(department);
-            await _context.SaveChangesAsync();
+            ModelState.AddModelError(nameof(department.DepartmentCode),
+                "Department Code already exists.");
 
-            await ActivityLogger.LogAsync(
-                _context,
-                User.Identity?.Name,
-                $"Added Department: {department.DepartmentName}");
-
-            return RedirectToAction(nameof(Index));
+            return View(department);
         }
-        return View(department);
+
+        bool nameExists = await _context.Departments
+            .AnyAsync(d => d.DepartmentName == department.DepartmentName);
+
+        if (nameExists)
+        {
+            ModelState.AddModelError(nameof(department.DepartmentName),
+                "Department Name already exists.");
+
+            return View(department);
+        }
+
+        _context.Departments.Add(department);
+
+        await _context.SaveChangesAsync();
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            $"Created Department '{department.DepartmentName}'");
+
+        TempData["Success"] = "Department created successfully.";
+
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: DEPARTMENTS/Edit/5
+    [Authorize(Roles = "Admin,HR")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -90,42 +158,72 @@ public class DepartmentController : Controller
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
+    [Authorize(Roles = "Admin,HR")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("DepartmentId,DepartmentName")] Department department)
+    public async Task<IActionResult> Edit(int id, Department department)
     {
         if (id != department.DepartmentId)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
+            return View(department);
+
+        bool codeExists = await _context.Departments
+            .AnyAsync(d =>
+                d.DepartmentCode == department.DepartmentCode &&
+                d.DepartmentId != department.DepartmentId);
+
+        if (codeExists)
         {
-            try
-            {
-                _context.Update(department);
-                await _context.SaveChangesAsync();
-                await ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    $"Updated Department: {department.DepartmentName}");
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DepartmentExists(department.DepartmentId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            ModelState.AddModelError(nameof(department.DepartmentCode),
+                "Department Code already exists.");
+
+            return View(department);
+        }
+
+        bool nameExists = await _context.Departments
+            .AnyAsync(d =>
+                d.DepartmentName == department.DepartmentName &&
+                d.DepartmentId != department.DepartmentId);
+
+        if (nameExists)
+        {
+            ModelState.AddModelError(nameof(department.DepartmentName),
+                "Department Name already exists.");
+
+            return View(department);
+        }
+
+        try
+        {
+            _context.Update(department);
+
+            await _context.SaveChangesAsync();
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Updated Department '{department.DepartmentName}'");
+
+            TempData["Success"] = "Department updated successfully.";
+
             return RedirectToAction(nameof(Index));
         }
-        return View(department);
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!DepartmentExists(department.DepartmentId))
+            {
+                return NotFound();
+            }
+
+            throw;
+        }
     }
 
     // GET: DEPARTMENTS/Delete/5
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -140,12 +238,14 @@ public class DepartmentController : Controller
         {
             return NotFound();
         }
+        
 
         return View(department);
     }
 
     // POST: DEPARTMENTS/Delete/5
     [HttpPost, ActionName("Delete")]
+    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
@@ -177,6 +277,8 @@ public class DepartmentController : Controller
             _context,
             User.Identity?.Name,
             $"Deleted Department: {department.DepartmentName}");
+        TempData["Success"] =
+    $"Department '{department.DepartmentName}' deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }

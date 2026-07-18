@@ -1,162 +1,448 @@
-@model IEnumerable<EmployeeManagementSystem.Models.Department>
+@model IEnumerable<EmployeeManagementSystem.ViewModels.DepartmentViewModel>
 
 @{
-    ViewData["Title"] = "Department Management";
+    ViewData["Title"] = "Departments";
 }
 
-<div class="container mt-4">
+<div class="container-fluid py-4">
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>⚠ Warning!</strong> @TempData["Error"]
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"></button>
-        </div>
-    }
-
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
         <div>
-            <h2 class="fw-bold text-primary">
-                🏢 Department Management
-            </h2>
 
-            <p class="text-muted mb-0">
+            <h1 class="fw-bold text-primary mb-2">
+
+                <i class="bi bi-building"></i>
+
+                Department Management
+
+            </h1>
+
+            <p class="text-muted fs-5">
+
                 Manage your departments and organize employees efficiently.
+
             </p>
+
         </div>
 
-        <a asp-action="Create"
-           class="btn btn-primary">
-            ➕ Add Department
-        </a>
+        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+        {
+            <a asp-action="Create"
+               class="btn btn-primary btn-lg px-4">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add Department
+
+            </a>
+        }
 
     </div>
 
-    <!-- Department Table -->
-    <div class="card shadow">
+    <div class="row g-4 mb-4">
 
-        <div class="card-header bg-dark text-white">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+
+                        Total Departments
+
+                    </h5>
+
+                    <h1 class="fw-bold text-primary">
+
+                        @ViewBag.TotalDepartments
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+
+                        Active Departments
+
+                    </h5>
+
+                    <h1 class="fw-bold text-success">
+
+                        @ViewBag.ActiveDepartments
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+
+                        Inactive Departments
+
+                    </h5>
+
+                    <h1 class="fw-bold text-danger">
+
+                        @ViewBag.InactiveDepartments
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+
+                        Total Employees
+
+                    </h5>
+
+                    <h1 class="fw-bold text-warning">
+
+                        @ViewBag.TotalEmployees
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-primary text-white">
 
             <h5 class="mb-0">
-                🏢 Department List
+
+                <i class="bi bi-search"></i>
+
+                Search & Filter
+
             </h5>
 
         </div>
 
-        <div class="table-responsive">
+        <div class="card-body">
 
-            <table class="table table-striped table-bordered align-middle mb-0">
+            <form asp-action="Index" method="get">
 
-                <thead class="table-primary">
+                <div class="row align-items-end">
 
-                    <tr>
+                    <div class="col-lg-6">
 
-                        <th width="80">#</th>
+                        <label class="form-label fw-semibold">
 
-                        <th>Department Name</th>
+                            Department Name
 
-                        <th width="260" class="text-center">
-                            Actions
-                        </th>
+                        </label>
 
-                    </tr>
+                        <input type="text"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="form-control form-control-lg"
+                               placeholder="Search by Department Code, Name or Description..." />
 
-                </thead>
+                    </div>
 
-                <tbody>
+                    <div class="col-lg-3">
 
-                    @{
-                        int count = 1;
-                    }
+                        <label class="form-label fw-semibold">
 
-                    @if (Model.Any())
-                    {
-                        @foreach (var item in Model)
+                            Status
+
+                        </label>
+
+                        <select name="status"
+                                class="form-select form-select-lg">
+
+                            <option value="">All Departments</option>
+
+                            @if (ViewBag.Status?.ToString() == "true")
+                            {
+                                <option value="true" selected>Active</option>
+                            }
+                            else
+                            {
+                                <option value="true">Active</option>
+                            }
+
+                            @if (ViewBag.Status?.ToString() == "false")
+                            {
+                                <option value="false" selected>Inactive</option>
+                            }
+                            else
+                            {
+                                <option value="false">Inactive</option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <div class="d-grid gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg">
+
+                                <i class="bi bi-search"></i>
+
+                                Search
+
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-arrow-clockwise"></i>
+
+                                Reset
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-building"></i>
+
+                Department List
+
+            </h5>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>S.No</th>
+
+                            <th>Department Code</th>
+
+                            <th>Department Name</th>
+
+                            <th>Description</th>
+
+                            <th>Employees</th>
+
+                            <th>Status</th>
+
+                            <th class="text-center">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Any())
+                        {
+                            int sno = 1;
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@sno</td>
+
+                                    <td>
+                                        <span class="fw-semibold">@item.DepartmentCode</span>
+                                    </td>
+
+                                    <td>@item.DepartmentName</td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(item.Description)
+                                            ? "-"
+                                            : item.Description)
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-info">
+                                            @item.EmployeeCount
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="badge bg-success">
+                                                Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Inactive
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.DepartmentId"
+                                           class="btn btn-sm btn-info text-white">
+
+                                            <i class="bi bi-eye"></i>
+
+                                            View
+
+                                        </a>
+
+                                        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                                        {
+                                            <a asp-action="Edit"
+                                               asp-route-id="@item.DepartmentId"
+                                               class="btn btn-sm btn-warning">
+
+                                                <i class="bi bi-pencil-square"></i>
+
+                                                Edit
+
+                                            </a>
+                                        }
+
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@item.DepartmentId"
+                                               class="btn btn-sm btn-danger">
+
+                                                <i class="bi bi-trash"></i>
+
+                                                Delete
+
+                                            </a>
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                                sno++;
+                            }
+                        }
+                        else
                         {
                             <tr>
 
-                                <td>
-                                    @count
-                                </td>
+                                <td colspan="7" class="text-center py-5">
 
-                                <td>
-                                    <span class="fw-semibold">
-                                        @item.DepartmentName
-                                    </span>
-                                </td>
+                                    <i class="bi bi-building display-1 text-secondary"></i>
 
-                                <td class="text-center">
+                                    <h4 class="mt-3">
 
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.DepartmentId"
-                                       class="btn btn-warning btn-sm me-1">
-                                         Edit
-                                    </a>
+                                        No Departments Found
 
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.DepartmentId"
-                                       class="btn btn-info btn-sm text-white me-1">
-                                         Details
-                                    </a>
+                                    </h4>
 
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.DepartmentId"
-                                       class="btn btn-danger btn-sm">
-                                         Delete
-                                    </a>
+                                    <p class="text-muted">
+
+                                        Click <strong>Add Department</strong> to create your first department.
+
+                                    </p>
 
                                 </td>
 
                             </tr>
-
-                            count++;
                         }
-                    }
-                    else
-                    {
-                        <tr>
 
-                            <td colspan="3" class="text-center py-4">
+                    </tbody>
 
-                                <h5 class="text-muted">
-                                    No Departments Found
-                                </h5>
+                </table>
 
-                            </td>
-
-                        </tr>
-                    }
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 
     </div>
 
 </div>
+@section Styles {
 
-<style>
+    <style>
 
-    .card {
-        border-radius: 12px;
-    }
-
-    .btn {
-        border-radius: 8px;
-    }
-
-    .table {
-        margin-bottom: 0;
-    }
-
-        .table tbody tr:hover {
-            background-color: transparent !important;
+        .table th {
+            font-weight: 700;
+            vertical-align: middle;
         }
 
-</style>
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .card {
+            border-radius: 16px;
+        }
+
+        .badge {
+            font-size: 14px;
+            padding: 8px 12px;
+        }
+
+        .btn {
+            border-radius: 8px;
+        }
+
+    </style>
+
+}

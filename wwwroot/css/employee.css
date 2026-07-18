@@ -392,3 +392,65 @@ ADD EMPLOYEE PAGE
         margin-bottom: 10px;
     }
 }
+/*==========================================
+      DASHBOARD EMPLOYEE TABLE
+==========================================*/
+
+.recent-section {
+    margin-top: 30px;
+}
+
+.recent-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+.employee-dashboard-table {
+    margin-bottom: 0;
+}
+
+    .employee-dashboard-table thead {
+        background: #f8f9fc;
+    }
+
+        .employee-dashboard-table thead th {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 700;
+            border: none;
+            padding: 15px;
+        }
+
+    .employee-dashboard-table tbody td {
+        vertical-align: middle;
+        padding: 14px;
+        border-color: #eef2f7;
+    }
+
+    .employee-dashboard-table tbody tr {
+        transition: .25s;
+    }
+
+        .employee-dashboard-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+.dashboard-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+}
+
+.employee-dashboard-table .badge {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.employee-dashboard-table .btn {
+    border-radius: 30px;
+}

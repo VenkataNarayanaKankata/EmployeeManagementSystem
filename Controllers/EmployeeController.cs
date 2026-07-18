@@ -1,19 +1,20 @@
-
+using ClosedXML.Excel;
 using EmployeeManagementSystem.Data;
+using EmployeeManagementSystem.Documents;
+using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using ClosedXML.Excel;
 using QuestPDF.Fluent;
-using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using EmployeeManagementSystem.Documents;
-using EmployeeManagementSystem.Helpers;
 using System.IO;
 
-[Authorize(Roles = "Admin,HR")]
+[Authorize]
 public class EmployeeController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -26,45 +27,98 @@ public class EmployeeController : Controller
         _context = context;
         _webHostEnvironment = webHostEnvironment;
     }
-
-    // GET: EMPLOYEES
-    public async Task<IActionResult> Index(string searchString, int? departmentId, int? page)
+    [Permission("Employee.View")]
+    public async Task<IActionResult> Index(
+        string searchString,
+        int? branchId,
+        int? departmentId,
+        int? designationId,
+        int? roleId)
     {
+        ViewData["BranchId"] = new SelectList(
+            _context.Branches
+                .Where(b => b.IsActive),
+            "BranchId",
+            "BranchName",
+            branchId);
+
+
         ViewData["DepartmentId"] = new SelectList(
-            _context.Departments,
+            _context.Departments
+                .Where(d => d.IsActive),
             "DepartmentId",
             "DepartmentName",
             departmentId);
 
+
+        ViewData["DesignationId"] = new SelectList(
+            _context.Designations
+                .Where(d => d.IsActive),
+            "DesignationId",
+            "DesignationName",
+            designationId);
+
+
+        ViewData["RoleId"] = new SelectList(
+            _context.Roles
+                .Where(r => r.IsActive),
+            "RoleId",
+            "RoleName",
+            roleId);
+
+
         ViewBag.SearchString = searchString;
 
         var employees = _context.Employees
-    .Include(e => e.Department)
-    .Include(e => e.Role)
-    .Where(e => !e.IsDeleted)
-    .AsQueryable();
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .Where(e => !e.IsDeleted)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchString))
         {
             employees = employees.Where(e =>
+                e.EmployeeCode.Contains(searchString) ||
                 e.FirstName.Contains(searchString) ||
-                e.LastName.Contains(searchString));
+                e.LastName.Contains(searchString) ||
+                e.Email.Contains(searchString));
+        }
+
+        if (branchId.HasValue)
+        {
+            employees = employees.Where(e =>
+                e.BranchId == branchId);
         }
 
         if (departmentId.HasValue)
         {
-            employees = employees.Where(e => e.DepartmentId == departmentId);
+            employees = employees.Where(e =>
+                e.DepartmentId == departmentId);
         }
 
-        var employeeList = await employees
-    .OrderBy(e => e.EmployeeId)
-    .ToListAsync();
 
-        return View(await employees
-     .OrderBy(e => e.EmployeeId)
-     .ToListAsync());
+        if (designationId.HasValue)
+        {
+            employees = employees.Where(e =>
+                e.DesignationId == designationId);
+        }
+
+        if (roleId.HasValue)
+        {
+            employees = employees.Where(e =>
+                e.RoleId == roleId);
+        }
+        var employeeList = await employees
+            .OrderBy(e => e.EmployeeId)
+            .ToListAsync();
+
+
+        return View(employeeList);
     }
     // GET: EMPLOYEES/Details/5
+    [Permission("Employee.ViewProfile")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -73,9 +127,11 @@ public class EmployeeController : Controller
         }
 
         var employee = await _context.Employees
-    .Include(e => e.Department)
-    .Include(e => e.Role)
-    .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
 
         if (employee == null)
         {
@@ -84,15 +140,16 @@ public class EmployeeController : Controller
 
         return View(employee);
     }
-    // GET: Employee/Import
-  
     [HttpGet]
+    [Permission("Employee.Import")]
     public IActionResult Import()
     {
         return View();
     }
-    // POST: Employee/Import
+
+
     [HttpPost]
+    [Permission("Employee.Import")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Import(IFormFile file)
     {
@@ -112,38 +169,125 @@ public class EmployeeController : Controller
 
         int lastRow = worksheet.LastRowUsed().RowNumber();
 
-        TempData["Success"] = $"Excel contains {lastRow - 1} employee(s).";
+        for (int row = 2; row <= lastRow; row++)
+        {
+            string employeeCode = worksheet.Cell(row, 1).Value.ToString();
+            string firstName = worksheet.Cell(row, 2).Value.ToString();
+            string lastName = worksheet.Cell(row, 3).Value.ToString();
+            string email = worksheet.Cell(row, 4).Value.ToString();
+            string phone = worksheet.Cell(row, 5).Value.ToString();
+            string gender = worksheet.Cell(row, 6).Value.ToString();
+            decimal salary = Convert.ToDecimal(
+                worksheet.Cell(row, 7).Value);
 
-        return RedirectToAction(nameof(Import));
+            DateTime joiningDate = Convert.ToDateTime(
+                worksheet.Cell(row, 8).Value);
+
+            string branchName = worksheet.Cell(row, 9).Value.ToString();
+            string departmentName = worksheet.Cell(row, 10).Value.ToString();
+            string designationName = worksheet.Cell(row, 11).Value.ToString();
+            string roleName = worksheet.Cell(row, 12).Value.ToString();
+
+
+            var branch = await _context.Branches
+                .FirstOrDefaultAsync(b => b.BranchName == branchName);
+
+
+            var department = await _context.Departments
+                .FirstOrDefaultAsync(d => d.DepartmentName == departmentName);
+
+
+            var designation = await _context.Designations
+                .FirstOrDefaultAsync(d =>
+                    d.DesignationName == designationName &&
+                    d.DepartmentId == department.DepartmentId);
+
+
+            var role = await _context.Roles
+                .FirstOrDefaultAsync(r => r.RoleName == roleName);
+
+
+            if (branch == null ||
+                department == null ||
+                designation == null ||
+                role == null)
+            {
+                continue;
+            }
+
+
+            Employee employee = new Employee
+            {
+                EmployeeCode = employeeCode,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Phone = phone,
+                Gender = gender,
+                Salary = salary,
+                JoiningDate = joiningDate,
+
+                BranchId = branch.BranchId,
+                DepartmentId = department.DepartmentId,
+                DesignationId = designation.DesignationId,
+                RoleId = role.RoleId,
+
+                IsActive = true,
+                IsDeleted = false
+            };
+
+
+            _context.Employees.Add(employee);
+        }
+
+
+        await _context.SaveChangesAsync();
+
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            "Imported Employees from Excel");
+
+
+        TempData["Success"] =
+            $"Excel imported successfully. Total rows: {lastRow - 1}";
+
+
+        return RedirectToAction(nameof(Index));
     }
-    // GET: Employee/DownloadTemplate
+    [Permission("Employee.Import")]
     public IActionResult DownloadTemplate()
     {
         using (var workbook = new XLWorkbook())
         {
             var worksheet = workbook.Worksheets.Add("Employees");
 
-            // Headers
-            worksheet.Cell(1, 1).Value = "FirstName";
-            worksheet.Cell(1, 2).Value = "LastName";
-            worksheet.Cell(1, 3).Value = "Email";
-            worksheet.Cell(1, 4).Value = "Phone";
-            worksheet.Cell(1, 5).Value = "Gender";
-            worksheet.Cell(1, 6).Value = "Salary";
-            worksheet.Cell(1, 7).Value = "JoiningDate";
-            worksheet.Cell(1, 8).Value = "Department";
-            worksheet.Cell(1, 9).Value = "Role";
+            worksheet.Cell(1, 1).Value = "EmployeeCode";
+            worksheet.Cell(1, 2).Value = "FirstName";
+            worksheet.Cell(1, 3).Value = "LastName";
+            worksheet.Cell(1, 4).Value = "Email";
+            worksheet.Cell(1, 5).Value = "Phone";
+            worksheet.Cell(1, 6).Value = "Gender";
+            worksheet.Cell(1, 7).Value = "Salary";
+            worksheet.Cell(1, 8).Value = "JoiningDate";
+            worksheet.Cell(1, 9).Value = "Branch";
+            worksheet.Cell(1, 10).Value = "Department";
+            worksheet.Cell(1, 11).Value = "Designation";
+            worksheet.Cell(1, 12).Value = "Role";
 
-            // Sample Data
-            worksheet.Cell(2, 1).Value = "Venkat";
-            worksheet.Cell(2, 2).Value = "Narayana";
-            worksheet.Cell(2, 3).Value = "venkat@gmail.com";
-            worksheet.Cell(2, 4).Value = "9876543210";
-            worksheet.Cell(2, 5).Value = "Male";
-            worksheet.Cell(2, 6).Value = 50000;
-            worksheet.Cell(2, 7).Value = DateTime.Today;
-            worksheet.Cell(2, 8).Value = "IT";
-            worksheet.Cell(2, 9).Value = "Employee";
+            worksheet.Cell(2, 1).Value = "EMP001";
+            worksheet.Cell(2, 2).Value = "Venkat";
+            worksheet.Cell(2, 3).Value = "Narayana";
+            worksheet.Cell(2, 4).Value = "venkat@gmail.com";
+            worksheet.Cell(2, 5).Value = "9876543210";
+            worksheet.Cell(2, 6).Value = "Male";
+            worksheet.Cell(2, 7).Value = 50000;
+            worksheet.Cell(2, 8).Value = DateTime.Today;
+            worksheet.Cell(2, 9).Value = "Hyderabad Head Office";
+            worksheet.Cell(2, 10).Value = "Information Technology";
+            worksheet.Cell(2, 11).Value = "Software Engineer";
+            worksheet.Cell(2, 12).Value = "Employee";
 
             worksheet.Columns().AdjustToContents();
 
@@ -158,91 +302,161 @@ public class EmployeeController : Controller
             }
         }
     }
-
-
-    // GET: EMPLOYEES/Create
-    // GET: EMPLOYEES/Create
+    [Permission("Employee.Create")]
     public IActionResult Create()
     {
+        var lastEmployee = _context.Employees
+            .OrderByDescending(e => e.EmployeeId)
+            .FirstOrDefault();
+
+        string nextEmployeeCode = "EMP001";
+
+        if (lastEmployee != null &&
+            !string.IsNullOrEmpty(lastEmployee.EmployeeCode))
+        {
+            int number = int.Parse(
+                lastEmployee.EmployeeCode.Replace("EMP", ""));
+
+            nextEmployeeCode = $"EMP{(number + 1):D3}";
+        }
+
+        var employee = new Employee
+        {
+            EmployeeCode = nextEmployeeCode
+        };
+
+
+        ViewData["BranchId"] = new SelectList(
+            _context.Branches
+                .Where(b => b.IsActive),
+            "BranchId",
+            "BranchName");
+
+
         ViewData["DepartmentId"] = new SelectList(
-            _context.Departments,
+            _context.Departments
+                .Where(d => d.IsActive),
             "DepartmentId",
             "DepartmentName");
 
-        ViewData["RoleId"] = new SelectList(
-     _context.Roles,
-     "RoleId",
-     "RoleName");
 
-        return View();
+        ViewData["DesignationId"] = new SelectList(
+            _context.Designations
+                .Where(d => d.IsActive),
+            "DesignationId",
+            "DesignationName");
+
+
+        ViewData["RoleId"] = new SelectList(
+            _context.Roles
+                .Where(r => r.IsActive),
+            "RoleId",
+            "RoleName");
+
+
+        return View(employee);
     }
 
-    // POST: EMPLOYEES/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
     [HttpPost]
+    [Permission("Employee.Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,DepartmentId,RoleId")] Employee employee,
-    IFormFile? PhotoFile)
+        [Bind("EmployeeId,EmployeeCode,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId")]
+    Employee employee,
+        IFormFile? PhotoFile)
     {
         if (ModelState.IsValid)
         {
-            // Check if a photo was uploaded
             if (PhotoFile != null && PhotoFile.Length > 0)
             {
-                // Create a unique file name
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(PhotoFile.FileName);
+                string fileName = Guid.NewGuid().ToString() +
+                                  Path.GetExtension(PhotoFile.FileName);
 
-                // Full path to wwwroot/uploads
-                string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                string uploadFolder = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "uploads");
 
-                // Create folder if it doesn't exist
+
                 if (!Directory.Exists(uploadFolder))
                 {
                     Directory.CreateDirectory(uploadFolder);
                 }
 
-                // Complete file path
-                string filePath = Path.Combine(uploadFolder, fileName);
 
-                // Save the file
+                string filePath = Path.Combine(
+                    uploadFolder,
+                    fileName);
+
+
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await PhotoFile.CopyToAsync(stream);
                 }
 
-                // Save file name in database
+
                 employee.PhotoPath = fileName;
             }
 
+
+            employee.IsActive = true;
+            employee.IsDeleted = false;
+
+
             _context.Add(employee);
+
             await _context.SaveChangesAsync();
+
 
             await ActivityLogger.LogAsync(
                 _context,
                 User.Identity?.Name,
                 $"Added Employee: {employee.FirstName} {employee.LastName}");
 
+
+            TempData["Success"] = "Employee created successfully.";
+
             return RedirectToAction(nameof(Index));
         }
 
+
+        ViewData["BranchId"] = new SelectList(
+            _context.Branches
+                .Where(b => b.IsActive),
+            "BranchId",
+            "BranchName",
+            employee.BranchId);
+
+
         ViewData["DepartmentId"] = new SelectList(
-    _context.Departments,
-    "DepartmentId",
-    "DepartmentName",
-    employee.DepartmentId);
+            _context.Departments
+                .Where(d => d.IsActive),
+            "DepartmentId",
+            "DepartmentName",
+            employee.DepartmentId);
+
+
+        ViewData["DesignationId"] = new SelectList(
+            _context.Designations
+                .Where(d => d.IsActive),
+            "DesignationId",
+            "DesignationName",
+            employee.DesignationId);
+
 
         ViewData["RoleId"] = new SelectList(
-            _context.Roles,
+            _context.Roles
+                .Where(r => r.IsActive),
             "RoleId",
             "RoleName",
             employee.RoleId);
 
+
         return View(employee);
     }
 
-    // GET: EMPLOYEES/Edit/5
+    [Permission("Employee.Edit")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -250,65 +464,97 @@ public class EmployeeController : Controller
             return NotFound();
         }
 
-        var employee = await _context.Employees.FindAsync(id);
+        var employee = await _context.Employees
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
+
         if (employee == null)
         {
             return NotFound();
         }
+
+
+        ViewData["BranchId"] = new SelectList(
+            _context.Branches.Where(b => b.IsActive),
+            "BranchId",
+            "BranchName",
+            employee.BranchId);
+
+
         ViewData["DepartmentId"] = new SelectList(
-     _context.Departments,
-     "DepartmentId",
-     "DepartmentName",
-     employee.DepartmentId);
+            _context.Departments.Where(d => d.IsActive),
+            "DepartmentId",
+            "DepartmentName",
+            employee.DepartmentId);
+
+
+        ViewData["DesignationId"] = new SelectList(
+            _context.Designations.Where(d => d.IsActive),
+            "DesignationId",
+            "DesignationName",
+            employee.DesignationId);
+
 
         ViewData["RoleId"] = new SelectList(
-            _context.Roles,
+            _context.Roles.Where(r => r.IsActive),
             "RoleId",
             "RoleName",
             employee.RoleId);
 
+
         return View(employee);
     }
 
-    // POST: EMPLOYEES/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
     [HttpPost]
+    [Permission("Employee.Edit")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
-    int id,
-    [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,DepartmentId,RoleId,PhotoPath")] Employee employee,
-    IFormFile? PhotoFile)
+        int id,
+        [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId,PhotoPath")]
+    Employee employee,
+        IFormFile? PhotoFile)
     {
         if (id != employee.EmployeeId)
         {
             return NotFound();
         }
 
+
         if (ModelState.IsValid)
         {
             try
             {
-                // Get existing employee from database
-                var existingEmployee = await _context.Employees.FindAsync(id);
+                var existingEmployee = await _context.Employees
+                    .FirstOrDefaultAsync(e => e.EmployeeId == id);
+
 
                 if (existingEmployee == null)
+                {
                     return NotFound();
+                }
 
-                // Update employee details
+
                 existingEmployee.FirstName = employee.FirstName;
                 existingEmployee.LastName = employee.LastName;
                 existingEmployee.Email = employee.Email;
                 existingEmployee.Phone = employee.Phone;
+                existingEmployee.Gender = employee.Gender;
                 existingEmployee.Salary = employee.Salary;
                 existingEmployee.JoiningDate = employee.JoiningDate;
+
+                existingEmployee.BranchId = employee.BranchId;
                 existingEmployee.DepartmentId = employee.DepartmentId;
+                existingEmployee.DesignationId = employee.DesignationId;
                 existingEmployee.RoleId = employee.RoleId;
 
-                // Upload new photo if selected
+
                 if (PhotoFile != null && PhotoFile.Length > 0)
                 {
-                    // Delete old photo
                     if (!string.IsNullOrEmpty(existingEmployee.PhotoPath))
                     {
                         string oldFile = Path.Combine(
@@ -316,35 +562,56 @@ public class EmployeeController : Controller
                             "uploads",
                             existingEmployee.PhotoPath);
 
+
                         if (System.IO.File.Exists(oldFile))
                         {
                             System.IO.File.Delete(oldFile);
                         }
                     }
 
-                    // Create new filename
+
                     string fileName = Guid.NewGuid().ToString() +
                                       Path.GetExtension(PhotoFile.FileName);
+
 
                     string uploadFolder = Path.Combine(
                         _webHostEnvironment.WebRootPath,
                         "uploads");
 
-                    string filePath = Path.Combine(uploadFolder, fileName);
+
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
+
+
+                    string filePath = Path.Combine(
+                        uploadFolder,
+                        fileName);
+
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await PhotoFile.CopyToAsync(stream);
                     }
 
+
                     existingEmployee.PhotoPath = fileName;
                 }
 
+
                 await _context.SaveChangesAsync();
+
+
                 await ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    $"Updated Employee: {existingEmployee.FirstName} {existingEmployee.LastName}");
+                    _context,
+                    User.Identity?.Name,
+                    $"Updated Employee: {existingEmployee.FirstName} {existingEmployee.LastName}");
+
+
+                TempData["Success"] = "Employee updated successfully.";
+
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -355,26 +622,40 @@ public class EmployeeController : Controller
 
                 throw;
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
+
+        ViewData["BranchId"] = new SelectList(
+            _context.Branches.Where(b => b.IsActive),
+            "BranchId",
+            "BranchName",
+            employee.BranchId);
+
+
         ViewData["DepartmentId"] = new SelectList(
-    _context.Departments,
-    "DepartmentId",
-    "DepartmentName",
-    employee.DepartmentId);
+            _context.Departments.Where(d => d.IsActive),
+            "DepartmentId",
+            "DepartmentName",
+            employee.DepartmentId);
+
+
+        ViewData["DesignationId"] = new SelectList(
+            _context.Designations.Where(d => d.IsActive),
+            "DesignationId",
+            "DesignationName",
+            employee.DesignationId);
+
 
         ViewData["RoleId"] = new SelectList(
-            _context.Roles,
+            _context.Roles.Where(r => r.IsActive),
             "RoleId",
             "RoleName",
             employee.RoleId);
 
+
         return View(employee);
     }
-
-    // GET: EMPLOYEES/Delete/5
+    [Permission("Employee.Delete")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -383,7 +664,12 @@ public class EmployeeController : Controller
         }
 
         var employee = await _context.Employees
-            .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
+
         if (employee == null)
         {
             return NotFound();
@@ -393,133 +679,191 @@ public class EmployeeController : Controller
     }
 
 
-    // POST: EMPLOYEES/Delete/5
-    // POST: EMPLOYEES/Delete/5
+
     [HttpPost, ActionName("Delete")]
+    [Permission("Employee.Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var employee = await _context.Employees.FindAsync(id);
+        var employee = await _context.Employees
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
 
-        if (employee != null)
+        if (employee == null)
         {
-            // Soft Delete
-            employee.IsDeleted = true;
-
-            await _context.SaveChangesAsync();
-
-            await ActivityLogger.LogAsync(
-                _context,
-                User.Identity?.Name,
-                $"Moved Employee to Recycle Bin: {employee.FirstName} {employee.LastName}");
+            return NotFound();
         }
+
+
+        employee.IsDeleted = true;
+
+        await _context.SaveChangesAsync();
+
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            $"Moved Employee to Recycle Bin: {employee.FirstName} {employee.LastName}");
+
+
+        TempData["Success"] = "Employee moved to Recycle Bin successfully.";
 
         return RedirectToAction(nameof(Index));
     }
+    [Permission("Employee.Export")]
     public async Task<IActionResult> ExportToExcel()
     {
         var employees = await _context.Employees
-    .Include(e => e.Department)
-    .Include(e => e.Role)
-    .ToListAsync();
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .Where(e => !e.IsDeleted)
+            .ToListAsync();
+
 
         var document = new EmployeeExcelDocument(employees);
 
         byte[] excel = document.GenerateExcel();
+
+
         await ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    "Exported Employees to Excel");
+            _context,
+            User.Identity?.Name,
+            "Exported Employees to Excel");
+
 
         return File(
             excel,
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "Employees.xlsx");
     }
+
+
+
+    [Permission("Employee.Export")]
     public async Task<IActionResult> ExportToPdf()
     {
         var employees = await _context.Employees
-    .Include(e => e.Department)
-    .Include(e => e.Role)
-    .ToListAsync();
+            .Include(e => e.Branch)
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
+            .Where(e => !e.IsDeleted)
+            .ToListAsync();
+
 
         var document = new EmployeePdfDocument(employees);
 
         byte[] pdf = document.GeneratePdf();
+
+
         await ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    "Exported Employees to PDF");
+            _context,
+            User.Identity?.Name,
+            "Exported Employees to PDF");
+
 
         return File(
             pdf,
             "application/pdf",
             "EmployeeReport.pdf");
     }
+    [Permission("Employee.Restore")]
     public async Task<IActionResult> RecycleBin()
     {
         var deletedEmployees = await _context.Employees
+            .Include(e => e.Branch)
             .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Include(e => e.Role)
             .Where(e => e.IsDeleted)
-            .OrderByDescending(e => e.EmployeeId)
             .ToListAsync();
 
         return View(deletedEmployees);
     }
+
+
     [HttpPost]
+    [Permission("Employee.Restore")]
     public async Task<IActionResult> Restore(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
+        var employee = await _context.Employees
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
 
-        if (employee != null)
+        if (employee == null)
         {
-            employee.IsDeleted = false;
-
-            await _context.SaveChangesAsync();
-
-            await ActivityLogger.LogAsync(
-                _context,
-                User.Identity?.Name,
-                $"Restored Employee: {employee.FirstName} {employee.LastName}");
+            return NotFound();
         }
+
+        employee.IsDeleted = false;
+
+        await _context.SaveChangesAsync();
+
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            $"Restored Employee: {employee.FirstName} {employee.LastName}");
+
+
+        TempData["Success"] = "Employee restored successfully.";
 
         return RedirectToAction(nameof(RecycleBin));
     }
+
+
+
     [HttpPost]
+    [Permission("Employee.Delete")]
     public async Task<IActionResult> PermanentDelete(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
+        var employee = await _context.Employees
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
 
-        if (employee != null)
+
+        if (employee == null)
         {
-            // Delete photo
-            if (!string.IsNullOrEmpty(employee.PhotoPath))
-            {
-                string imagePath = Path.Combine(
-                    _webHostEnvironment.WebRootPath,
-                    "uploads",
-                    employee.PhotoPath);
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
-            }
-
-            string employeeName = employee.FirstName + " " + employee.LastName;
-
-            await ActivityLogger.LogAsync(
-                _context,
-                User.Identity?.Name,
-                $"Permanently Deleted Employee: {employeeName}");
-
-            _context.Employees.Remove(employee);
-
-            await _context.SaveChangesAsync();
+            return NotFound();
         }
+
+
+        if (!string.IsNullOrEmpty(employee.PhotoPath))
+        {
+            string imagePath = Path.Combine(
+                _webHostEnvironment.WebRootPath,
+                "uploads",
+                employee.PhotoPath);
+
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+        }
+
+
+        string employeeName =
+            $"{employee.FirstName} {employee.LastName}";
+
+
+        await ActivityLogger.LogAsync(
+            _context,
+            User.Identity?.Name,
+            $"Permanently Deleted Employee: {employeeName}");
+
+
+        _context.Employees.Remove(employee);
+
+        await _context.SaveChangesAsync();
+
+
+        TempData["Success"] =
+            "Employee permanently deleted successfully.";
+
 
         return RedirectToAction(nameof(RecycleBin));
     }
+
 
     private bool EmployeeExists(int? id)
     {

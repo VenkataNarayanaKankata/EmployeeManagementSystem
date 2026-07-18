@@ -45,21 +45,29 @@
 
                 <dd class="col-sm-9">
 
-                    @if (Model.Role == "Admin")
+                    @if (Model.Role?.RoleName == "Admin")
                     {
-                        <span class="badge bg-danger">Admin</span>
+                        <span class="badge bg-danger">
+                            Admin
+                        </span>
                     }
-                    else if (Model.Role == "HR")
+                    else if (Model.Role?.RoleName == "HR")
                     {
-                        <span class="badge bg-success">HR</span>
+                        <span class="badge bg-success">
+                            HR
+                        </span>
                     }
-                    else if (Model.Role == "Manager")
+                    else if (Model.Role?.RoleName == "Manager")
                     {
-                        <span class="badge bg-primary">Manager</span>
+                        <span class="badge bg-primary">
+                            Manager
+                        </span>
                     }
                     else
                     {
-                        <span class="badge bg-secondary">@Model.Role</span>
+                        <span class="badge bg-secondary">
+                            User
+                        </span>
                     }
 
                 </dd>

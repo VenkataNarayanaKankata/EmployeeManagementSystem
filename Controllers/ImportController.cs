@@ -1,11 +1,14 @@
 ﻿using ClosedXML.Excel;
 using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
+    [Authorize(Roles = "Admin,HR")]
     public class ImportController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,18 +18,15 @@ namespace EmployeeManagementSystem.Controllers
             _context = context;
         }
 
-        // ================================
-        // GET : Import Page
-        // ================================
+
         [HttpGet]
         public IActionResult EmployeeImport()
         {
             return View();
         }
 
-        // ================================
-        // Preview Excel
-        // ================================
+
+
         [HttpPost]
         public async Task<IActionResult> PreviewImport(IFormFile file)
         {
@@ -35,159 +35,326 @@ namespace EmployeeManagementSystem.Controllers
                 return Json(new
                 {
                     success = false,
-                    message = "Please select an Excel file."
+                    message = "Please select Excel file."
                 });
             }
+
 
             using var stream = new MemoryStream();
 
             await file.CopyToAsync(stream);
 
+
             using var workbook = new XLWorkbook(stream);
 
             var worksheet = workbook.Worksheet(1);
 
-            int totalEmployees = worksheet.LastRowUsed().RowNumber() - 1;
+
+            int lastRow = worksheet.LastRowUsed().RowNumber();
+
 
             HashSet<string> existingDepartments = new();
             HashSet<string> newDepartments = new();
 
-            for (int row = 2; row <= worksheet.LastRowUsed().RowNumber(); row++)
-            {
-                string departmentName = worksheet.Cell(row, 7)
-                                                 .GetString()
-                                                 .Trim();
 
-                if (string.IsNullOrWhiteSpace(departmentName))
+
+            for (int row = 2; row <= lastRow; row++)
+            {
+
+                string departmentCode =
+                    worksheet.Cell(row, 10)
+                    .GetString()
+                    .Trim();
+
+
+                if (string.IsNullOrEmpty(departmentCode))
                     continue;
 
-                bool exists = await _context.Departments
-                    .AnyAsync(d => d.DepartmentName == departmentName);
+
+
+                bool exists =
+                    await _context.Departments
+                    .AnyAsync(x =>
+                    x.DepartmentCode == departmentCode);
+
+
 
                 if (exists)
-                    existingDepartments.Add(departmentName);
+                {
+                    existingDepartments.Add(departmentCode);
+                }
                 else
-                    newDepartments.Add(departmentName);
+                {
+                    newDepartments.Add(departmentCode);
+                }
+
             }
+
+
 
             return Json(new
             {
                 success = true,
                 fileName = file.FileName,
-                totalEmployees = totalEmployees,
-                totalDepartments = existingDepartments.Count + newDepartments.Count,
-                existingDepartments = existingDepartments,
-                newDepartments = newDepartments
+                totalEmployees = lastRow - 1,
+                totalDepartments =
+                    existingDepartments.Count +
+                    newDepartments.Count,
+
+                existingDepartments,
+                newDepartments
             });
+
         }
 
-        // ================================
-        // Upload Employees
-        // ================================
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadEmployees(IFormFile file)
         {
+
             if (file == null || file.Length == 0)
             {
-                TempData["Error"] = "Please select an Excel file.";
+                TempData["Error"] =
+                    "Please select Excel file.";
+
                 return RedirectToAction(nameof(EmployeeImport));
             }
+
+
 
             using var stream = new MemoryStream();
 
             await file.CopyToAsync(stream);
 
+
+
             using var workbook = new XLWorkbook(stream);
+
 
             var worksheet = workbook.Worksheet(1);
 
-            int lastRow = worksheet.LastRowUsed().RowNumber();
 
-            int importedCount = 0;
-            int skippedCount = 0;
-            int newDepartmentCount = 0;
+            int lastRow =
+                worksheet.LastRowUsed().RowNumber();
+
+
+
+            int imported = 0;
+            int skipped = 0;
+
+
 
             for (int row = 2; row <= lastRow; row++)
             {
-                string firstName = worksheet.Cell(row, 1).GetString().Trim();
-                string lastName = worksheet.Cell(row, 2).GetString().Trim();
-                string email = worksheet.Cell(row, 3).GetString().Trim();
-                string phone = worksheet.Cell(row, 4).GetString().Trim();
-                string gender = worksheet.Cell(row, 5).GetString().Trim();
-                decimal salary = worksheet.Cell(row, 6).GetValue<decimal>();
-                DateTime joiningDate = worksheet.Cell(row, 7).GetDateTime();
-                string departmentName = worksheet.Cell(row, 8).GetString().Trim();
-                string roleName = worksheet.Cell(row, 9).GetString().Trim();
 
-                // Skip duplicate employee
-                bool employeeExists = await _context.Employees
-                    .AnyAsync(e => e.Email == email);
+                string employeeCode =
+                    worksheet.Cell(row, 1)
+                    .GetString()
+                    .Trim();
 
-                if (employeeExists)
+
+                string firstName =
+                    worksheet.Cell(row, 2)
+                    .GetString()
+                    .Trim();
+
+
+                string lastName =
+                    worksheet.Cell(row, 3)
+                    .GetString()
+                    .Trim();
+
+
+                string email =
+                    worksheet.Cell(row, 4)
+                    .GetString()
+                    .Trim();
+
+
+                string phone =
+                    worksheet.Cell(row, 5)
+                    .GetString()
+                    .Trim();
+
+
+                string gender =
+                    worksheet.Cell(row, 6)
+                    .GetString()
+                    .Trim();
+
+
+
+                decimal salary =
+                    worksheet.Cell(row, 7)
+                    .GetValue<decimal>();
+
+
+                DateTime joiningDate =
+                    worksheet.Cell(row, 8)
+                    .GetDateTime();
+
+
+
+                string branchCode =
+                    worksheet.Cell(row, 9)
+                    .GetString()
+                    .Trim();
+
+
+
+                string departmentCode =
+                    worksheet.Cell(row, 10)
+                    .GetString()
+                    .Trim();
+
+
+
+                string designationCode =
+                    worksheet.Cell(row, 11)
+                    .GetString()
+                    .Trim();
+
+
+
+                string roleName =
+                    worksheet.Cell(row, 12)
+                    .GetString()
+                    .Trim();
+
+
+
+
+                bool exists =
+                    await _context.Employees
+                    .AnyAsync(x =>
+                    x.Email == email);
+
+
+
+                if (exists)
                 {
-                    skippedCount++;
+                    skipped++;
                     continue;
                 }
 
-                // Find Department
-                var department = await _context.Departments
-                    .FirstOrDefaultAsync(d => d.DepartmentName == departmentName);
-                var role = await _context.Roles
-    .FirstOrDefaultAsync(r => r.RoleName == roleName);
 
-                if (role == null)
+
+
+
+                var branch =
+                    await _context.Branches
+                    .FirstOrDefaultAsync(x =>
+                    x.BranchCode == branchCode);
+
+
+
+                var department =
+                    await _context.Departments
+                    .FirstOrDefaultAsync(x =>
+                    x.DepartmentCode == departmentCode);
+
+
+
+                var designation =
+                    await _context.Designations
+                    .FirstOrDefaultAsync(x =>
+                    x.DesignationCode == designationCode);
+
+
+
+                var role =
+                    await _context.Roles
+                    .FirstOrDefaultAsync(x =>
+                    x.RoleName == roleName);
+
+
+
+
+
+                if (branch == null ||
+                   department == null ||
+                   designation == null ||
+                   role == null)
                 {
-                    skippedCount++;
+                    skipped++;
                     continue;
                 }
 
-                // Create Department if not exists
-                if (department == null)
+
+
+
+
+                Employee employee = new Employee
                 {
-                    department = new Department
-                    {
-                        DepartmentName = departmentName
-                    };
 
-                    _context.Departments.Add(department);
-                    await _context.SaveChangesAsync();
+                    EmployeeCode = employeeCode,
 
-                    newDepartmentCount++;
-                }
-
-                // Create Employee
-                var employee = new Employee
-                {
                     FirstName = firstName,
+
                     LastName = lastName,
+
                     Email = email,
+
                     Phone = phone,
+
                     Gender = gender,
+
                     Salary = salary,
+
                     JoiningDate = joiningDate,
+
+
+                    BranchId = branch.BranchId,
+
                     DepartmentId = department.DepartmentId,
-                    RoleId = role.RoleId
+
+                    DesignationId = designation.DesignationId,
+
+                    RoleId = role.RoleId,
+
+
+                    IsActive = true,
+
+                    IsDeleted = false
                 };
+
+
 
                 _context.Employees.Add(employee);
 
-                importedCount++;
+
+                imported++;
+
             }
 
+
+
+
             await _context.SaveChangesAsync();
-            await Helpers.ActivityLogger.LogAsync(
-    _context,
-    User.Identity?.Name,
-    $"Imported {importedCount} employee(s), Skipped {skippedCount}, Created {newDepartmentCount} new department(s).");
+
+
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Imported Employees: {imported}, Skipped: {skipped}"
+            );
+
+
+
 
             TempData["Success"] =
-                $"Import Completed Successfully! " +
-                $"Imported: {importedCount}, " +
-                $"Skipped: {skippedCount}, " +
-                $"New Departments: {newDepartmentCount}";
+                $"Import Completed. Imported: {imported}, Skipped: {skipped}";
+
+
 
             return RedirectToAction(nameof(EmployeeImport));
+
         }
+
     }
 }

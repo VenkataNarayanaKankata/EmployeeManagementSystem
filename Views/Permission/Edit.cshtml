@@ -1,0 +1,251 @@
+@model EmployeeManagementSystem.Models.Permission
+
+@{
+    ViewData["Title"] = "Edit Permission";
+}
+
+
+<div class="container mt-4">
+
+
+    <div class="employee-header mb-4">
+
+
+        <div class="employee-header-left">
+
+
+            <h1>
+                ✏️ Edit Permission
+            </h1>
+
+
+            <p>
+                Update permission details and access status.
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+
+        <div class="card-header bg-warning">
+
+
+            <h3 class="mb-0">
+
+                🔑 Permission Information
+
+            </h3>
+
+
+        </div>
+
+
+
+
+
+        <div class="card-body p-4">
+
+
+            <form asp-action="Edit">
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+
+
+                <input type="hidden"
+                       asp-for="PermissionId" />
+
+
+
+
+
+                <div class="row g-4">
+
+
+
+                    <div class="col-md-6">
+
+
+                        <label asp-for="PermissionName"
+                               class="form-label fw-semibold">
+
+                            Permission Name
+
+                        </label>
+
+
+
+                        <input asp-for="PermissionName"
+                               class="form-control" />
+
+
+
+                        <span asp-validation-for="PermissionName"
+                              class="text-danger"></span>
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="col-md-6">
+
+
+                        <label asp-for="ModuleName"
+                               class="form-label fw-semibold">
+
+                            Module Name
+
+                        </label>
+
+
+
+                        <input asp-for="ModuleName"
+                               class="form-control" />
+
+
+
+                        <span asp-validation-for="ModuleName"
+                              class="text-danger"></span>
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="col-md-6">
+
+
+                        <label asp-for="IsActive"
+                               class="form-label fw-semibold">
+
+                            Status
+
+                        </label>
+
+
+
+                        <select asp-for="IsActive"
+                                class="form-select">
+
+
+                            <option value="true">
+                                Active
+                            </option>
+
+
+                            <option value="false">
+                                Inactive
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="col-12">
+
+
+                        <label asp-for="Description"
+                               class="form-label fw-semibold">
+
+                            Description
+
+                        </label>
+
+
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"></textarea>
+
+
+
+                        <span asp-validation-for="Description"
+                              class="text-danger"></span>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+                <div class="mt-5 d-flex justify-content-end">
+
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary me-3">
+
+                        ← Back
+
+                    </a>
+
+
+
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        💾 Save Changes
+
+                    </button>
+
+
+                </div>
+
+
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

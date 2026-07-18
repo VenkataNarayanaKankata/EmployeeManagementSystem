@@ -226,8 +226,28 @@
                 Login
 
             </button>
+            @if (ViewBag.ShowRegister == true)
+            {
+                <div class="text-center mt-4">
+
+                    <span>First time using the system?</span>
+
+                    <br />
+
+                    <a asp-action="Register"
+                       class="btn btn-outline-light mt-2">
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        Create First Administrator
+
+                    </a>
+
+                </div>
+            }
 
         </form>
+       
 
         <div class="footer">
 

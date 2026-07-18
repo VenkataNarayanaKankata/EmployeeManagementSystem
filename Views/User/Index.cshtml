@@ -20,10 +20,25 @@
             </p>
         </div>
 
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-person-plus-fill"></i>
-            Create User
-        </a>
+        <div class="d-flex gap-2">
+
+    <a asp-action="Create"
+       class="btn btn-primary">
+
+        <i class="bi bi-person-plus-fill"></i>
+
+        Create User
+
+    </a>
+
+    <a asp-action="GenerateUsers"
+       class="btn btn-success">
+
+        ⚡ Generate User Accounts
+
+    </a>
+
+</div>
 
     </div>
 
@@ -145,16 +160,13 @@
                     <tr>
 
                         <th>Username</th>
-
+                        <th>Employee Code</th>
+                        <th>Employee Name</th>
+                        <th>Department</th>
                         <th>Role</th>
-
                         <th>Status</th>
-
                         <th>Last Login</th>
-
-                        <th class="text-center">
-                            Actions
-                        </th>
+                        <th class="text-center">Actions</th>
 
                     </tr>
 
@@ -171,25 +183,86 @@
                                 <td class="fw-semibold">
                                     @user.Username
                                 </td>
-
                                 <td>
 
-                                    @if (user.Role == "Admin")
+                                    @if (user.Employee != null)
+                                    {
+                                        <span class="badge bg-dark">
+
+                                            @user.Employee.EmployeeCode
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+
+                                            Not Linked
+
+                                        </span>
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @if (user.Employee != null)
+                                    {
+                                        @user.Employee.FirstName @user.Employee.LastName
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+
+                                            Not Linked
+
+                                        </span>
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @if (user.Employee?.Department != null)
+                                    {
+                                        <span class="badge bg-primary">
+
+                                            @user.Employee.Department.DepartmentName
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @if (user.Role?.RoleName == "Admin")
                                     {
                                         <span class="badge bg-danger">
                                             Admin
                                         </span>
                                     }
-                                    else if (user.Role == "HR")
+                                    else if (user.Role?.RoleName == "HR")
                                     {
                                         <span class="badge bg-success">
                                             HR
                                         </span>
                                     }
+                                    else if (user.Role?.RoleName == "Manager")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Manager
+                                        </span>
+                                    }
                                     else
                                     {
                                         <span class="badge bg-primary">
-                                            @user.Role
+                                            @user.Role?.RoleName
                                         </span>
                                     }
 
@@ -214,8 +287,40 @@
 
                                 <td>
 
-                                    @(user.LastLogin?.ToString("dd MMM yyyy hh:mm tt")
-                                        ?? "Never Logged In")
+                                    @if (user.LastLogin == null)
+                                    {
+                                        <span class="text-muted">
+
+                                            Never Logged In
+
+                                        </span>
+                                    }
+                                    else if (user.LastLogin.Value.Date == DateTime.Today)
+                                    {
+                                        <span class="badge bg-success">
+
+                                            Today,
+                                            @user.LastLogin.Value.ToString("hh:mm tt")
+
+                                        </span>
+                                    }
+                                    else if (user.LastLogin.Value.Date == DateTime.Today.AddDays(-1))
+                                    {
+                                        <span class="badge bg-warning text-dark">
+
+                                            Yesterday,
+                                            @user.LastLogin.Value.ToString("hh:mm tt")
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+
+                                            @user.LastLogin.Value.ToString("dd MMM yyyy")
+
+                                        </span>
+                                    }
 
                                 </td>
 

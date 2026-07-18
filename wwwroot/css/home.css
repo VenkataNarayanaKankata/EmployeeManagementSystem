@@ -879,3 +879,10 @@
         padding: 25px 20px;
     }
 }
+.detail-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

@@ -1,0 +1,193 @@
+﻿@model EmployeeManagementSystem.Models.Designation
+
+@{
+    ViewData["Title"] = "Create Designation";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+
+                <i class="bi bi-person-badge-fill"></i>
+
+                Create Designation
+
+            </h3>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-4">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DesignationCode"
+                               class="form-label fw-semibold">
+
+                            Designation Code
+
+                        </label>
+
+                        <input asp-for="DesignationCode"
+                               class="form-control form-control-lg"
+                               placeholder="Enter designation code" />
+
+                        <span asp-validation-for="DesignationCode"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DesignationName"
+                               class="form-label fw-semibold">
+
+                            Designation Name
+
+                        </label>
+
+                        <input asp-for="DesignationName"
+                               class="form-control form-control-lg"
+                               placeholder="Enter designation name" />
+
+                        <span asp-validation-for="DesignationName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DepartmentId"
+                               class="form-label fw-semibold">
+
+                            Department
+
+                        </label>
+
+                        <select asp-for="DepartmentId"
+                                asp-items="ViewBag.Departments"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+
+                                Select Department
+
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="DepartmentId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Status
+
+                        </label>
+
+                        <div class="form-check form-switch mt-2">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input"
+                                   checked />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label">
+
+                                Active Designation
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label asp-for="Description"
+                           class="form-label fw-semibold">
+
+                        Description
+
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Enter designation description">
+                    </textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <hr />
+
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary btn-lg">
+
+                        <i class="bi bi-arrow-left-circle"></i>
+
+                        Back
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary btn-lg">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Designation
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

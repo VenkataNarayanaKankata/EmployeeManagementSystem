@@ -1,34 +1,142 @@
 @model EmployeeManagementSystem.Models.Department
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Department";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid py-4">
 
-<h4>Department</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DepartmentId" />
-            <div class="form-group">
-                <label asp-for="DepartmentName" class="control-label"></label>
-                <input asp-for="DepartmentName" class="form-control" />
-                <span asp-validation-for="DepartmentName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-header bg-warning text-dark">
+
+            <h3 class="mb-0">
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Department
+
+            </h3>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Edit" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-4">
+                </div>
+
+                <input asp-for="DepartmentId" type="hidden" />
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DepartmentCode"
+                               class="form-label fw-semibold">
+
+                            Department Code
+
+                        </label>
+
+                        <input asp-for="DepartmentCode"
+                               class="form-control form-control-lg" />
+
+                        <span asp-validation-for="DepartmentCode"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DepartmentName"
+                               class="form-label fw-semibold">
+
+                            Department Name
+
+                        </label>
+
+                        <input asp-for="DepartmentName"
+                               class="form-control form-control-lg" />
+
+                        <span asp-validation-for="DepartmentName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Description"
+                           class="form-label fw-semibold">
+
+                        Description
+
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="form-check form-switch mb-4">
+
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label fw-semibold">
+
+                        Active Department
+
+                    </label>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary btn-lg">
+
+                        <i class="bi bi-arrow-left-circle"></i>
+
+                        Back
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning btn-lg">
+
+                        <i class="bi bi-save"></i>
+
+                        Update Department
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <partial name="_ValidationScriptsPartial" />
+
 }

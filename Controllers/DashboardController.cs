@@ -3,7 +3,7 @@ using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+using System.Security.Claims;
 
 namespace EmployeeManagementSystem.Controllers
 {
@@ -17,59 +17,235 @@ namespace EmployeeManagementSystem.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = new DashboardViewModel();
 
-            model.TotalEmployees = _context.Employees.Count();
+            model.TotalEmployees = await _context.Employees
+                .CountAsync(e => !e.IsDeleted);
 
-            model.TotalDepartments = _context.Departments.Count();
+            model.TotalBranches = await _context.Branches.CountAsync();
 
-            decimal avgSalary = _context.Employees.Any()
-                ? _context.Employees.Average(e => e.Salary)
-                : 0;
+            model.TotalDepartments = await _context.Departments.CountAsync();
 
-            decimal highestSalary = _context.Employees.Any()
-                ? _context.Employees.Max(e => e.Salary)
-                : 0;
+            model.TotalDesignations = await _context.Designations.CountAsync();
 
-            decimal lowestSalary = _context.Employees.Any()
-                ? _context.Employees.Min(e => e.Salary)
-                : 0;
+            model.TotalRoles = await _context.Roles.CountAsync();
 
-            CultureInfo indianCulture = new CultureInfo("en-IN");
 
-            model.AverageSalary = string.Format(indianCulture, "{0:N0}", avgSalary);
+            model.ActiveEmployees = await _context.Employees
+                .CountAsync(e => e.IsActive && !e.IsDeleted);
 
-            model.HighestSalary = string.Format(indianCulture, "{0:N0}", highestSalary);
 
-            model.LowestSalary = string.Format(indianCulture, "{0:N0}", lowestSalary);
+            model.InactiveEmployees = await _context.Employees
+                .CountAsync(e => !e.IsActive && !e.IsDeleted);
 
-            model.JoinedThisMonth = _context.Employees.Count(e =>
-                e.JoiningDate.Month == DateTime.Now.Month &&
-                e.JoiningDate.Year == DateTime.Now.Year);
 
-            model.RecentEmployees = _context.Employees
+            if (await _context.Employees.AnyAsync(e => !e.IsDeleted))
+            {
+                model.TotalSalary = await _context.Employees
+                    .Where(e => !e.IsDeleted)
+                    .SumAsync(e => e.Salary);
+
+
+                model.AverageSalary = await _context.Employees
+                    .Where(e => !e.IsDeleted)
+                    .AverageAsync(e => e.Salary);
+
+
+                model.HighestSalary = await _context.Employees
+                    .Where(e => !e.IsDeleted)
+                    .MaxAsync(e => e.Salary);
+
+
+                model.LowestSalary = await _context.Employees
+                    .Where(e => !e.IsDeleted)
+                    .MinAsync(e => e.Salary);
+            }
+
+
+            model.JoinedThisMonth =
+                await _context.Employees.CountAsync(e =>
+                    e.JoiningDate.Month == DateTime.Now.Month &&
+                    e.JoiningDate.Year == DateTime.Now.Year &&
+                    !e.IsDeleted);
+
+
+
+            model.RecentEmployees =
+                await _context.Employees
+                .Include(e => e.Branch)
                 .Include(e => e.Department)
+                .Include(e => e.Designation)
+                .Include(e => e.Role)
+                .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.EmployeeId)
                 .Take(5)
-                .ToList();
+                .ToListAsync();
 
-            var departmentData = _context.Departments
+
+
+            var branchData =
+                await _context.Branches
+                .Select(b => new
+                {
+                    Name = b.BranchName,
+                    Count = _context.Employees.Count(e =>
+                        e.BranchId == b.BranchId &&
+                        !e.IsDeleted)
+                })
+                .ToListAsync();
+
+
+            model.BranchNames =
+                branchData.Select(x => x.Name).ToList();
+
+
+            model.BranchEmployeeCounts =
+                branchData.Select(x => x.Count).ToList();
+
+
+
+
+
+            var departmentData =
+                await _context.Departments
                 .Select(d => new
                 {
                     Name = d.DepartmentName,
-                    Count = _context.Employees.Count(e => e.DepartmentId == d.DepartmentId)
+                    Count = _context.Employees.Count(e =>
+                        e.DepartmentId == d.DepartmentId &&
+                        !e.IsDeleted)
                 })
+                .ToListAsync();
+
+
+            model.DepartmentNames =
+                departmentData.Select(x => x.Name).ToList();
+
+
+            model.DepartmentEmployeeCounts =
+                departmentData.Select(x => x.Count).ToList();
+
+
+
+            var topDepartments = departmentData
+                .OrderByDescending(x => x.Count)
+                .Take(10)
                 .ToList();
 
-            model.DepartmentNames = departmentData
-                .Select(x => x.Name)
+
+            model.TopDepartmentNames =
+                topDepartments.Select(x => x.Name).ToList();
+
+
+            model.TopDepartmentCounts =
+                topDepartments.Select(x => x.Count).ToList();
+
+
+
+
+
+
+            var designationData =
+                await _context.Designations
+                .Select(d => new
+                {
+                    Name = d.DesignationName,
+
+                    Count = _context.Employees.Count(e =>
+                        e.DesignationId == d.DesignationId &&
+                        !e.IsDeleted)
+
+                })
+                .ToListAsync();
+
+
+            model.DesignationNames =
+                designationData.Select(x => x.Name).ToList();
+
+
+            model.DesignationEmployeeCounts =
+                designationData.Select(x => x.Count).ToList();
+
+
+
+            var topDesignations = designationData
+                .OrderByDescending(x => x.Count)
+                .Take(10)
                 .ToList();
 
-            model.EmployeeCounts = departmentData
-                .Select(x => x.Count)
-                .ToList();
+
+            model.TopDesignationNames =
+                topDesignations.Select(x => x.Name).ToList();
+
+
+            model.TopDesignationCounts =
+                topDesignations.Select(x => x.Count).ToList();
+
+
+
+
+
+
+
+            var roleData =
+     await _context.Roles
+     .Select(r => new
+     {
+         Name = r.RoleName,
+         Count = _context.Employees
+             .Where(e => e.RoleId == r.RoleId && !e.IsDeleted)
+             .Count()
+     })
+     .Where(x => x.Count > 0)
+     .ToListAsync();
+
+
+            model.RoleNames =
+                roleData.Select(x => x.Name).ToList();
+
+
+            model.RoleEmployeeCounts =
+                roleData.Select(x => x.Count).ToList();
+
+
+
+
+            ViewBag.CurrentRole =
+                User.FindFirstValue(
+                    ClaimTypes.Role);
+
+
+
+            if (User.IsInRole("Employee"))
+            {
+                var employeeIdClaim =
+                    User.FindFirst("EmployeeId");
+
+
+                if (employeeIdClaim != null)
+                {
+                    int employeeId =
+                        int.Parse(employeeIdClaim.Value);
+
+
+                    model.LoggedInEmployee =
+                        await _context.Employees
+                        .Include(e => e.Branch)
+                        .Include(e => e.Department)
+                        .Include(e => e.Designation)
+                        .Include(e => e.Role)
+                        .FirstOrDefaultAsync(
+                            e => e.EmployeeId == employeeId);
+                }
+
+
+                return View(
+                    "EmployeeDashboard",
+                    model);
+            }
+
 
             return View(model);
         }

@@ -25,6 +25,31 @@
                      class="text-danger mb-4"></div>
 
                 <div class="row">
+                    <div class="col-md-6 mb-4" id="employeeSection">
+
+                        <label asp-for="EmployeeId" class="form-label">
+
+                            Employee
+
+                        </label>
+
+                        <select asp-for="EmployeeId"
+                                asp-items="Model.Employees"
+                                class="form-select"
+                                id="EmployeeId">
+
+                            <option value="">
+
+                                -- Select Employee --
+
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="EmployeeId"
+                              class="text-danger"></span>
+
+                    </div>
 
                     <div class="col-md-6 mb-4">
 
@@ -41,47 +66,28 @@
 
                     <div class="col-md-6 mb-4">
 
-                        <label asp-for="Role"
-                               class="form-label fw-semibold"></label>
+                        <label asp-for="RoleId"
+                               class="form-label fw-semibold">
+                            Role
+                        </label>
 
-                        <select asp-for="Role"
+                        <select asp-for="RoleId"
                                 class="form-select">
 
-                            <option value="Admin">Admin</option>
+                            <option value="">-- Select Role --</option>
 
-                            <option value="HR">HR</option>
-
-                            <option value="Manager">Manager</option>
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.Value">
+                                    @role.Text
+                                </option>
+                            }
 
                         </select>
 
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-
-                        <label asp-for="Password"
-                               class="form-label fw-semibold"></label>
-
-                        <input asp-for="Password"
-                               type="password"
-                               class="form-control" />
-
-                        <span asp-validation-for="Password"
-                              class="text-danger"></span>
-
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-
-                        <label asp-for="ConfirmPassword"
-                               class="form-label fw-semibold"></label>
-
-                        <input asp-for="ConfirmPassword"
-                               type="password"
-                               class="form-control" />
-
-                        <span asp-validation-for="ConfirmPassword"
-                              class="text-danger"></span>
+                        <span asp-validation-for="RoleId"
+                              class="text-danger">
+                        </span>
 
                     </div>
 
@@ -136,4 +142,5 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+    
 }

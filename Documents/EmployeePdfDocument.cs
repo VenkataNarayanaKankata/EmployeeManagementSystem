@@ -16,68 +16,144 @@ namespace EmployeeManagementSystem.Documents
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
 
+
         public void Compose(IDocumentContainer container)
         {
             container.Page(page =>
             {
-                page.Margin(30);
+                page.Margin(20);
+
 
                 page.Header()
                     .Text("Employee Management Report")
-                    .FontSize(22)
+                    .FontSize(20)
                     .Bold()
                     .FontColor(Colors.Blue.Medium);
+
+
 
                 page.Content().Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.RelativeColumn(2); // Name
-                        columns.RelativeColumn(3); // Email
-                        columns.RelativeColumn(2); // Gender
-                        columns.RelativeColumn(2); // Department
+                        columns.RelativeColumn(2); // Code
+                        columns.RelativeColumn(3); // Name
+                        columns.RelativeColumn(3); // Branch
+                        columns.RelativeColumn(3); // Department
+                        columns.RelativeColumn(3); // Designation
+                        columns.RelativeColumn(2); // Role
                         columns.RelativeColumn(2); // Salary
-                        columns.RelativeColumn(1); // role
+                        columns.RelativeColumn(2); // Status
                     });
+
+
 
                     table.Header(header =>
                     {
-                        header.Cell().Element(CellStyle).Text("Name").Bold();
-                        header.Cell().Element(CellStyle).Text("Email").Bold();
-                        header.Cell().Element(CellStyle).Text("Gender").Bold();
-                        header.Cell().Element(CellStyle).Text("Department").Bold();
-                        header.Cell().Element(CellStyle).Text("Salary").Bold();
-                        header.Cell().Element(CellStyle).Text("Role").Bold();
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Code")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Name")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Branch")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Department")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Designation")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Role")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Salary")
+                            .Bold();
+
+
+                        header.Cell()
+                            .Element(CellStyle)
+                            .Text("Status")
+                            .Bold();
                     });
+
+
 
                     foreach (var employee in _employees)
                     {
-                        table.Cell().Element(CellStyle)
+                        table.Cell()
+                            .Element(CellStyle)
+                            .Text(employee.EmployeeCode ?? "");
+
+
+                        table.Cell()
+                            .Element(CellStyle)
                             .Text($"{employee.FirstName} {employee.LastName}");
 
-                        table.Cell().Element(CellStyle)
-                            .Text(employee.Email);
 
-                        table.Cell().Element(CellStyle)
-                            .Text(employee.Gender);
+                        table.Cell()
+                            .Element(CellStyle)
+                            .Text(employee.Branch?.BranchName ?? "");
 
-                        table.Cell().Element(CellStyle)
+
+                        table.Cell()
+                            .Element(CellStyle)
                             .Text(employee.Department?.DepartmentName ?? "");
 
-                        table.Cell().Element(CellStyle)
+
+                        table.Cell()
+                            .Element(CellStyle)
+                            .Text(employee.Designation?.DesignationName ?? "");
+
+
+                        table.Cell()
+                            .Element(CellStyle)
+                            .Text(employee.Role?.RoleName ?? "");
+
+
+                        table.Cell()
+                            .Element(CellStyle)
                             .Text($"₹ {employee.Salary:N0}");
-                        table.Cell().Element(CellStyle)
-                        .Text(employee.Role?.RoleName ?? "");
+
+
+                        table.Cell()
+                            .Element(CellStyle)
+                            .Text(employee.IsActive ? "Active" : "Inactive");
                     }
+
+
 
                     static IContainer CellStyle(IContainer container)
                     {
                         return container
                             .Border(1)
                             .BorderColor(Colors.Grey.Lighten2)
-                            .Padding(5);
+                            .Padding(4);
                     }
                 });
+
+
 
                 page.Footer()
                     .AlignCenter()

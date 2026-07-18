@@ -2,193 +2,434 @@
     ViewData["Title"] = "Import Employees";
 }
 
-<div class="container mt-4">
+<div class="container py-4">
 
-    <div class="row justify-content-center">
+    <div class="card shadow-lg border-0 rounded-4">
 
-        <div class="col-md-7">
+        <div class="card-header bg-primary text-white rounded-top-4 py-3">
 
-            <div class="card shadow border-0">
-
-                <div class="card-header bg-primary text-white">
-
-                    <h3 class="mb-0">
-                        📥 Import Employees from Excel
-                    </h3>
-
-                </div>
-
-                <div class="card-body">
-
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success">
-                            @TempData["Success"]
-                        </div>
-                    }
-
-                    @if (TempData["Error"] != null)
-                    {
-                        <div class="alert alert-danger">
-                            @TempData["Error"]
-                        </div>
-                    }
-
-                    <form asp-controller="Import"
-                          asp-action="UploadEmployees"
-                          method="post"
-                          enctype="multipart/form-data">
-
-                        @Html.AntiForgeryToken()
-
-                        <div class="mb-3">
-
-                            <label class="form-label fw-bold">
-                                Select Excel File
-                            </label>
-
-                            <input type="file"
-                                   name="file"
-                                   accept=".xlsx"
-                                   class="form-control" />
-                            <div id="filePreview"
-                                 class="alert alert-info mt-3"
-                                 style="display:none;">
-
-                                <h5>📄 Import Preview</h5>
-
-                                <hr />
-
-                                <p>
-                                    <strong>File Name :</strong>
-                                    <span id="fileName"></span>
-                                </p>
-
-                                <p>
-                                    <strong>Total Employees :</strong>
-                                    <span id="totalEmployees"></span>
-                                </p>
-
-                                <p>
-                                    <strong>Total Departments :</strong>
-                                    <span id="totalDepartments"></span>
-                                </p>
-
-                                <hr />
-
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <h6 class="text-success">✅ Existing Departments</h6>
-                                        <ul id="existingDepartments" class="list-group"></ul>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <h6 class="text-primary">🆕 New Departments</h6>
-                                        <ul id="newDepartments" class="list-group"></ul>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <button type="submit"
-                                id="uploadBtn"
-                                class="btn btn-success"
-                                disabled>
-
-                            📤 Upload Employees
-
-                        </button>
-
-                        <a asp-action="DownloadTemplate"
-                           class="btn btn-primary ms-2">
-
-                            📄 Download Sample
-
-                        </a>
-
-                    </form>
-
-                    <hr />
-
-                    <h5>Instructions</h5>
-
-                    <ul>
-
-                        <li>Upload only <b>.xlsx</b> files.</li>
-
-                        <li>Department names can be new or existing.</li>
-
-                        <li>Existing departments will be reused automatically.</li>
-
-                        <li>New departments will be created automatically.</li>
-
-                        <li>Duplicate departments will not be created.</li>
-
-                    </ul>
-
-                </div>
-
-            </div>
+            <h3 class="mb-0">
+                📥 Import Employees from Excel
+            </h3>
 
         </div>
 
-    </div>
+
+        <div class="card-body p-4">
+
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["Error"]
+                </div>
+            }
+
+
+
+            <form asp-controller="Import"
+                  asp-action="UploadEmployees"
+                  method="post"
+                  enctype="multipart/form-data">
+
+
+                @Html.AntiForgeryToken()
+
+
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Select Employee Excel File
+                    </label>
+
+
+                    <input type="file"
+                           name="file"
+                           accept=".xlsx"
+                           class="form-control"
+                           id="excelFile" />
+
+
+                </div>
+
+
+
+
+                <div id="filePreview"
+                     class="card bg-light border-0 shadow-sm mb-4"
+                     style="display:none;">
+
+
+                    <div class="card-body">
+
+
+                        <h5 class="text-primary fw-bold">
+                            📄 Import Preview
+                        </h5>
+
+
+                        <hr />
+
+
+                        <div class="row">
+
+
+                            <div class="col-md-6">
+
+                                <p>
+                                    <strong>
+                                        File Name:
+                                    </strong>
+
+                                    <span id="fileName"></span>
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Total Employees:
+                                    </strong>
+
+                                    <span id="totalEmployees"></span>
+
+                                </p>
+
+
+                            </div>
+
+
+
+                            <div class="col-md-6">
+
+
+                                <p>
+
+                                    <strong>
+                                        Total Departments:
+                                    </strong>
+
+                                    <span id="totalDepartments"></span>
+
+                                </p>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+                        <hr />
+
+
+
+                        <div class="row">
+
+
+                            <div class="col-md-6">
+
+
+                                <h6 class="text-success fw-bold">
+
+                                    ✅ Existing Departments
+
+                                </h6>
+
+
+                                <ul id="existingDepartments"
+                                    class="list-group">
+                                </ul>
+
+
+                            </div>
+
+
+
+                            <div class="col-md-6">
+
+
+                                <h6 class="text-danger fw-bold">
+
+                                    🆕 New Departments
+
+                                </h6>
+
+
+                                <ul id="newDepartments"
+                                    class="list-group">
+                                </ul>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <button type="submit"
+                        id="uploadBtn"
+                        class="btn btn-success px-4"
+                        disabled>
+
+                    📤 Upload Employees
+
+                </button>
+
+
+
+
+                <a asp-controller="Employee"
+                   asp-action="DownloadTemplate"
+                   class="btn btn-primary ms-2 px-4">
+
+
+                    📄 Download Template
+
+
+                </a>
+
+
+
+            </form>
+
+
+
+
+
+            <hr class="my-4" />
+
+
+            <h5 class="fw-bold text-primary">
+                📌 Import Instructions & Rules
+            </h5>
+
+
+            <div class="alert alert-info">
+
+
+                <ul class="mb-0">
+
+                    <li>
+                        Upload only <b>.xlsx Excel files</b>.
+                    </li>
+
+
+                    <li>
+                        Excel columns must match the provided template format.
+                    </li>
+
+
+                    <li>
+                        Employee duplicate checking is done using
+                        <b>Email Address</b>.
+                    </li>
+
+
+                    <li>
+                        If an employee with the same email already exists,
+                        the record will be skipped automatically.
+                    </li>
+
+
+                    <li>
+                        Existing branches will be reused based on
+                        <b>Branch Code</b>.
+                    </li>
+
+
+                    <li>
+                        Existing departments will be reused based on
+                        <b>Department Code</b>.
+                    </li>
+
+
+                    <li>
+                        Existing designations will be reused based on
+                        <b>Designation Code</b>.
+                    </li>
+
+
+                    <li>
+                        New departments will be created automatically if they do not exist.
+                    </li>
+
+
+                    <li>
+                        Employee records with invalid roles will not be imported.
+                    </li>
+
+
+                    <li>
+                        Please verify employee details before uploading.
+                    </li>
+
+
+                </ul>
+
+
+            </div>
 
 </div>
+
+
+
+
+
 @section Scripts
 {
+
     <script>
 
-        const fileInput = document.querySelector('input[type="file"]');
 
-        fileInput.addEventListener('change', async function () {
+        const fileInput =
+            document.getElementById("excelFile");
 
-            if (this.files.length === 0)
+
+
+        fileInput.addEventListener("change", async function() {
+
+
+            if (this.files.length === 0) {
                 return;
+            }
+
+
 
             let formData = new FormData();
 
-            formData.append("file", this.files[0]);
 
-            const response = await fetch("/Import/PreviewImport", {
-                method: "POST",
-                body: formData
-            });
+            formData.append(
+                "file",
+                this.files[0]
+            );
 
-            const result = await response.json();
+
+
+            const response =
+                await fetch("/Import/PreviewImport",
+                    {
+                        method: "POST",
+                        body: formData
+                    });
+
+
+
+            const result =
+                await response.json();
+
+
 
             if (result.success) {
 
-                document.getElementById("filePreview").style.display = "block";
 
-                document.getElementById("fileName").innerText = result.fileName;
+                document
+                    .getElementById("filePreview")
+                    .style.display = "block";
 
-                document.getElementById("totalEmployees").innerText = result.totalEmployees;
 
-                document.getElementById("totalDepartments").innerText = result.totalDepartments;
 
-                document.getElementById("uploadBtn").disabled = false;
+                document
+                    .getElementById("fileName")
+                    .innerText = result.fileName;
 
-                let existingList = document.getElementById("existingDepartments");
-                let newList = document.getElementById("newDepartments");
 
-                existingList.innerHTML = "";
-                newList.innerHTML = "";
 
-                result.existingDepartments.forEach(function (department) {
-                    existingList.innerHTML += `<li class="list-group-item">${department}</li>`;
-                });
+                document
+                    .getElementById("totalEmployees")
+                    .innerText = result.totalEmployees;
 
-                result.newDepartments.forEach(function (department) {
-                    newList.innerHTML += `<li class="list-group-item">${department}</li>`;
-                });
+
+
+                document
+                    .getElementById("totalDepartments")
+                    .innerText = result.totalDepartments;
+
+
+
+                document
+                    .getElementById("uploadBtn")
+                    .disabled = false;
+
+
+
+                let existing =
+                    document.getElementById(
+                        "existingDepartments"
+                    );
+
+
+
+                let newDept =
+                    document.getElementById(
+                        "newDepartments"
+                    );
+
+
+
+                existing.innerHTML = "";
+                newDept.innerHTML = "";
+
+
+
+                result.existingDepartments
+                    .forEach(function(item) {
+
+
+                        existing.innerHTML +=
+                            `<li class="list-group-item">
+                        ${item}
+                     </li>`;
+
+
+                    });
+
+
+
+                result.newDepartments
+                    .forEach(function(item) {
+
+
+                        newDept.innerHTML +=
+                            `<li class="list-group-item">
+                        ${item}
+                     </li>`;
+
+
+                    });
+
+
+
             }
+
+
 
         });
 
+
     </script>
+
+
 }

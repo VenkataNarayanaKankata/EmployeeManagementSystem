@@ -43,22 +43,55 @@
 
                     </div>
 
-                    <!-- Role -->
+                    <!-- Employee -->
 
                     <div class="col-md-6 mb-4">
 
-                        <label asp-for="Role"
-                               class="form-label fw-semibold"></label>
+                        <label asp-for="EmployeeId"
+                               class="form-label fw-semibold">
 
-                        <select asp-for="Role"
+                            Employee
+
+                        </label>
+
+                        <select asp-for="EmployeeId"
+                                asp-items="Model.Employees"
                                 class="form-select">
 
-                            <option value="Admin">Admin</option>
-                            <option value="HR">HR</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Employee">Employee</option>
+                            <option value="">
+                                -- Select Employee --
+                            </option>
 
                         </select>
+
+                        <span asp-validation-for="EmployeeId"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <!-- Role -->
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="RoleId"
+                               class="form-label fw-semibold">
+
+                            Role
+
+                        </label>
+
+                        <select asp-for="RoleId"
+                                asp-items="Model.Roles"
+                                class="form-select">
+
+                            <option value="">
+                                Select Role
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="RoleId"
+                              class="text-danger">
+                        </span>
 
                     </div>
 
@@ -76,7 +109,7 @@
 
                     </div>
 
-                    <!-- Status -->
+                    <!-- Active User -->
 
                     <div class="col-md-6 mb-4 d-flex align-items-center">
 

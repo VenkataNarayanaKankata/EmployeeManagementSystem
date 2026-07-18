@@ -1,0 +1,182 @@
+@model EmployeeManagementSystem.ViewModels.BranchViewModel
+
+@{
+    ViewData["Title"] = "Edit Branch";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-warning text-dark">
+
+            <h3 class="mb-0">
+
+                <i class="fas fa-edit"></i>
+
+                Edit Branch
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="BranchId" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="BranchCode" class="form-label"></label>
+
+                        <input asp-for="BranchCode" class="form-control" />
+
+                        <span asp-validation-for="BranchCode"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="BranchName" class="form-label"></label>
+
+                        <input asp-for="BranchName" class="form-control" />
+
+                        <span asp-validation-for="BranchName"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+
+                        <label asp-for="Address" class="form-label"></label>
+
+                        <textarea asp-for="Address"
+                                  rows="3"
+                                  class="form-control"></textarea>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="City" class="form-label"></label>
+
+                        <input asp-for="City" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="State" class="form-label"></label>
+
+                        <input asp-for="State" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Country" class="form-label"></label>
+
+                        <input asp-for="Country" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Pincode" class="form-label"></label>
+
+                        <input asp-for="Pincode" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Phone" class="form-label"></label>
+
+                        <input asp-for="Phone" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Email" class="form-label"></label>
+
+                        <input asp-for="Email" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-check mt-4">
+
+                            <input asp-for="IsHeadOffice"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsHeadOffice"
+                                   class="form-check-label"></label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-check mt-4">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label"></label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="fas fa-save"></i>
+
+                        Update Branch
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -7,47 +7,93 @@ namespace EmployeeManagementSystem.Models
     {
         public int EmployeeId { get; set; }
 
+        // Employee Information
+
+        [Required]
+        [StringLength(20)]
+        [Display(Name = "Employee Code")]
+        public string EmployeeCode { get; set; } = string.Empty;
+
         [Required]
         [StringLength(100)]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string FullName => $"{FirstName} {LastName}";
 
         [Required]
         [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; } = string.Empty;
-        [Required]
-        [StringLength(255)]
-        public string Password { get; set; } = string.Empty;
 
         [Required]
+        [Phone]
+        [Display(Name = "Phone Number")]
         public string Phone { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Gender is required.")]
+
+        [Required]
         [StringLength(10)]
         public string Gender { get; set; } = string.Empty;
 
+        // Employment Details
+
         [Required]
+        [Display(Name = "Joining Date")]
+        public DateTime JoiningDate { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
 
-        [Required]
-        public DateTime JoiningDate { get; set; }
         public string? PhotoPath { get; set; }
 
-        // Foreign Key
+        // Department
+
+        [Required]
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }
 
-        // Navigation Property
-        [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public int? RoleId { get; set; }
+
+        // Designation
+
+        [Required]
+        [Display(Name = "Designation")]
+        public int DesignationId { get; set; }
+
+        public Designation? Designation { get; set; }
+
+        // System Role
+
+        [Required]
+        [Display(Name = "System Role")]
+        public int RoleId { get; set; }
 
         public Role? Role { get; set; }
+
+        // Employee Status
+
+        [Display(Name = "Active")]
         public bool IsActive { get; set; } = true;
 
-        public DateTime? LastLogin { get; set; }
+        [Display(Name = "Deleted")]
+        public bool IsDeleted { get; set; } = false;
+
+        // Navigation
+
+        public Admin? Admin { get; set; }
+        // Branch
+
+        [Required]
+        [Display(Name = "Branch")]
+        public int BranchId { get; set; }
+
+        public Branch? Branch { get; set; }
     }
 }

@@ -3,185 +3,289 @@
 @{
     ViewData["Title"] = "Add Employee";
 }
-<div class="employee-create-page">
 
-    <!-- Header -->
+<div class="employee-create-page">
 
     <div class="create-header">
 
         <span class="page-badge">
-
             Employee Module
-
         </span>
 
         <h1>
-
             👨‍💼 Add New Employee
-
         </h1>
 
         <p>
-
             Create a new employee profile and assign them to your organization.
-
         </p>
 
     </div>
-    <!--==========================================================
-    CREATE CARD
-===========================================================-->
 
-<div class="create-card">
 
-    <form asp-action="Create"
-          enctype="multipart/form-data">
+    <div class="create-card">
 
-        <div asp-validation-summary="ModelOnly"
-             class="text-danger mb-4"></div>
+        <form asp-action="Create"
+              enctype="multipart/form-data">
 
-        <div class="row g-5">
 
-            <!--==========================================
-                LEFT : PHOTO
-            ===========================================-->
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4"></div>
 
-            <div class="col-lg-4">
 
-                <div class="photo-card">
+            <div class="row g-5">
 
-                    <h4>
-                        Employee Photo
-                    </h4>
 
-                    <div class="photo-preview">
+                <div class="col-lg-4">
 
-                        <img id="previewImage"
-                             src="https://placehold.co/250x250?text=Upload"
-                             alt="Employee Photo" />
+                    <div class="photo-card">
+
+                        <h4>
+                            Employee Photo
+                        </h4>
+
+
+                        <div class="photo-preview">
+
+                            <img id="previewImage"
+                                 src="https://placehold.co/250x250?text=Upload"
+                                 alt="Employee Photo" />
+
+                        </div>
+
+
+                        <input type="file"
+                               id="PhotoFile"
+                               name="PhotoFile"
+                               accept="image/*"
+                               class="form-control mt-4" />
+
+
+                        <small class="text-muted">
+                            JPG, PNG up to 5 MB
+                        </small>
+
 
                     </div>
 
-                    <input type="file"
-                           id="PhotoFile"
-                           name="PhotoFile"
-                           accept="image/*"
-                           class="form-control mt-4" />
-
-                    <small class="text-muted">
-
-                        JPG, PNG up to 5 MB
-
-                    </small>
-
                 </div>
 
-            </div>
 
-            <!--==========================================
-                RIGHT : DETAILS
-            ===========================================-->
 
-            <div class="col-lg-8">
+                <div class="col-lg-8">
 
-                <h3 class="form-title">
 
-                    Personal Information
+                    <h3 class="form-title">
+                        Personal Information
+                    </h3>
 
-                </h3>
 
-                <div class="row g-4">
-                        <!-- First Name -->
+                    <div class="row g-4">
+
 
                         <div class="col-md-6">
 
-                            <label asp-for="FirstName" class="form-label"></label>
+                            <label asp-for="EmployeeCode"
+                                   class="form-label fw-semibold">
+                            </label>
 
-                            <input asp-for="FirstName" class="form-control" />
-
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                            <input asp-for="EmployeeCode"
+                                   class="form-control"
+                                   readonly />
 
                         </div>
 
-                        <!-- Last Name -->
+
 
                         <div class="col-md-6">
 
-                            <label asp-for="LastName" class="form-label"></label>
+                            <label asp-for="FirstName"
+                                   class="form-label">
+                            </label>
 
-                            <input asp-for="LastName" class="form-control" />
+                            <input asp-for="FirstName"
+                                   class="form-control" />
 
-                            <span asp-validation-for="LastName" class="text-danger"></span>
+                            <span asp-validation-for="FirstName"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
-                        <!-- Email -->
+
 
                         <div class="col-md-6">
 
-                            <label asp-for="Email" class="form-label"></label>
+                            <label asp-for="LastName"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="LastName"
+                                   class="form-control" />
+
+                            <span asp-validation-for="LastName"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Email"
+                                   class="form-label">
+                            </label>
 
                             <input asp-for="Email"
                                    type="email"
                                    class="form-control" />
 
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <span asp-validation-for="Email"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
-                        <!-- Phone -->
+
 
                         <div class="col-md-6">
 
-                            <label asp-for="Phone" class="form-label"></label>
+                            <label asp-for="Phone"
+                                   class="form-label">
+                            </label>
 
-                            <input asp-for="Phone" class="form-control" />
+                            <input asp-for="Phone"
+                                   class="form-control" />
 
-                            <span asp-validation-for="Phone" class="text-danger"></span>
-
-                        </div>
-                        <div class="mb-3">
-    <label asp-for="Gender" class="form-label"></label>
-    <select asp-for="Gender" class="form-select">
-        <option value="">-- Select Gender --</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-    </select>
-    <span asp-validation-for="Gender" class="text-danger"></span>
-</div>
-
-                        <!-- Salary -->
-
-                        <div class="col-md-6">
-
-                            <label asp-for="Salary" class="form-label"></label>
-
-                            <input asp-for="Salary" class="form-control" />
-
-                            <span asp-validation-for="Salary" class="text-danger"></span>
+                            <span asp-validation-for="Phone"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
-                        <!-- Joining Date -->
+
 
                         <div class="col-md-6">
 
-                            <label asp-for="JoiningDate" class="form-label"></label>
+                            <label asp-for="Gender"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="Gender"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Gender --
+                                </option>
+
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+
+                            <span asp-validation-for="Gender"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Salary"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Salary"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Salary"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="JoiningDate"
+                                   class="form-label">
+                            </label>
 
                             <input asp-for="JoiningDate"
                                    type="date"
                                    class="form-control" />
 
-                            <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                            <span asp-validation-for="JoiningDate"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
-                        <!-- Department -->
 
-                        <div class="col-12">
 
-                            <label asp-for="DepartmentId" class="form-label"></label>
+                    </div>
+
+
+
+                    <hr class="my-5" />
+
+
+                    <h3 class="form-title">
+                        Organization Details
+                    </h3>
+
+
+                    <div class="row g-4">
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="BranchId"
+                                   class="form-label">
+                                Branch
+                            </label>
+
+
+                            <select asp-for="BranchId"
+                                    asp-items="ViewBag.BranchId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Branch --
+                                </option>
+
+                            </select>
+
+
+                            <span asp-validation-for="BranchId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="DepartmentId"
+                                   class="form-label">
+                                Department
+                            </label>
+
 
                             <select asp-for="DepartmentId"
                                     asp-items="ViewBag.DepartmentId"
@@ -193,37 +297,77 @@
 
                             </select>
 
+
                             <span asp-validation-for="DepartmentId"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="DesignationId"
+                                   class="form-label">
+                                Designation
+                            </label>
+
+
+                            <select asp-for="DesignationId"
+                                    asp-items="ViewBag.DesignationId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Designation --
+                                </option>
+
+                            </select>
+
+
+                            <span asp-validation-for="DesignationId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="RoleId"
+                                   class="form-label">
+                                Role
+                            </label>
+
+
+                            <select asp-for="RoleId"
+                                    asp-items="ViewBag.RoleId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Role --
+                                </option>
+
+                            </select>
+
+
+                            <span asp-validation-for="RoleId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
                     </div>
-                    <!-- Role -->
 
-<div class="col-12">
 
-    <label asp-for="RoleId" class="form-label">
-        Role
-    </label>
-
-    <select asp-for="RoleId"
-            asp-items="ViewBag.RoleId"
-            class="form-select">
-
-        <option value="">
-            -- Select Role --
-        </option>
-
-    </select>
-
-    <span asp-validation-for="RoleId"
-          class="text-danger"></span>
-
-</div>
 
                     <hr class="my-5" />
 
+
                     <div class="text-end">
+
 
                         <a asp-action="Index"
                            class="btn btn-outline-secondary btn-lg me-3">
@@ -232,6 +376,7 @@
 
                         </a>
 
+
                         <button type="submit"
                                 class="btn btn-primary btn-lg">
 
@@ -239,27 +384,39 @@
 
                         </button>
 
+
                     </div>
+
 
                 </div>
 
+
             </div>
+
 
         </form>
 
+
     </div>
 
+
 </div>
+
+
+
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
 
+
     <script>
 
         const photoInput = document.getElementById("PhotoFile");
+
         const preview = document.getElementById("previewImage");
 
-        photoInput.addEventListener("change", function () {
+
+        photoInput.addEventListener("change", function() {
 
             if (this.files && this.files[0]) {
 

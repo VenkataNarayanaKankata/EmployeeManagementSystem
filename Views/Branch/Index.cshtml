@@ -1,0 +1,448 @@
+@model IEnumerable<EmployeeManagementSystem.ViewModels.BranchViewModel>
+
+@{
+    ViewData["Title"] = "Branch Management";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">
+                <i class="fas fa-code-branch"></i>
+                Branch Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage company branches and locations.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary btn-lg">
+
+            <i class="fas fa-plus-circle"></i>
+
+            Add Branch
+
+        </a>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Branches
+
+                    </h6>
+
+                    <h2 class="fw-bold text-primary">
+
+                        @ViewBag.TotalBranches
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Active Branches
+
+                    </h6>
+
+                    <h2 class="fw-bold text-success">
+
+                        @ViewBag.ActiveBranches
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Inactive Branches
+
+                    </h6>
+
+                    <h2 class="fw-bold text-danger">
+
+                        @ViewBag.InactiveBranches
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Head Offices
+
+                    </h6>
+
+                    <h2 class="fw-bold text-warning">
+
+                        @ViewBag.HeadOfficeCount
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+        SEARCH & FILTER
+========================================= -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-search"></i>
+
+                Search & Filter
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Index" method="get">
+
+                <div class="row align-items-end">
+
+                    <!-- Search -->
+
+                    <div class="col-lg-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Branch Name
+
+                        </label>
+
+                        <input type="text"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="form-control form-control-lg"
+                               placeholder="Search by Branch Code, Name or City..." />
+
+                    </div>
+
+                    <!-- Status -->
+
+                    <div class="col-lg-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Status
+
+                        </label>
+
+                        <select name="status"
+                                class="form-select form-select-lg">
+
+                            <option value="">All Branches</option>
+
+                            <option value="true"
+                                    selected="@(ViewBag.Status?.ToString() == "true")">
+
+                                Active
+
+                            </option>
+
+                            <option value="false"
+                                    selected="@(ViewBag.Status?.ToString() == "false")">
+
+                                Inactive
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Buttons -->
+
+                    <div class="col-lg-3">
+
+                        <div class="d-grid gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg">
+
+                                <i class="bi bi-search"></i>
+
+                                Search
+
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-arrow-clockwise"></i>
+
+                                Reset
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="fas fa-check-circle"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="fas fa-building"></i>
+
+                Branch List
+
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Code</th>
+
+                        <th>Branch</th>
+
+                        <th>City</th>
+
+                        <th>State</th>
+
+                        <th>Employees</th>
+
+                        <th>Head Office</th>
+
+                        <th>Status</th>
+
+                        <th width="220">Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>@item.BranchCode</strong>
+
+                                </td>
+
+                                <td>
+
+                                    @item.BranchName
+
+                                </td>
+
+                                <td>
+
+                                    @item.City
+
+                                </td>
+
+                                <td>
+
+                                    @item.State
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-info">
+
+                                        @item.EmployeeCount
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.IsHeadOffice)
+                                    {
+                                        <span class="badge bg-warning text-dark">
+
+                                            Head Office
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+
+                                            Branch
+
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">
+
+                                            Active
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+
+                                            Inactive
+
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.BranchId"
+                                       class="btn btn-sm btn-info text-white">
+
+                                        
+
+                                        View
+
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.BranchId"
+                                       class="btn btn-sm btn-warning text-dark">
+
+                                       
+
+                                        Edit
+
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.BranchId"
+                                       class="btn btn-sm btn-danger">
+
+                                     
+
+                                        Delete
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="8"
+                                class="text-center text-muted py-5">
+
+                                <i class="fas fa-building fa-3x mb-3"></i>
+
+                                <br />
+
+                                No branches found.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+    </div>

@@ -1,0 +1,482 @@
+﻿@model EmployeeManagementSystem.ViewModels.RolePermissionViewModel
+
+@{
+    ViewData["Title"] = "Role Permissions";
+}
+
+
+<div class="container mt-4">
+
+
+    <div class="employee-header mb-4">
+
+        <div class="employee-header-left">
+
+            <h1>
+                🔐 Role Permission Management
+            </h1>
+
+            <p>
+                Assign multiple permissions to roles and manage system access.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+
+
+
+
+    <div class="card shadow-sm border-0 mb-4">
+
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+                Select Role
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <form method="get"
+                  asp-action="Index">
+
+
+                <select name="roleId"
+                        class="form-select"
+                        onchange="this.form.submit()">
+
+
+
+                    <option value="">
+                        -- Select Role --
+                    </option>
+
+
+
+                    @foreach (var role in ViewBag.Roles)
+                    {
+
+                        <option value="@role.RoleId"
+                                selected="@(Model.RoleId == role.RoleId)">
+
+                            @role.RoleName
+
+                        </option>
+
+                    }
+
+
+                </select>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    @if (Model.RoleId > 0)
+    {
+
+
+        <form asp-action="Index"
+              method="post">
+
+
+            <input type="hidden"
+                   asp-for="RoleId" />
+
+
+
+            <div class="card shadow-sm border-0 mb-4">
+
+
+                <div class="card-header text-white"
+                     style="background: linear-gradient(135deg,#2563eb,#1d4ed8);">
+
+                    <h5 class="mb-0">
+                        📂 Select Modules
+                    </h5>
+
+                </div>
+
+
+
+                <div class="card-body">
+
+
+                    <div class="row">
+
+
+                        @foreach (var module in Model.Modules)
+                        {
+
+                            <div class="col-md-3 mb-3">
+
+
+                                <div class="border rounded p-3">
+
+
+                                    <div class="form-check">
+
+
+                                        <input class="form-check-input module-checkbox"
+                                               type="checkbox"
+                                               name="SelectedModules"
+                                               value="@module"
+                                        @(Model.SelectedModules.Contains(module) ? "checked" : "") />
+
+
+                                        <label class="form-check-label fw-semibold">
+
+                                            @module
+
+                                        </label>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        }
+
+
+                    </div>
+
+
+
+                    <button type="button"
+                            class="btn btn-primary"
+                            onclick="loadPermissions()">
+
+                        🔍 Load Permissions
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="card shadow-sm border-0">
+
+
+                <div class="card-header bg-success text-white">
+
+
+                    <h4 class="mb-0">
+
+                        Permissions for:
+
+                        @Model.RoleName
+
+                    </h4>
+
+
+                </div>
+
+
+
+
+
+                <div class="card-body">
+
+
+                    @if (Model.Permissions.Any())
+                    {
+
+
+                        var groupedPermissions =
+                            Model.Permissions
+                            .GroupBy(x => x.ModuleName);
+
+
+
+                        foreach (var group in groupedPermissions)
+                        {
+
+
+                            <div class="mb-4">
+
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+
+
+                                    <h5 class="text-primary">
+
+                                        @group.Key
+
+                                    </h5>
+
+
+                                    <div>
+
+
+                                        <input type="checkbox"
+                                               class="form-check-input select-all"
+                                               data-module="@group.Key" />
+
+
+                                        <label class="ms-2">
+                                            Select All
+                                        </label>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+
+
+
+                                <div class="row">
+
+
+                                    @for (int i = 0; i < group.Count(); i++)
+                                    {
+
+
+                                        var permission =
+                                            group.ElementAt(i);
+
+
+
+                                        var index =
+                                            Model.Permissions.IndexOf(permission);
+
+
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[index].PermissionId" />
+
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[index].PermissionName" />
+
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[index].ModuleName" />
+
+
+
+
+                                        <div class="col-md-6 mb-3">
+
+
+                                            <div class="border rounded p-3">
+
+
+                                                <div class="form-check">
+
+
+                                                    <input class="form-check-input permission-checkbox"
+                                                           asp-for="Permissions[index].IsSelected"
+                                                           data-module="@permission.ModuleName" />
+
+
+                                                    <label class="form-check-label">
+
+                                                        @permission.PermissionName
+
+                                                    </label>
+
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    }
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        }
+
+
+                    }
+                    else
+                    {
+
+                        <div class="alert alert-info">
+
+                            Select modules and load permissions.
+
+                        </div>
+
+                    }
+
+
+
+                </div>
+
+
+
+
+
+                <div class="card-footer text-end">
+
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+
+                        💾 Save Permissions
+
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+
+        </form>
+
+
+    }
+    else
+    {
+
+        <div class="alert alert-info">
+
+            Please select a role to manage permissions.
+
+        </div>
+
+    }
+
+
+
+</div>
+
+
+
+
+
+@section Scripts
+{
+
+    <script>
+
+
+        function loadPermissions() {
+
+            let roleId =
+                @Model.RoleId;
+
+
+            let modules =
+                [];
+
+
+            document
+                .querySelectorAll(".module-checkbox:checked")
+                .forEach(x => {
+                    modules.push(x.value);
+                });
+
+
+
+            let url =
+                "/RolePermission/Index?roleId="
+                + roleId;
+
+
+
+            modules.forEach(m => {
+                url += "&selectedModules=" + encodeURIComponent(m);
+            });
+
+
+
+            window.location.href = url;
+
+        }
+
+
+
+
+
+        document
+            .querySelectorAll(".select-all")
+            .forEach(function(select) {
+
+                select.addEventListener("change", function() {
+
+
+                    let module =
+                        this.dataset.module;
+
+
+
+                    document
+                        .querySelectorAll(
+                            '.permission-checkbox[data-module="' + module + '"]'
+                        )
+                        .forEach(function(permission) {
+
+                            permission.checked =
+                                select.checked;
+
+                        });
+
+
+
+                });
+
+
+            });
+
+
+
+    </script>
+
+}

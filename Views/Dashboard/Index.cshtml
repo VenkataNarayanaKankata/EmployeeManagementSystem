@@ -4,706 +4,428 @@
     ViewData["Title"] = "Dashboard";
 }
 
-
-<!-- =====================================================
-                    DASHBOARD PAGE
-====================================================== -->
-
-
 <div class="dashboard-page">
-
-
-    <!-- =================================================
-                    DASHBOARD HERO
-    ================================================== -->
 
 
     <section class="dashboard-hero">
 
-
         <div class="dashboard-hero-content">
 
-
             <span class="dashboard-badge">
-
                 <i class="bi bi-grid-1x2-fill"></i>
-
                 Dashboard Overview
-
             </span>
 
 
-
             <h1>
-
                 Welcome Back,
                 <span>
-                    Admin
+                    @(User.IsInRole("Admin") ? "Administrator" :
+                    User.IsInRole("HR") ? "HR" :
+                    User.IsInRole("Manager") ? "Manager" :
+                    User.IsInRole("Employee") ? "Employee" :
+                    "User")
                 </span>
                 👋
-
             </h1>
 
 
-
             <p>
-
-                Monitor your workforce,
-                employee performance,
-                departments and business insights
-                from one centralized dashboard.
-
+                Monitor employees, branches, departments and organization insights from one place.
             </p>
 
-
         </div>
-
-
-
-
-        <!-- DATE CARD -->
 
 
         <div class="dashboard-date-card">
 
-
             <div class="date-icon">
-
                 <i class="bi bi-calendar-event"></i>
-
             </div>
-
 
 
             <div>
 
-
                 <small>
-
                     Today
-
                 </small>
 
-
                 <h4>
-
                     @DateTime.Now.ToString("dddd")
-
                 </h4>
 
-
                 <p>
-
                     @DateTime.Now.ToString("dd MMMM yyyy")
-
                 </p>
-
 
             </div>
 
-
-
         </div>
-
 
     </section>
 
 
 
-
-
-    <!-- =================================================
-                    KPI CARDS
-    ================================================== -->
 
 
     <section class="dashboard-kpi-section">
 
-
         <div class="kpi-grid">
 
 
-
-            <!-- TOTAL EMPLOYEES -->
-
-
             <div class="kpi-card">
-
-
                 <div class="kpi-icon blue">
-
                     <i class="bi bi-people-fill"></i>
-
                 </div>
 
-
-
-                <div class="kpi-content">
-
-
-                    <span>
-
-                        Total Employees
-
-                    </span>
-
-
-                    <h2>
-
-                        @Model.TotalEmployees
-
-                    </h2>
-
-
-                    <small>
-
-                        Active workforce
-
-                    </small>
-
-
+                <div>
+                    <span>Total Employees</span>
+                    <h2>@Model.TotalEmployees</h2>
+                    <small>Total workforce</small>
                 </div>
-
-
             </div>
 
 
 
-
-
-
-            <!-- DEPARTMENTS -->
-
-
             <div class="kpi-card">
-
-
                 <div class="kpi-icon green">
-
-                    <i class="bi bi-building-fill"></i>
-
+                    <i class="bi bi-building"></i>
                 </div>
 
-
-
-                <div class="kpi-content">
-
-
-                    <span>
-
-                        Departments
-
-                    </span>
-
-
-                    <h2>
-
-                        @Model.TotalDepartments
-
-                    </h2>
-
-
-                    <small>
-
-                        Company structure
-
-                    </small>
-
-
+                <div>
+                    <span>Branches</span>
+                    <h2>@Model.TotalBranches</h2>
+                    <small>Company locations</small>
                 </div>
-
-
             </div>
 
 
 
 
-
-
-            <!-- SALARY -->
-
-
             <div class="kpi-card">
-
-
                 <div class="kpi-icon orange">
-
-                    <i class="bi bi-currency-rupee"></i>
-
+                    <i class="bi bi-diagram-3"></i>
                 </div>
 
-
-
-                <div class="kpi-content">
-
-
-                    <span>
-
-                        Average Salary
-
-                    </span>
-
-                    <h2>
-
-                        ₹ @Convert.ToDecimal(Model.AverageSalary).ToString("N0")
-
-                    </h2>
-
-
-                    <small>
-
-                        Monthly average
-
-                    </small>
-
-
+                <div>
+                    <span>Departments</span>
+                    <h2>@Model.TotalDepartments</h2>
+                    <small>Organization units</small>
                 </div>
-
-
             </div>
 
 
 
 
+            <div class="kpi-card">
+                <div class="kpi-icon purple">
+                    <i class="bi bi-person-badge"></i>
+                </div>
 
+                <div>
+                    <span>Designations</span>
+                    <h2>@Model.TotalDesignations</h2>
+                    <small>Job positions</small>
+                </div>
+            </div>
 
-            <!-- JOINED -->
 
 
             <div class="kpi-card">
+                <div class="kpi-icon blue">
+                    <i class="bi bi-person-check"></i>
+                </div>
+
+                <div>
+                    <span>Active Employees</span>
+                    <h2>@Model.ActiveEmployees</h2>
+                    <small>Currently working</small>
+                </div>
+            </div>
 
 
+
+            <div class="kpi-card">
+                <div class="kpi-icon green">
+                    <i class="bi bi-calendar-plus"></i>
+                </div>
+
+                <div>
+                    <span>New Joiners</span>
+                    <h2>@Model.JoinedThisMonth</h2>
+                    <small>This month</small>
+                </div>
+            </div>
+
+
+
+            <div class="kpi-card">
+                <div class="kpi-icon orange">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+
+                <div>
+                    <span>Average Salary</span>
+                    <h2>₹ @Model.AverageSalary.ToString("N0")</h2>
+                    <small>Monthly average</small>
+                </div>
+            </div>
+
+
+
+            <div class="kpi-card">
                 <div class="kpi-icon purple">
-
-                    <i class="bi bi-person-plus-fill"></i>
-
+                    <i class="bi bi-wallet2"></i>
                 </div>
 
-
-
-                <div class="kpi-content">
-
-
-                    <span>
-
-                        New Joiners
-
-                    </span>
-
-
-                    <h2>
-
-                        @Model.JoinedThisMonth
-
-                    </h2>
-
-
-                    <small>
-
-                        This month
-
-                    </small>
-
-
+                <div>
+                    <span>Highest Salary</span>
+                    <h2>₹ @Model.HighestSalary.ToString("N0")</h2>
+                    <small>Highest package</small>
                 </div>
-
-
             </div>
 
 
 
         </div>
 
-
     </section>
-    <!-- =====================================================
-                ANALYTICS SECTION
-====================================================== -->
+
+
+
 
 
     <section class="dashboard-analytics-section">
 
-
         <div class="analytics-grid">
 
 
-
-            <!-- =============================================
-                EMPLOYEE ANALYTICS
-        ============================================== -->
-
-
             <div class="analytics-card">
 
-
-                <div class="analytics-header">
-
-
-                    <div>
-
-
-                        <h3>
-
-                            Employee Analytics
-
-                        </h3>
-
-
-                        <p>
-
-                            Workforce distribution overview
-
-                        </p>
-
-
-                    </div>
-
-
-
-                    <div class="analytics-icon">
-
-                        <i class="bi bi-bar-chart-fill"></i>
-
-                    </div>
-
-
-                </div>
-
-
+                <h3>
+                    Employees By Branch
+                </h3>
 
                 <div class="chart-container">
-
-
-                    <canvas id="employeeChart"></canvas>
-
-
+                    <canvas id="branchChart"></canvas>
                 </div>
-
 
             </div>
 
 
 
 
-
-
-
-            <!-- =============================================
-                DEPARTMENT ANALYTICS
-        ============================================== -->
-
-
             <div class="analytics-card">
 
-
-                <div class="analytics-header">
-
-
-                    <div>
-
-
-                        <h3>
-
-                            Department Distribution
-
-                        </h3>
-
-
-                        <p>
-
-                            Employees by department
-
-                        </p>
-
-
-                    </div>
-
-
-
-                    <div class="analytics-icon">
-
-
-                        <i class="bi bi-pie-chart-fill"></i>
-
-
-                    </div>
-
-
-                </div>
-
-
+                <h3>
+                    Top Departments
+                </h3>
 
                 <div class="chart-container">
-
-
                     <canvas id="departmentChart"></canvas>
-
-
                 </div>
-
-
 
             </div>
 
 
+
+
+
+            <div class="analytics-card">
+
+                <h3>
+                    Top Designations
+                </h3>
+
+                <div class="chart-container">
+                    <canvas id="designationChart"></canvas>
+                </div>
+
+            </div>
+
+
+
+
+
+            <div class="analytics-card">
+
+                <h3>
+                    Employee Roles
+                </h3>
+
+                <div class="chart-container">
+
+                    <canvas id="roleChart"></canvas>
+
+                </div>
+
+            </div>
 
 
         </div>
 
-
     </section>
-    <!-- =====================================================
-                QUICK ACTIONS SECTION
-====================================================== -->
+
+
+
 
 
     <section class="dashboard-actions-section">
 
-
         <div class="section-title">
 
+            <h2>
+                Quick Actions
+            </h2>
 
-            <div>
-
-                <span class="dashboard-badge">
-
-                    <i class="bi bi-lightning-fill"></i>
-
-                    Quick Actions
-
-                </span>
-
-
-                <h2>
-
-                    Manage Your Workspace
-
-                </h2>
-
-
-                <p>
-
-                    Quickly access frequently used employee
-                    management features.
-
-                </p>
-
-
-            </div>
-
+            <p>
+                Manage organization modules quickly.
+            </p>
 
         </div>
-
-
 
 
 
         <div class="actions-grid">
 
 
+            @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+            {
 
-            <!-- ADD EMPLOYEE -->
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="action-card">
 
+                    <i class="bi bi-person-plus"></i>
 
-            <a asp-controller="Employee"
-               asp-action="Create"
-               class="action-card">
-
-
-                <div class="action-icon blue">
-
-                    <i class="bi bi-person-plus-fill"></i>
-
-                </div>
-
-
-
-                <div class="action-content">
-
-
-                    <h4>
-
+                    <span>
                         Add Employee
+                    </span>
 
-                    </h4>
+                </a>
 
 
-                    <p>
 
-                        Create a new employee record.
+                <a asp-controller="Import"
+                   asp-action="EmployeeImport"
+                   class="action-card">
 
-                    </p>
+                    <i class="bi bi-upload"></i>
 
-
-                </div>
-
-
-
-                <i class="bi bi-arrow-right action-arrow"></i>
-
-
-            </a>
-
-
-
-
-
-
-
-            <!-- DEPARTMENT -->
-
-
-            <a asp-controller="Department"
-               asp-action="Create"
-               class="action-card">
-
-
-                <div class="action-icon green">
-
-
-                    <i class="bi bi-building-add"></i>
-
-
-                </div>
-
-
-
-                <div class="action-content">
-
-
-                    <h4>
-
-                        Add Department
-
-                    </h4>
-
-
-                    <p>
-
-                        Organize company departments.
-
-                    </p>
-
-
-                </div>
-
-
-
-                <i class="bi bi-arrow-right action-arrow"></i>
-
-
-            </a>
-
-
-
-
-
-
-
-            <!-- IMPORT -->
-
-
-            <a asp-controller="Import"
-               asp-action="EmployeeImport"
-               class="action-card">
-
-
-                <div class="action-icon orange">
-
-
-                    <i class="bi bi-file-earmark-arrow-up-fill"></i>
-
-
-                </div>
-
-
-
-                <div class="action-content">
-
-
-                    <h4>
-
+                    <span>
                         Import Employees
+                    </span>
 
-                    </h4>
+                </a>
 
-
-                    <p>
-
-                        Upload bulk employee data.
-
-                    </p>
-
-
-                </div>
+            }
 
 
 
-                <i class="bi bi-arrow-right action-arrow"></i>
+            @if (User.IsInRole("Admin"))
+            {
 
 
-            </a>
+                <a asp-controller="Branch"
+                   asp-action="Index"
+                   class="action-card">
 
+                    <i class="bi bi-building"></i>
 
+                    <span>
+                        Branches
+                    </span>
 
-
-
-
-
-            <!-- REPORTS -->
-
-
-            <a asp-controller="Reports"
-               asp-action="Index"
-               class="action-card">
-
-
-                <div class="action-icon purple">
-
-
-                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
-
-
-                </div>
+                </a>
 
 
 
-                <div class="action-content">
+                <a asp-controller="Department"
+                   asp-action="Index"
+                   class="action-card">
 
+                    <i class="bi bi-diagram-3"></i>
 
-                    <h4>
+                    <span>
+                        Departments
+                    </span>
 
-                        View Reports
-
-                    </h4>
-
-
-                    <p>
-
-                        Generate employee reports.
-
-                    </p>
-
-
-                </div>
+                </a>
 
 
 
-                <i class="bi bi-arrow-right action-arrow"></i>
+                <a asp-controller="Designation"
+                   asp-action="Index"
+                   class="action-card">
+
+                    <i class="bi bi-person-badge"></i>
+
+                    <span>
+                        Designations
+                    </span>
+
+                </a>
 
 
-            </a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+
+                <a asp-controller="User"
+                   asp-action="Index"
+                   class="action-card">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>
+                        User Management
+                    </span>
+
+                </a>
 
 
+                <a asp-controller="ActivityLog"
+                   asp-action="Index"
+                   class="action-card">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <span>
+                        Activity Logs
+                    </span>
+
+                </a>
+
+            }
+
+
+
+            @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+            {
+
+                <a asp-controller="Reports"
+                   asp-action="Index"
+                   class="action-card">
+
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </a>
+
+            }
 
 
         </div>
 
 
     </section>
-    <!-- =====================================================
-                RECENT EMPLOYEES SECTION
-====================================================== -->
+
+
+
+
 
 
     <section class="recent-section">
@@ -712,43 +434,20 @@
         <div class="recent-card">
 
 
-            <div class="recent-header">
+            <div class="d-flex justify-content-between mb-4">
 
-
-                <div>
-
-                    <span class="dashboard-badge">
-
-                        <i class="bi bi-people-fill"></i>
-
-                        Recent Employees
-
-                    </span>
-
-
-                    <h2>
-
-                        Latest Employee Records
-
-                    </h2>
-
-
-                </div>
-
+                <h2>
+                    Latest Employees
+                </h2>
 
 
                 <a asp-controller="Employee"
                    asp-action="Index"
                    class="btn btn-primary">
 
-
                     View All
 
-                    <i class="bi bi-arrow-right ms-2"></i>
-
-
                 </a>
-
 
             </div>
 
@@ -759,7 +458,7 @@
             <div class="table-responsive">
 
 
-                <table class="table employee-table">
+                <table class="table table-hover">
 
 
                     <thead>
@@ -767,7 +466,15 @@
                         <tr>
 
                             <th>
+                                Photo
+                            </th>
+
+                            <th>
                                 Employee
+                            </th>
+
+                            <th>
+                                Branch
                             </th>
 
                             <th>
@@ -775,19 +482,18 @@
                             </th>
 
                             <th>
+                                Designation
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
                                 Joining Date
                             </th>
 
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
                         </tr>
-
 
                     </thead>
 
@@ -796,134 +502,81 @@
                     <tbody>
 
 
-                        @if (Model.RecentEmployees != null &&
-                            Model.RecentEmployees.Any())
-                        {
-
-                            foreach (var employee in Model.RecentEmployees)
-                            {
-
-                                <tr>
-
-
-                                    <td>
-
-
-                                        <div class="employee-profile">
-
-
-                                            @if (!string.IsNullOrEmpty(employee.PhotoPath))
-                                            {
-
-                                                <img src="~/uploads/@employee.PhotoPath"
-                                                     asp-append-version="true"
-                                                     class="employee-avatar" />
-
-                                            }
-                                            else
-                                            {
-
-                                                <img src="~/images/default-user.png"
-                                                     class="employee-avatar" />
-
-                                            }
-
-
-
-                                            <div>
-
-
-                                                <h6>
-
-                                                    @employee.FirstName
-                                                    @employee.LastName
-
-                                                </h6>
-
-
-                                                <span>
-
-                                                    @employee.Email
-
-                                                </span>
-
-
-                                            </div>
-
-
-                                        </div>
-
-
-                                    </td>
-
-
-
-                                    <td>
-
-                                        @employee.Department?.DepartmentName
-
-                                    </td>
-
-
-
-                                    
-
-                                        <td>
-                                            @employee.JoiningDate.ToString("dd MMM yyyy")
-                                        </td>
-
-
-
-                                    <td>
-
-
-                                        <span class="status-active">
-
-                                            Active
-
-                                        </span>
-
-
-                                    </td>
-
-
-
-                                    <td>
-
-
-                                        <a asp-controller="Employee"
-                                           asp-action="Details"
-                                           asp-route-id="@employee.EmployeeId"
-                                           class="btn btn-sm btn-outline-primary">
-
-
-                                            View
-
-
-                                        </a>
-
-
-                                    </td>
-
-
-
-                                </tr>
-
-
-                            }
-
-                        }
-                        else
+                        @foreach (var employee in Model.RecentEmployees)
                         {
 
                             <tr>
 
-                                <td colspan="5"
-                                    class="text-center">
 
-                                    No employee records found.
+                                <td>
+
+                                    @if (!string.IsNullOrEmpty(employee.PhotoPath))
+                                    {
+
+                                        <img src="~/uploads/@employee.PhotoPath"
+                                             width="55"
+                                             height="55"
+                                             class="rounded-circle" />
+
+                                    }
+                                    else
+                                    {
+
+                                        <img src="~/images/default-user.png"
+                                             width="55"
+                                             height="55"
+                                             class="rounded-circle" />
+
+                                    }
 
                                 </td>
+
+
+
+                                <td>
+
+                                    <strong>
+                                        @employee.FirstName @employee.LastName
+                                    </strong>
+
+                                    <br />
+
+                                    <small>
+                                        @employee.Email
+                                    </small>
+
+                                </td>
+
+
+
+                                <td>
+                                    @employee.Branch?.BranchName
+                                </td>
+
+
+
+                                <td>
+                                    @employee.Department?.DepartmentName
+                                </td>
+
+
+
+                                <td>
+                                    @employee.Designation?.DesignationName
+                                </td>
+
+
+
+                                <td>
+                                    @employee.Role?.RoleName
+                                </td>
+
+
+
+                                <td>
+                                    @employee.JoiningDate.ToString("dd MMM yyyy")
+                                </td>
+
 
                             </tr>
 
@@ -945,187 +598,129 @@
     </section>
 
 
+</div>
 
 
 
-    <!-- =====================================================
-                CHART SCRIPTS
-====================================================== -->
-    @section Scripts
-    {
-
-        <script>
 
 
-                const departmentNames =
-                @Html.Raw(
-                        System.Text.Json.JsonSerializer.Serialize(
-                                Model.DepartmentNames
-                        )
-                );
+@section Scripts
+{
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-                const employeeCounts =
-                @Html.Raw(
-                        System.Text.Json.JsonSerializer.Serialize(
-                                Model.EmployeeCounts
-                        )
-                );
+    <script>
 
 
+        function createChart(id, labels, data, type) {
 
-                // EMPLOYEE BAR CHART
+            new Chart(document.getElementById(id),
+                {
 
-                new Chart(
-                    document.getElementById("employeeChart"),
+                    type: type,
+
+                    data:
                     {
 
-                        type:"bar",
+                        labels: labels,
 
-                        data:
+                        datasets:
+                            [{
+
+                                data: data
+
+                            }]
+
+                    },
+
+                    options:
+                    {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false
+
+                    }
+
+                });
+
+
+        }
+
+
+
+        createChart(
+            "branchChart",
+        @Html.Raw(Json.Serialize(Model.BranchNames)),
+        @Html.Raw(Json.Serialize(Model.BranchEmployeeCounts)),
+            "bar"
+        );
+
+
+
+        createChart(
+            "departmentChart",
+        @Html.Raw(Json.Serialize(Model.TopDepartmentNames)),
+        @Html.Raw(Json.Serialize(Model.TopDepartmentCounts)),
+            "bar"
+        );
+
+
+
+        createChart(
+            "designationChart",
+        @Html.Raw(Json.Serialize(Model.TopDesignationNames)),
+        @Html.Raw(Json.Serialize(Model.TopDesignationCounts)),
+            "bar"
+        );
+        const roleCtx = document.getElementById('roleChart');
+
+
+        const roleChartElement = document.getElementById("roleChart");
+
+        if (roleChartElement) {
+
+            new Chart(roleChartElement, {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: @Html.Raw(Json.Serialize(Model.RoleNames)),
+
+                    datasets: [
                         {
+                            data: @Html.Raw(Json.Serialize(Model.RoleEmployeeCounts))
+                    }
+                    ]
 
-                            labels:departmentNames,
-
-                            datasets:
-                            [
-                                {
-
-                                    label:"Employees",
-
-                                    data:employeeCounts,
-
-                                    borderRadius:12,
-
-                                    backgroundColor:
-                                    [
-                                        "#2563EB",
-                                        "#16A34A",
-                                        "#F59E0B",
-                                        "#DC2626",
-                                        "#9333EA"
-                                    ]
-
-                                }
-
-                            ]
-
-                        },
+                },
 
 
-                        options:
-                        {
+                options: {
 
-                            responsive:true,
+                    responsive: true,
 
-                            maintainAspectRatio:false,
+                    maintainAspectRatio: false,
 
+                    plugins: {
 
-                            plugins:
-                            {
+                        legend: {
 
-                                legend:
-                                {
-
-                                    display:false
-
-                                }
-
-                            },
-
-
-                            scales:
-                            {
-
-                                y:
-                                {
-
-                                    beginAtZero:true
-
-                                }
-
-                            }
-
+                            position: "right"
 
                         }
 
-
                     }
-                );
+
+                }
+
+            });
+
+        }
 
 
+    </script>
 
-
-
-                // DEPARTMENT PIE CHART
-
-
-                new Chart(
-                    document.getElementById("departmentChart"),
-                    {
-
-                        type:"doughnut",
-
-
-                        data:
-                        {
-
-                            labels:departmentNames,
-
-
-                            datasets:
-                            [
-                                {
-
-                                    data:employeeCounts,
-
-
-                                    backgroundColor:
-                                    [
-                                        "#2563EB",
-                                        "#16A34A",
-                                        "#F59E0B",
-                                        "#DC2626",
-                                        "#9333EA"
-                                    ]
-
-
-                                }
-
-                            ]
-
-
-                        },
-
-
-                        options:
-                        {
-
-                            responsive:true,
-
-                            maintainAspectRatio:false,
-
-
-                            plugins:
-                            {
-
-                                legend:
-                                {
-
-                                    position:"bottom"
-
-                                }
-
-                            }
-
-
-                        }
-
-
-                    }
-                );
-
-
-        </script>
-
-    }
+}

@@ -1,82 +1,314 @@
 @model EmployeeManagementSystem.Models.Employee
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Employee";
 }
 
-<h1>Delete</h1>
+<div class="container py-4">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>EmployeeManagementSystem.Models.Employee</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salary)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JoiningDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JoiningDate)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartmentId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DepartmentId)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Department)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Department)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="EmployeeId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="card border-0 shadow-lg rounded-4">
+
+
+        <div class="card-header bg-danger text-white rounded-top-4 py-3">
+
+            <h2 class="mb-0">
+
+                <i class="bi bi-trash-fill"></i>
+                Delete Employee
+
+            </h2>
+
+        </div>
+
+
+        <div class="card-body p-4">
+
+
+            <div class="alert alert-warning">
+
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                <strong>Warning!</strong>
+
+                This employee will be moved to Recycle Bin.
+                You can restore the employee later or permanently delete it.
+
+            </div>
+
+
+
+            <div class="row">
+
+
+
+                <div class="col-md-4 text-center">
+
+
+                    @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                    {
+                        <img src="~/uploads/@Model.PhotoPath"
+                             class="img-fluid rounded-circle shadow border border-4 border-danger"
+                             style="width:220px;height:220px;object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <div class="border rounded shadow d-flex justify-content-center align-items-center"
+                             style="width:220px;height:220px;margin:auto;">
+
+                            <span class="text-muted">
+                                No Photo
+                            </span>
+
+                        </div>
+                    }
+
+
+
+                    <h4 class="mt-3">
+
+                        @Model.FirstName @Model.LastName
+
+                    </h4>
+
+
+
+                    <span class="badge bg-danger fs-6">
+
+                        Will be Deleted
+
+                    </span>
+
+
+                </div>
+
+
+
+
+
+                <div class="col-md-8">
+
+
+                    <dl class="row">
+
+
+                        <dt class="col-sm-4">
+                            Employee Code
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="badge bg-dark fs-6">
+
+                                @Model.EmployeeCode
+
+                            </span>
+
+                        </dd>
+
+
+
+                        <dt class="col-sm-4">
+                            Email
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            @Model.Email
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Phone
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            @Model.Phone
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Branch
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="badge bg-dark">
+
+                                @Model.Branch?.BranchName
+
+                            </span>
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Department
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="badge bg-primary">
+
+                                @Model.Department?.DepartmentName
+
+                            </span>
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Designation
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="badge bg-info text-dark">
+
+                                @Model.Designation?.DesignationName
+
+                            </span>
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Role
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="badge bg-success">
+
+                                @Model.Role?.RoleName
+
+                            </span>
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Salary
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            <span class="text-success fw-bold">
+
+                                ₹ @Model.Salary.ToString("N0")
+
+                            </span>
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Joining Date
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+                            @Model.JoiningDate.ToString("dd MMM yyyy")
+
+                        </dd>
+
+
+
+
+                        <dt class="col-sm-4">
+                            Status
+                        </dt>
+
+                        <dd class="col-sm-8">
+
+
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+
+                                    Active
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+
+                                    Inactive
+
+                                </span>
+                            }
+
+
+                        </dd>
+
+
+                    </dl>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <hr />
+
+
+
+            <form asp-action="Delete">
+
+
+                <input type="hidden"
+                       asp-for="EmployeeId" />
+
+
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left-circle"></i>
+
+                    Back
+
+                </a>
+
+
+
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                    Move to Recycle Bin
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
 </div>

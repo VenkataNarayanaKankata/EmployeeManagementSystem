@@ -1,0 +1,277 @@
+@model EmployeeManagementSystem.Models.Permission
+
+@{
+    ViewData["Title"] = "Permission Details";
+}
+
+
+<div class="container mt-4">
+
+
+    <div class="employee-header mb-4">
+
+
+        <div class="employee-header-left">
+
+
+            <h1>
+                🔑 Permission Details
+            </h1>
+
+
+            <p>
+                View permission information and access details.
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+
+        <div class="card-header bg-primary text-white">
+
+
+            <h3 class="mb-0">
+
+                @Model.PermissionName
+
+            </h3>
+
+
+        </div>
+
+
+
+
+
+        <div class="card-body p-4">
+
+
+
+            <div class="row g-4">
+
+
+
+                <div class="col-md-6">
+
+
+                    <div class="border rounded p-3">
+
+
+                        <label class="text-muted">
+
+                            Permission Name
+
+                        </label>
+
+
+                        <h5 class="fw-bold">
+
+                            @Model.PermissionName
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="col-md-6">
+
+
+                    <div class="border rounded p-3">
+
+
+                        <label class="text-muted">
+
+                            Module
+
+                        </label>
+
+
+                        <h5>
+
+                            <span class="badge bg-primary">
+
+                                @Model.ModuleName
+
+                            </span>
+
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="col-md-6">
+
+
+                    <div class="border rounded p-3">
+
+
+                        <label class="text-muted">
+
+                            Status
+
+                        </label>
+
+
+                        <h5>
+
+
+                            @if (Model.IsActive)
+                            {
+
+                                <span class="badge bg-success">
+
+                                    Active
+
+                                </span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-danger">
+
+                                    Inactive
+
+                                </span>
+
+                            }
+
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="col-md-6">
+
+
+                    <div class="border rounded p-3">
+
+
+                        <label class="text-muted">
+
+                            Permission Id
+
+                        </label>
+
+
+                        <h5>
+
+                            @Model.PermissionId
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="col-12">
+
+
+                    <div class="border rounded p-3">
+
+
+                        <label class="text-muted">
+
+                            Description
+
+                        </label>
+
+
+                        <h5>
+
+                            @(string.IsNullOrEmpty(Model.Description)
+                            ? "No description available"
+                            : Model.Description)
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+
+            <div class="mt-4">
+
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.PermissionId"
+                   class="btn btn-warning">
+
+
+                    ✏ Edit Permission
+
+
+                </a>
+
+
+
+                <a asp-action="Index"
+                   class="btn btn-secondary ms-2">
+
+
+                    ← Back
+
+
+                </a>
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>

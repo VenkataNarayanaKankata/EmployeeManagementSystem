@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementSystem.Data;
+using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -102,7 +103,10 @@ namespace EmployeeManagementSystem.Controllers
             {
                 return PartialView("_SalaryReportContent", model);
             }
-
+            await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Viewed Salary Report");
             return View(model);
         }
         public async Task<IActionResult> JoiningReport(
@@ -200,7 +204,10 @@ namespace EmployeeManagementSystem.Controllers
             {
                 return PartialView("_JoiningReportContent", model);
             }
-
+            await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Viewed Joining Report");
             return View(model);
         }
         public async Task<IActionResult> DepartmentReport(
@@ -258,7 +265,10 @@ namespace EmployeeManagementSystem.Controllers
             };
 
             ViewBag.Print = print;
-
+            await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Viewed Department Report");
             return View(model);
         }
         public async Task<IActionResult> EmployeeReport(
@@ -346,7 +356,10 @@ namespace EmployeeManagementSystem.Controllers
             {
                 return PartialView("_EmployeeReportContent", model);
             }
-
+            await ActivityLogger.LogAsync(
+    _context,
+    User.Identity?.Name,
+    "Viewed Employee Report");
             return View(model);
         }
     }

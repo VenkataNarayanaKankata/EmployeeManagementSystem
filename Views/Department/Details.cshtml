@@ -1,24 +1,256 @@
 @model EmployeeManagementSystem.Models.Department
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Department Details";
+
+    var totalEmployees = Model.Employees?.Count(e => !e.IsDeleted) ?? 0;
+    var activeEmployees = Model.Employees?.Count(e => !e.IsDeleted && e.IsActive) ?? 0;
+    var inactiveEmployees = Model.Employees?.Count(e => !e.IsDeleted && !e.IsActive) ?? 0;
 }
 
-<h1>Details</h1>
+<div class="container-fluid py-4">
 
-<div>
-    <h4>Department</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartmentName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DepartmentName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.DepartmentId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+
+                <i class="bi bi-building"></i>
+
+                Department Details
+
+            </h3>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold text-primary">
+
+                        Department Code
+
+                    </label>
+
+                    <h5 class="mt-2">
+
+                        @Model.DepartmentCode
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold text-primary">
+
+                        Department Name
+
+                    </label>
+
+                    <h5 class="mt-2">
+
+                        @Model.DepartmentName
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-12">
+
+                    <label class="fw-bold text-primary">
+
+                        Description
+
+                    </label>
+
+                    <p class="mt-2">
+
+                        @(string.IsNullOrWhiteSpace(Model.Description)
+                            ? "No description available."
+                            : Model.Description)
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold text-primary">
+
+                        Status
+
+                    </label>
+
+                    <div class="mt-2">
+
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success fs-6">
+
+                                Active
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger fs-6">
+
+                                Inactive
+
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                        Department Statistics
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row text-center">
+
+                        <div class="col-md-4">
+
+                            <div class="card border-0 shadow-sm rounded-4">
+
+                                <div class="card-body">
+
+                                    <i class="bi bi-people-fill text-primary display-5"></i>
+
+                                    <h2 class="fw-bold mt-3">
+
+                                        @totalEmployees
+
+                                    </h2>
+
+                                    <p class="text-muted">
+
+                                        Total Employees
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="card border-0 shadow-sm rounded-4">
+
+                                <div class="card-body">
+
+                                    <i class="bi bi-person-check-fill text-success display-5"></i>
+
+                                    <h2 class="fw-bold mt-3">
+
+                                        @activeEmployees
+
+                                    </h2>
+
+                                    <p class="text-muted">
+
+                                        Active Employees
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="card border-0 shadow-sm rounded-4">
+
+                                <div class="card-body">
+
+                                    <i class="bi bi-person-x-fill text-danger display-5"></i>
+
+                                    <h2 class="fw-bold mt-3">
+
+                                        @inactiveEmployees
+
+                                    </h2>
+
+                                    <p class="text-muted">
+
+                                        Inactive Employees
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end">
+
+                @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.DepartmentId"
+                       class="btn btn-warning me-3">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit
+
+                    </a>
+                }
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left-circle"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

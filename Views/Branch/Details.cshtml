@@ -1,0 +1,584 @@
+@model EmployeeManagementSystem.ViewModels.BranchViewModel
+
+@{
+    ViewData["Title"] = "Branch Details";
+}
+
+<div class="container-fluid mt-4">
+
+    <!-- =========================================
+                PAGE HEADER
+    ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-primary mb-1">
+                <i class="bi bi-buildings-fill"></i>
+                Branch Details
+            </h2>
+
+            <p class="text-muted mb-0">
+                View complete information about this branch.
+            </p>
+
+        </div>
+
+        <div>
+
+            @if (Model.IsHeadOffice)
+            {
+                <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                    <i class="bi bi-star-fill"></i>
+                    Head Office
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-info fs-6 px-3 py-2">
+                    Branch Office
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+                BRANCH INFORMATION
+    ========================================== -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-building"></i>
+
+                Branch Information
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="detail-label">
+
+                        Branch Code
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @Model.BranchCode
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="detail-label">
+
+                        Branch Name
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @Model.BranchName
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- =========================================
+                LOCATION INFORMATION
+    ========================================== -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                Location Information
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-12 mb-4">
+
+                    <label class="detail-label">
+
+                        Address
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.Address)
+                            ? "Not Available"
+                            : Model.Address)
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="detail-label">
+
+                        City
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.City)
+                            ? "Not Available"
+                            : Model.City)
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="detail-label">
+
+                        State
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.State)
+                            ? "Not Available"
+                            : Model.State)
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="detail-label">
+
+                        Country
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.Country)
+                            ? "Not Available"
+                            : Model.Country)
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="detail-label">
+
+                        Pincode
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.Pincode)
+                            ? "Not Available"
+                            : Model.Pincode)
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+                CONTACT INFORMATION
+    ========================================== -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-info text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-telephone-fill"></i>
+
+                Contact Information
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="detail-label">
+
+                        Phone Number
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.Phone)
+                            ? "Not Available"
+                            : Model.Phone)
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="detail-label">
+
+                        Email Address
+
+                    </label>
+
+                    <div class="detail-value">
+
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                            ? "Not Available"
+                            : Model.Email)
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- =========================================
+            BRANCH STATISTICS
+========================================== -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Branch Statistics
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card text-center border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <i class="bi bi-people-fill display-5 text-primary"></i>
+
+                            <h2 class="fw-bold mt-3">
+
+                                @Model.EmployeeCount
+
+                            </h2>
+
+                            <p class="text-muted mb-0">
+
+                                Total Employees
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card text-center border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <i class="bi bi-person-check-fill display-5 text-success"></i>
+
+                            <h2 class="fw-bold mt-3">
+
+                                @Model.ActiveEmployeeCount
+
+                            </h2>
+
+                            <p class="text-muted mb-0">
+
+                                Active Employees
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card text-center border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <i class="bi bi-person-x-fill display-5 text-danger"></i>
+
+                            <h2 class="fw-bold mt-3">
+
+                                @Model.InactiveEmployeeCount
+
+                            </h2>
+
+                            <p class="text-muted mb-0">
+
+                                Inactive Employees
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card text-center border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <i class="bi bi-building-fill display-5 text-warning"></i>
+
+                            <h5 class="fw-bold mt-3">
+
+                                @(Model.IsHeadOffice ? "Head Office" : "Branch Office")
+
+                            </h5>
+
+                            <p class="text-muted mb-0">
+
+                                Office Type
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+            ACTION BUTTONS
+========================================== -->
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between flex-wrap">
+
+                <div>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-left-circle"></i>
+
+                        Back to List
+
+                    </a>
+
+                </div>
+
+                <div>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.BranchId"
+                       class="btn btn-warning me-2">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit Branch
+
+                    </a>
+
+                    <a asp-controller="Employee"
+                       asp-action="Index"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        View Employees
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@section Styles {
+
+    <style>
+
+        .detail-label{
+
+            display:block;
+
+            color:#2563eb;
+
+            font-size:13px;
+
+            font-weight:700;
+
+            text-transform:uppercase;
+
+            letter-spacing:1px;
+
+            margin-bottom:6px;
+
+        }
+
+        .detail-value{
+
+            font-size:17px;
+
+            font-weight:600;
+
+            color:#2c3e50;
+
+            min-height:28px;
+
+        }
+
+        .details-card{
+
+            border-radius:18px;
+
+        }
+
+        .card-header{
+
+            border-radius:18px 18px 0 0 !important;
+
+        }
+
+        .stat-card{
+
+            border-radius:18px;
+
+            color:white;
+
+            text-align:center;
+
+            padding:30px 20px;
+
+            transition:.3s;
+
+            height:100%;
+
+        }
+
+        .card-header {
+            background: linear-gradient(90deg,#2563eb,#4f46e5);
+            color: white;
+            border: none;
+            padding: 16px 22px;
+            border-radius: 18px 18px 0 0;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .stat-card:hover{
+
+            transform:translateY(-6px);
+
+            box-shadow:0 12px 25px rgba(0,0,0,.18);
+
+        }
+
+        .stat-card i{
+
+            font-size:42px;
+
+        }
+
+        .stat-card h2{
+
+            margin-top:15px;
+
+            font-weight:700;
+
+        }
+
+        .stat-card span{
+
+            font-size:15px;
+
+        }
+
+        .btn{
+
+            border-radius:10px;
+
+            font-weight:600;
+
+        }
+
+    </style>
+
+}

@@ -1,0 +1,198 @@
+@model EmployeeManagementSystem.ViewModels.BranchViewModel
+
+@{
+    ViewData["Title"] = "Create Branch";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+
+                <i class="fas fa-plus-circle"></i>
+
+                Create Branch
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="BranchCode"
+                               class="form-label"></label>
+
+                        <input asp-for="BranchCode"
+                               class="form-control" />
+
+                        <span asp-validation-for="BranchCode"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="BranchName"
+                               class="form-label"></label>
+
+                        <input asp-for="BranchName"
+                               class="form-control" />
+
+                        <span asp-validation-for="BranchName"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+
+                        <label asp-for="Address"
+                               class="form-label"></label>
+
+                        <textarea asp-for="Address"
+                                  class="form-control"
+                                  rows="3"></textarea>
+
+                    </div>
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="City" class="form-label"></label>
+
+                        <input asp-for="City" class="form-control" />
+
+                        <span asp-validation-for="City" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="State" class="form-label"></label>
+
+                        <input asp-for="State" class="form-control" />
+
+                        <span asp-validation-for="State" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Country" class="form-label"></label>
+
+                        <input asp-for="Country" class="form-control" />
+
+                        <span asp-validation-for="Country" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Pincode" class="form-label"></label>
+
+                        <input asp-for="Pincode" class="form-control" />
+
+                        <span asp-validation-for="Pincode" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Phone" class="form-label"></label>
+
+                        <input asp-for="Phone" class="form-control" />
+
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Email" class="form-label"></label>
+
+                        <input asp-for="Email" class="form-control" />
+
+                        <span asp-validation-for="Email" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="form-check mt-4">
+
+                            <input asp-for="IsHeadOffice"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsHeadOffice"
+                                   class="form-check-label">
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="form-check mt-4">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label">
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-end">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary me-2">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fas fa-save"></i>
+
+                        Save Branch
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

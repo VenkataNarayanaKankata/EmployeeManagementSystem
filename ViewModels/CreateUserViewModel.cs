@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagementSystem.ViewModels
 {
@@ -8,18 +9,20 @@ namespace EmployeeManagementSystem.ViewModels
         [StringLength(50)]
         public string Username { get; set; } = string.Empty;
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
 
         [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match.")]
-        public string ConfirmPassword { get; set; } = string.Empty;
+        public int RoleId { get; set; }
 
-        [Required]
-        public string Role { get; set; } = "HR";
 
         public bool IsActive { get; set; } = true;
+
+
+        public int? EmployeeId { get; set; }
+
+
+        public IEnumerable<SelectListItem>? Employees { get; set; }
+
+
+        public IEnumerable<SelectListItem>? Roles { get; set; }
     }
 }
