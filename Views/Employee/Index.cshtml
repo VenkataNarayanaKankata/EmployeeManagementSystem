@@ -22,31 +22,38 @@
 
 
         <div class="employee-header-right">
+            
+                @if (await PermissionService.HasPermissionAsync("Employee.Export"))
+                {
+                    <a asp-action="ExportToExcel" class="btn btn-success">
+                        📊 Export Excel
+                    </a>
+                }
 
-            @if (User.IsInRole("Admin") || User.IsInRole("HR"))
-            {
-                <a asp-action="ExportToExcel" class="btn btn-success">
-                    📊 Export Excel
-                </a>
+                @if (await PermissionService.HasPermissionAsync("Employee.Export"))
+                {
+                    <a asp-action="ExportToPdf" class="btn btn-danger">
+                        📄 Export PDF
+                    </a>
+                }
+                @if (await PermissionService.HasPermissionAsync("Employee.Import"))
+                {
+                    <a asp-controller="Import"
+                       asp-action="EmployeeImport"
+                       class="btn btn-success">
+                        📥 Import Excel
+                    </a>
+                }
 
-                <a asp-action="ExportToPdf" class="btn btn-danger">
-                    📄 Export PDF
-                </a>
+                @if (await PermissionService.HasPermissionAsync("Employee.Create"))
+                {
+                    <a asp-action="Create"
+                       class="btn btn-primary">
+                        ➕ Add Employee
+                    </a>
+                }
 
-                <a asp-controller="Import"
-                   asp-action="EmployeeImport"
-                   class="btn btn-success">
-                    📥 Import Excel
-                </a>
-
-                <a asp-action="Create"
-                   class="btn btn-primary">
-                    ➕ Add Employee
-                </a>
-            }
-
-
-            @if (User.IsInRole("Admin"))
+            @if (await PermissionService.HasPermissionAsync("Employee.Restore"))
             {
                 <a asp-action="RecycleBin"
                    class="btn btn-outline-danger">
@@ -260,7 +267,10 @@
                         <th>Department</th>
                         <th>Designation</th>
                         <th>Role</th>
-                        <th>Salary</th>
+                            @if (await PermissionService.HasPermissionAsync("Employee.ViewSalary"))
+                            {
+                                <th>Salary</th>
+                            }
                         <th>Joining Date</th>
                         <th>Status</th>
                         <th style="width:240px;">Actions</th>
@@ -359,9 +369,18 @@
                                 </td>
 
 
-                                <td>
-                                    ₹ @item.Salary.ToString("N0")
-                                </td>
+                                    @if (await PermissionService.HasPermissionAsync("Employee.ViewSalary"))
+                                    {
+                                        <td>
+                                            ₹ @item.Salary.ToString("N0")
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            ****
+                                        </td>
+                                    }
 
 
                                 <td>
@@ -392,37 +411,33 @@
                                     <div class="d-flex justify-content-center gap-2">
 
 
-                                        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
-                                        {
-                                            <a asp-action="Edit"
-                                               asp-route-id="@item.EmployeeId"
-                                               class="btn btn-warning btn-sm">
-
-                                                Edit
-
-                                            </a>
-                                        }
+                                            @if (await PermissionService.HasPermissionAsync("Employee.Edit"))
+                                            {
+                                                <a asp-action="Edit"
+                                                   asp-route-id="@item.EmployeeId"
+                                                   class="btn btn-warning btn-sm">
+                                                    Edit
+                                                </a>
+                                            }
 
 
-                                        <a asp-action="Details"
-                                           asp-route-id="@item.EmployeeId"
-                                           class="btn btn-info btn-sm text-white">
+                                            @if (await PermissionService.HasPermissionAsync("Employee.ViewProfile"))
+                                            {
+                                                <a asp-action="Details"
+                                                   asp-route-id="@item.EmployeeId"
+                                                   class="btn btn-info btn-sm text-white">
+                                                    Details
+                                                </a>
+                                            }
 
-                                            Details
-
-                                        </a>
-
-
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <a asp-action="Delete"
-                                               asp-route-id="@item.EmployeeId"
-                                               class="btn btn-danger btn-sm">
-
-                                                Delete
-
-                                            </a>
-                                        }
+                                            @if (await PermissionService.HasPermissionAsync("Employee.Delete"))
+                                            {
+                                                <a asp-action="Delete"
+                                                   asp-route-id="@item.EmployeeId"
+                                                   class="btn btn-danger btn-sm">
+                                                    Delete
+                                                </a>
+                                            }
 
 
                                     </div>

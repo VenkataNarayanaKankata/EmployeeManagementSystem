@@ -21,6 +21,9 @@
         </div>
 
         <div class="card-body p-4">
+            @if(await PermissionService.HasPermissionAsync("Department.Create"))
+{
+
 
             <form asp-action="Create" method="post">
 
@@ -130,6 +133,13 @@
                 </div>
 
             </form>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    You don't have permission to create departments.
+                </div>
+            }
 
         </div>
 

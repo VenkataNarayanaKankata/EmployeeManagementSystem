@@ -8,6 +8,9 @@
     var inactiveEmployees = Model.Employees?.Count(e => !e.IsDeleted && !e.IsActive) ?? 0;
 }
 
+@if(await PermissionService.HasPermissionAsync("Designation.ViewDetails"))
+{
+
 <div class="container-fluid py-4">
 
     <div class="card shadow-sm border-0 rounded-4">
@@ -239,18 +242,18 @@
             <div class="mt-4 d-flex justify-content-end">
 
 
-                @if (User.IsInRole("Admin") || User.IsInRole("HR"))
-                {
-                    <a asp-action="Edit"
-                       asp-route-id="@Model.DesignationId"
-                       class="btn btn-warning me-3">
+                    @if (await PermissionService.HasPermissionAsync("Designation.Edit"))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.DesignationId"
+                           class="btn btn-warning me-3">
 
-                        <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-square"></i>
 
-                        Edit
+                            Edit
 
-                    </a>
-                }
+                        </a>
+                    }
 
 
                 <a asp-action="Index"
@@ -271,3 +274,10 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger mt-4">
+        You don't have permission to view designation details.
+    </div>
+}

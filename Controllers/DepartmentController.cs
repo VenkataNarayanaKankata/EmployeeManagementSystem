@@ -1,4 +1,5 @@
 
+using EmployeeManagementSystem.Authorization;
 using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
@@ -6,7 +7,7 @@ using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-[Authorize(Roles = "Admin,HR,Manager")]
+[Authorize]
 public class DepartmentController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -17,6 +18,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS
+    [Permission("Department.View")]
     public async Task<IActionResult> Index(string? search, bool? status)
     {
         var query = _context.Departments
@@ -62,6 +64,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS/Details/5
+    [Permission("Department.ViewDetails")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -81,7 +84,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS/Create
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Department.Create")]
     public IActionResult Create()
     {
         return View();
@@ -92,7 +95,7 @@ public class DepartmentController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 
     [HttpPost]
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Department.Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Department department)
     {
@@ -136,7 +139,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS/Edit/5
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Department.Edit")] 
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -158,7 +161,7 @@ public class DepartmentController : Controller
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Department.Edit")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, Department department)
     {
@@ -223,7 +226,7 @@ public class DepartmentController : Controller
     }
 
     // GET: DEPARTMENTS/Delete/5
-    [Authorize(Roles = "Admin")]
+    [Permission("Department.Delete")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -245,7 +248,7 @@ public class DepartmentController : Controller
 
     // POST: DEPARTMENTS/Delete/5
     [HttpPost, ActionName("Delete")]
-    [Authorize(Roles = "Admin")]
+    [Permission("Department.Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

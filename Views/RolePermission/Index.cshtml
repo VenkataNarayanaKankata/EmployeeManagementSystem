@@ -4,7 +4,8 @@
     ViewData["Title"] = "Role Permissions";
 }
 
-
+@if(await PermissionService.HasPermissionAsync("RolePermission.Manage"))
+{
 <div class="container mt-4">
 
 
@@ -33,6 +34,12 @@
             @TempData["Success"]
         </div>
     }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
 
 
 
@@ -396,7 +403,13 @@
 
 
 </div>
-
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to manage role permissions.
+    </div>
+}
 
 
 
@@ -409,30 +422,43 @@
 
         function loadPermissions() {
 
+            let checkedModules =
+                document.querySelectorAll(".module-checkbox:checked");
+
+
+            if (checkedModules.length == 0) {
+
+                alert("Please select at least one module.");
+
+                return;
+            }
+
+
             let roleId =
                 @Model.RoleId;
 
 
-            let modules =
-                [];
+            let modules = [];
 
 
-            document
-                .querySelectorAll(".module-checkbox:checked")
-                .forEach(x => {
-                    modules.push(x.value);
-                });
+            checkedModules.forEach(x => {
+
+                modules.push(x.value);
+
+            });
 
 
 
             let url =
-                "/RolePermission/Index?roleId="
-                + roleId;
+                "/RolePermission/Index?roleId=" + roleId;
 
 
 
             modules.forEach(m => {
-                url += "&selectedModules=" + encodeURIComponent(m);
+
+                url += "&selectedModules="
+                    + encodeURIComponent(m);
+
             });
 
 

@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Employee Profile";
 }
+@if (await PermissionService.HasPermissionAsync("Employee.ViewProfile"))
+{
 
 <div class="container mt-4">
 
@@ -185,21 +187,20 @@
 
 
 
+                        @if (await PermissionService.HasPermissionAsync("Employee.ViewSalary"))
+                        {
+                            <div class="col-md-6 mb-4">
 
-                        <div class="col-md-6 mb-4">
+                                <label class="text-muted">
+                                    Salary
+                                </label>
 
-                            <label class="text-muted">
-                                Salary
-                            </label>
+                                <h5 class="text-success fw-bold">
+                                    ₹ @Model.Salary.ToString("N0") / Month
+                                </h5>
 
-                            <h5 class="text-success fw-bold">
-
-                                ₹ @Model.Salary.ToString("N0") / Month
-
-                            </h5>
-
-                        </div>
-
+                            </div>
+                        }
 
 
 
@@ -342,7 +343,7 @@
                     <div class="d-flex gap-2">
 
 
-                        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                        @if (await PermissionService.HasPermissionAsync("Employee.Edit"))
                         {
                             <a asp-action="Edit"
                                asp-route-id="@Model.EmployeeId"
@@ -362,12 +363,15 @@
                         </a>
 
 
-                        <button class="btn btn-info"
-                                onclick="window.print();">
+                        @if (await PermissionService.HasPermissionAsync("Employee.PrintProfile"))
+                        {
+                            <button class="btn btn-info"
+                                    onclick="window.print();">
 
-                            🖨 Print
+                                🖨 Print
 
-                        </button>
+                            </button>
+                        }
 
 
                     </div>
@@ -386,3 +390,10 @@
 
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to view employee profile.
+    </div>
+}

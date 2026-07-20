@@ -243,48 +243,43 @@
                                 <td>
 
 
-                                    <form asp-action="Restore"
-                                          asp-route-id="@item.EmployeeId"
-                                          method="post"
-                                          class="d-inline">
+                                    @if (await PermissionService.HasPermissionAsync("Employee.Restore"))
+                                    {
+                                        <form asp-action="Restore"
+                                              asp-route-id="@item.EmployeeId"
+                                              method="post"
+                                              class="d-inline">
 
+                                            <button class="btn btn-success btn-sm"
+                                                    onclick="return confirm('Restore this employee?');">
 
-                                        <button class="btn btn-success btn-sm"
-                                                onclick="return confirm('Restore this employee?');">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
 
+                                                Restore
 
-                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
 
-                                            Restore
+                                        </form>
+                                    }
 
+                                    @if (await PermissionService.HasPermissionAsync("Employee.Delete"))
+                                    {
+                                        <form asp-action="PermanentDelete"
+                                              asp-route-id="@item.EmployeeId"
+                                              method="post"
+                                              class="d-inline">
 
-                                        </button>
+                                            <button class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Are you sure you want to permanently delete this employee? This action cannot be undone.');">
 
+                                                <i class="bi bi-trash3-fill"></i>
 
-                                    </form>
+                                                Delete Forever
 
+                                            </button>
 
-
-
-                                    <form asp-action="PermanentDelete"
-                                          asp-route-id="@item.EmployeeId"
-                                          method="post"
-                                          class="d-inline">
-
-
-                                        <button class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to permanently delete this employee? This action cannot be undone.');">
-
-
-                                            <i class="bi bi-trash3-fill"></i>
-
-                                            Delete Forever
-
-
-                                        </button>
-
-
-                                    </form>
+                                        </form>
+                                    }
 
 
                                 </td>

@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Delete User";
 }
-
+@if(await PermissionService.HasPermissionAsync("User.Delete"))
+{
 <div class="container py-4">
 
     <div class="card border-0 shadow-lg rounded-4">
@@ -132,3 +133,10 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to delete users.
+    </div>
+}

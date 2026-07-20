@@ -4,6 +4,8 @@
     ViewData["Title"] = "Delete Permission";
 }
 
+@if(await PermissionService.HasPermissionAsync("Permission.Delete"))
+{
 
 <div class="container mt-4">
 
@@ -281,3 +283,10 @@
 
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to delete permissions.
+    </div>
+}

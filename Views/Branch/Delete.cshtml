@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Delete Branch";
 }
-
+@if(await PermissionService.HasPermissionAsync("Branch.Delete"))
+{
 <div class="container-fluid mt-4">
 
     <div class="card shadow-lg border-0">
@@ -103,7 +104,8 @@
 
                     </a>
 
-                    @if (Model.EmployeeCount == 0)
+                    @if (Model.EmployeeCount == 0 &&
+     await PermissionService.HasPermissionAsync("Branch.Delete"))
                     {
                         <button type="submit"
                                 class="btn btn-danger">
@@ -124,3 +126,10 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger mt-4">
+        You don't have permission to delete branches.
+    </div>
+}

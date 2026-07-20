@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Edit Permission";
 }
-
+@if(await PermissionService.HasPermissionAsync("Permission.Edit"))
+{
 
 <div class="container mt-4">
 
@@ -86,8 +87,9 @@
 
 
 
-                        <input asp-for="PermissionName"
-                               class="form-control" />
+                            <input asp-for="PermissionName"
+                                   class="form-control"
+                                   readonly />
 
 
 
@@ -114,8 +116,9 @@
 
 
 
-                        <input asp-for="ModuleName"
-                               class="form-control" />
+                            <input asp-for="ModuleName"
+                                   class="form-control"
+                                   readonly />
 
 
 
@@ -239,7 +242,13 @@
 
 </div>
 
-
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to edit permissions.
+    </div>
+}
 
 
 @section Scripts {

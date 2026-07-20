@@ -26,7 +26,7 @@
 
         </div>
 
-        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+        @if (await PermissionService.HasPermissionAsync("Designation.Create"))
         {
             <a asp-action="Create"
                class="btn btn-primary btn-lg">
@@ -374,17 +374,20 @@
 
                                     <td class="text-center">
 
-                                        <a asp-action="Details"
-                                           asp-route-id="@item.DesignationId"
-                                           class="btn btn-sm btn-info text-white">
+                                        @if (await PermissionService.HasPermissionAsync("Designation.ViewDetails"))
+                                        {
+                                            <a asp-action="Details"
+                                               asp-route-id="@item.DesignationId"
+                                               class="btn btn-sm btn-info text-white">
 
-                                            <i class="bi bi-eye"></i>
+                                                <i class="bi bi-eye"></i>
 
-                                            View
+                                                View
 
-                                        </a>
+                                            </a>
+                                        }
 
-                                        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                                        @if (await PermissionService.HasPermissionAsync("Designation.Edit"))
                                         {
                                             <a asp-action="Edit"
                                                asp-route-id="@item.DesignationId"
@@ -397,7 +400,7 @@
                                             </a>
                                         }
 
-                                        @if (User.IsInRole("Admin"))
+                                        @if (await PermissionService.HasPermissionAsync("Designation.Delete"))
                                         {
                                             <a asp-action="Delete"
                                                asp-route-id="@item.DesignationId"

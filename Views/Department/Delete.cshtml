@@ -4,6 +4,9 @@
     ViewData["Title"] = "Delete Department";
 }
 
+@if(await PermissionService.HasPermissionAsync("Department.Delete"))
+{
+
 <div class="container-fluid py-4">
 
     <div class="card shadow-sm border-0 rounded-4">
@@ -150,15 +153,18 @@
 
                     </a>
 
-                    <button type="submit"
-                            class="btn btn-danger btn-lg"
-                            onclick="return confirm('Are you sure you want to delete this department?');">
+                        @if (await PermissionService.HasPermissionAsync("Department.Delete"))
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger btn-lg"
+                                    onclick="return confirm('Are you sure you want to delete this department?');">
 
-                        <i class="bi bi-trash-fill"></i>
+                                <i class="bi bi-trash-fill"></i>
 
-                        Delete Department
+                                Delete Department
 
-                    </button>
+                            </button>
+                        }
 
                 </div>
 
@@ -169,3 +175,10 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger mt-4">
+        You don't have permission to delete departments.
+    </div>
+}

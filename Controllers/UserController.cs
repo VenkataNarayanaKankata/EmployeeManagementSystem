@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Super Admin")]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;

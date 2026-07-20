@@ -4,192 +4,203 @@
     ViewData["Title"] = "Create Branch";
 }
 
+
 <div class="container-fluid mt-4">
 
     <div class="card shadow-lg border-0">
 
-        <div class="card-header bg-primary text-white">
+        @if (await PermissionService.HasPermissionAsync("Branch.Create"))
+        {
+            <button type="submit"
+                    class="btn btn-primary">
 
-            <h3 class="mb-0">
+                <i class="fas fa-save"></i>
 
-                <i class="fas fa-plus-circle"></i>
+                Save Branch
 
-                Create Branch
-
-            </h3>
-
-        </div>
+            </button>
+        }
 
         <div class="card-body">
+            @if (await PermissionService.HasPermissionAsync("Branch.Create"))
+            {
 
-            <form asp-action="Create"
-                  method="post">
+                <form asp-action="Create"
+                method="post">
 
-                <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3">
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="BranchCode"
-                               class="form-label"></label>
-
-                        <input asp-for="BranchCode"
-                               class="form-control" />
-
-                        <span asp-validation-for="BranchCode"
-                              class="text-danger"></span>
-
+                    <div asp-validation-summary="ModelOnly"
+                    class="text-danger mb-3">
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="row">
 
-                        <label asp-for="BranchName"
-                               class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="BranchName"
-                               class="form-control" />
+                            <label asp-for="BranchCode"
+                            class="form-label"></label>
 
-                        <span asp-validation-for="BranchName"
-                              class="text-danger"></span>
+                            <input asp-for="BranchCode"
+                            class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="BranchCode"
+                            class="text-danger"></span>
 
-                    <div class="col-md-12 mb-3">
+                        </div>
 
-                        <label asp-for="Address"
-                               class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <textarea asp-for="Address"
-                                  class="form-control"
-                                  rows="3"></textarea>
+                            <label asp-for="BranchName"
+                            class="form-label"></label>
 
-                    </div>
-                    <div class="col-md-6 mb-3">
+                            <input asp-for="BranchName"
+                            class="form-control" />
 
-                        <label asp-for="City" class="form-label"></label>
+                            <span asp-validation-for="BranchName"
+                            class="text-danger"></span>
 
-                        <input asp-for="City" class="form-control" />
+                        </div>
 
-                        <span asp-validation-for="City" class="text-danger"></span>
+                        <div class="col-md-12 mb-3">
 
-                    </div>
+                            <label asp-for="Address"
+                            class="form-label"></label>
 
-                    <div class="col-md-6 mb-3">
+                            <textarea asp-for="Address"
+                            class="form-control"
+                            rows="3"></textarea>
 
-                        <label asp-for="State" class="form-label"></label>
+                        </div>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="State" class="form-control" />
+                            <label asp-for="City" class="form-label"></label>
 
-                        <span asp-validation-for="State" class="text-danger"></span>
+                            <input asp-for="City" class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="City" class="text-danger"></span>
 
-                    <div class="col-md-6 mb-3">
+                        </div>
 
-                        <label asp-for="Country" class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="Country" class="form-control" />
+                            <label asp-for="State" class="form-label"></label>
 
-                        <span asp-validation-for="Country" class="text-danger"></span>
+                            <input asp-for="State" class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="State" class="text-danger"></span>
 
-                    <div class="col-md-6 mb-3">
+                        </div>
 
-                        <label asp-for="Pincode" class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="Pincode" class="form-control" />
+                            <label asp-for="Country" class="form-label"></label>
 
-                        <span asp-validation-for="Pincode" class="text-danger"></span>
+                            <input asp-for="Country" class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="Country" class="text-danger"></span>
 
-                    <div class="col-md-6 mb-3">
+                        </div>
 
-                        <label asp-for="Phone" class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="Phone" class="form-control" />
+                            <label asp-for="Pincode" class="form-label"></label>
 
-                        <span asp-validation-for="Phone" class="text-danger"></span>
+                            <input asp-for="Pincode" class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="Pincode" class="text-danger"></span>
 
-                    <div class="col-md-6 mb-3">
+                        </div>
 
-                        <label asp-for="Email" class="form-label"></label>
+                        <div class="col-md-6 mb-3">
 
-                        <input asp-for="Email" class="form-control" />
+                            <label asp-for="Phone" class="form-label"></label>
 
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Phone" class="form-control" />
 
-                    </div>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
 
-                    <div class="col-md-6 mb-3">
+                        </div>
 
-                        <div class="form-check mt-4">
+                        <div class="col-md-6 mb-3">
 
-                            <input asp-for="IsHeadOffice"
-                                   class="form-check-input" />
+                            <label asp-for="Email" class="form-label"></label>
 
-                            <label asp-for="IsHeadOffice"
-                                   class="form-check-label">
-                            </label>
+                            <input asp-for="Email" class="form-control" />
+
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="form-check mt-4">
+
+                                <input asp-for="IsHeadOffice"
+                                class="form-check-input" />
+
+                                <label asp-for="IsHeadOffice"
+                                class="form-check-label">
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="form-check mt-4">
+
+                                <input asp-for="IsActive"
+                                class="form-check-input" />
+
+                                <label asp-for="IsActive"
+                                class="form-check-label">
+                                </label>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <hr />
 
-                        <div class="form-check mt-4">
+                    <div class="d-flex justify-content-end">
 
-                            <input asp-for="IsActive"
-                                   class="form-check-input" />
+                        <a asp-action="Index"
+                        class="btn btn-secondary me-2">
 
-                            <label asp-for="IsActive"
-                                   class="form-check-label">
-                            </label>
+                            <i class="fas fa-arrow-left"></i>
 
-                        </div>
+                            Back
+
+                        </a>
+
+                        <button type="submit"
+                        class="btn btn-primary">
+
+                            <i class="fas fa-save"></i>
+
+                            Save Branch
+
+                        </button>
 
                     </div>
 
-                </div>
-
-                <hr />
-
-                <div class="d-flex justify-content-end">
-
-                    <a asp-action="Index"
-                       class="btn btn-secondary me-2">
-
-                        <i class="fas fa-arrow-left"></i>
-
-                        Back
-
-                    </a>
-
-                    <button type="submit"
-                            class="btn btn-primary">
-
-                        <i class="fas fa-save"></i>
-
-                        Save Branch
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
+                </form>
+                 }
+            else
+{
+    <div class="alert alert-danger">
+        You don't have permission to create branches.
     </div>
+}
 
-</div>
+                </div>
+
+                </div>
+
+                </div>
+           
 
 @section Scripts {
     @{

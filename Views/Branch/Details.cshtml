@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Branch Details";
 }
-
+@if(await PermissionService.HasPermissionAsync("Branch.ViewDetails"))
+{
 <div class="container-fluid mt-4">
 
     <!-- =========================================
@@ -442,25 +443,31 @@
 
                 <div>
 
-                    <a asp-action="Edit"
-                       asp-route-id="@Model.BranchId"
-                       class="btn btn-warning me-2">
+                        @if (await PermissionService.HasPermissionAsync("Branch.Edit"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@Model.BranchId"
+                               class="btn btn-warning me-2">
 
-                        <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-pencil-square"></i>
 
-                        Edit Branch
+                                Edit Branch
 
-                    </a>
+                            </a>
+                        }
 
-                    <a asp-controller="Employee"
-                       asp-action="Index"
-                       class="btn btn-primary">
+                        @if (await PermissionService.HasPermissionAsync("Employee.View"))
+                        {
+                            <a asp-controller="Employee"
+                               asp-action="Index"
+                               class="btn btn-primary">
 
-                        <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill"></i>
 
-                        View Employees
+                                View Employees
 
-                    </a>
+                            </a>
+                        }
 
                 </div>
 
@@ -471,6 +478,13 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger mt-4">
+        You don't have permission to view branch details.
+    </div>
+}
 @section Styles {
 
     <style>

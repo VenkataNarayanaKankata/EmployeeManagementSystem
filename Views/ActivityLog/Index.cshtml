@@ -66,13 +66,16 @@
     </a>
 
 
-    <button type="button"
-            class="btn btn-success"
-            onclick="window.print();">
+                @if (await PermissionService.HasPermissionAsync("ActivityLog.Print"))
+                {
+                    <button type="button"
+                            class="btn btn-success"
+                            onclick="window.print();">
 
-        🖨 Print Report
+                        🖨 Print Report
 
-    </button>
+                    </button>
+                }
 
 </div>
         </div>

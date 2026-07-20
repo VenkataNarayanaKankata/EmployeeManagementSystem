@@ -18,6 +18,8 @@
         </div>
 
         <div class="card-body p-4">
+            @if(await PermissionService.HasPermissionAsync("User.Create"))
+{
 
             <form asp-action="Create">
 
@@ -132,6 +134,13 @@
                 </div>
 
             </form>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    You don't have permission to create users.
+                </div>
+            }
 
         </div>
 

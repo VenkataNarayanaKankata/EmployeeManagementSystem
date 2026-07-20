@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Admin,HR")]
+    [Authorize(Roles = "Super Admin,HR")]
     public class ImportController : Controller
     {
         private readonly ApplicationDbContext _context;
