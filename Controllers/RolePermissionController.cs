@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementSystem.Data;
+using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
 using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Super Admin")]
     public class RolePermissionController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,9 +27,12 @@ namespace EmployeeManagementSystem.Controllers
         {
 
             var roles = await _context.Roles
-                .Where(r => r.IsActive)
-                .OrderBy(r => r.RoleName)
-                .ToListAsync();
+    .Where(r =>
+        r.IsActive &&
+        r.RoleName != "Super Admin")
+    .OrderBy(r => r.RoleName)
+    .ToListAsync();
+                
 
 
             ViewBag.Roles = roles;
@@ -217,23 +221,25 @@ namespace EmployeeManagementSystem.Controllers
 
             }
 
+            try
+            {
+                await _context.SaveChangesAsync();
 
 
+                await ActivityLogger.LogAsync(
+                    _context,
+                    User.Identity?.Name,
+                    $"Updated permissions for Role Id {model.RoleId}");
 
 
-            await _context.SaveChangesAsync();
-
-
-
-
-
-            TempData["Success"] =
-                "Role permissions updated successfully.";
-
-
-
-
-
+                TempData["Success"] =
+                    "Role permissions updated successfully.";
+            }
+            catch (Exception)
+            {
+                TempData["Error"] =
+                    "Unable to update permissions.";
+            }
             return RedirectToAction(
                 nameof(Index),
                 new

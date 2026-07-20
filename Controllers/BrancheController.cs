@@ -1,3 +1,4 @@
+using EmployeeManagementSystem.Authorization;
 using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
@@ -17,6 +18,7 @@ namespace EmployeeManagementSystem.Controllers
         {
             _context = context;
         }
+        [Permission("Branch.View")]
         public async Task<IActionResult> Index(string? search, bool? status)
         {
             var query = _context.Branches
@@ -92,12 +94,14 @@ namespace EmployeeManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Permission("Branch.Create")]
         public IActionResult Create()
         {
             return View(new BranchViewModel());
         }
 
         [HttpPost]
+        [Permission("Branch.Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BranchViewModel model)
         {
@@ -162,6 +166,7 @@ namespace EmployeeManagementSystem.Controllers
         //====================================================
 
         [HttpGet]
+        [Permission("Branch.Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -192,6 +197,7 @@ namespace EmployeeManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Permission("Branch.Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, BranchViewModel model)
         {
@@ -262,6 +268,7 @@ namespace EmployeeManagementSystem.Controllers
         //====================================================
 
         [HttpGet]
+        [Permission("Branch.ViewDetails")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -307,6 +314,7 @@ namespace EmployeeManagementSystem.Controllers
         //====================================================
 
         [HttpGet]
+        [Permission("Branch.Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -340,6 +348,7 @@ namespace EmployeeManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Permission("Branch.Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {

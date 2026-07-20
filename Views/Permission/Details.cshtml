@@ -4,7 +4,8 @@
     ViewData["Title"] = "Permission Details";
 }
 
-
+@if(await PermissionService.HasPermissionAsync("Permission.View"))
+{
 <div class="container mt-4">
 
 
@@ -241,15 +242,16 @@
             <div class="mt-4">
 
 
-                <a asp-action="Edit"
-                   asp-route-id="@Model.PermissionId"
-                   class="btn btn-warning">
+                    @if (await PermissionService.HasPermissionAsync("Permission.Edit"))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.PermissionId"
+                           class="btn btn-warning">
 
+                            ✏ Edit Permission
 
-                    ✏ Edit Permission
-
-
-                </a>
+                        </a>
+                    }
 
 
 
@@ -275,3 +277,10 @@
 
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to view permission details.
+    </div>
+}

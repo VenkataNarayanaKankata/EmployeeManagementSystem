@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Data;
+﻿using EmployeeManagementSystem.Authorization;
+using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
 using EmployeeManagementSystem.ViewModels;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers;
 
-[Authorize(Roles = "Admin,HR,Manager")]
+[Authorize]
 public class DesignationController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -18,7 +19,7 @@ public class DesignationController : Controller
     {
         _context = context;
     }
-
+    [Permission("Designation.View")]
     public async Task<IActionResult> Index(string? search, int? departmentId, bool? status)
     {
         var query = _context.Designations
@@ -81,7 +82,7 @@ public class DesignationController : Controller
 
         return View(designations);
     }
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Designation.Create")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Departments = new SelectList(
@@ -95,7 +96,7 @@ public class DesignationController : Controller
         return View();
     }
     [HttpPost]
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Designation.Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Designation designation)
     {
@@ -148,6 +149,7 @@ public class DesignationController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+    [Permission("Designation.ViewDetails")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -167,7 +169,7 @@ public class DesignationController : Controller
 
         return View(designation);
     }
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Designation.Edit")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -195,7 +197,7 @@ public class DesignationController : Controller
         return View(designation);
     }
     [HttpPost]
-    [Authorize(Roles = "Admin,HR")]
+    [Permission("Designation.Edit")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, Designation designation)
     {
@@ -250,7 +252,7 @@ public class DesignationController : Controller
         return _context.Designations
             .Any(e => e.DesignationId == id);
     }
-    [Authorize(Roles = "Admin")]
+    [Permission("Designation.Delete")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -270,7 +272,7 @@ public class DesignationController : Controller
         return View(designation);
     }
     [HttpPost, ActionName("Delete")]
-    [Authorize(Roles = "Admin")]
+    [Permission("Designation.Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

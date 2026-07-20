@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "User Management";
 }
-
+@if(await PermissionService.HasPermissionAsync("User.View"))
+{
 <div class="container-fluid py-4">
 
     <!-- Header -->
@@ -22,21 +23,27 @@
 
         <div class="d-flex gap-2">
 
-    <a asp-action="Create"
-       class="btn btn-primary">
+            @if (await PermissionService.HasPermissionAsync("User.Create"))
+            {
+                <a asp-action="Create"
+                   class="btn btn-primary">
 
-        <i class="bi bi-person-plus-fill"></i>
+                    <i class="bi bi-person-plus-fill"></i>
 
-        Create User
+                    Create User
 
-    </a>
+                </a>
+            }
 
-    <a asp-action="GenerateUsers"
-       class="btn btn-success">
+            @if (await PermissionService.HasPermissionAsync("User.GenerateAccount"))
+            {
+                <a asp-action="GenerateUsers"
+                   class="btn btn-success">
 
-        ⚡ Generate User Accounts
+                    ⚡ Generate User Accounts
 
-    </a>
+                </a>
+            }
 
 </div>
 
@@ -326,28 +333,37 @@
 
                                 <td class="text-center">
 
-                                    <a asp-action="Edit"
-                                       asp-route-id="@user.AdminId"
-                                       class="btn btn-sm btn-warning">
+                                    @if (await PermissionService.HasPermissionAsync("User.Edit"))
+                                    {
+                                        <a asp-action="Edit"
+                                           asp-route-id="@user.AdminId"
+                                           class="btn btn-sm btn-warning">
 
-                                        <i class="bi bi-pencil-square"></i>
+                                            <i class="bi bi-pencil-square"></i>
 
-                                    </a>
+                                        </a>
+                                    }
 
-                                    <a asp-action="ResetPassword"
-                                       asp-route-id="@user.AdminId"
-                                       class="btn btn-sm btn-info text-white">
+                                    @if (await PermissionService.HasPermissionAsync("User.ResetPassword"))
+                                    {
+                                        <a asp-action="ResetPassword"
+                                           asp-route-id="@user.AdminId"
+                                           class="btn btn-sm btn-info text-white">
 
-                                        <i class="bi bi-key-fill"></i>
+                                            <i class="bi bi-key-fill"></i>
 
-                                    </a>
-                                    <a asp-action="Delete"
-   asp-route-id="@user.AdminId"
-   class="btn btn-sm btn-danger">
+                                        </a>
+                                    }
+                                    @if (await PermissionService.HasPermissionAsync("User.Delete"))
+                                    {
+                                        <a asp-action="Delete"
+                                           asp-route-id="@user.AdminId"
+                                           class="btn btn-sm btn-danger">
 
-    <i class="bi bi-trash-fill"></i>
+                                            <i class="bi bi-trash-fill"></i>
 
-</a>
+                                        </a>
+                                    }
 
                                 </td>
 
@@ -377,3 +393,10 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to view users.
+    </div>
+}

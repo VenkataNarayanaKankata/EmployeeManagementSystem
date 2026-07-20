@@ -125,6 +125,12 @@ namespace EmployeeManagementSystem.Data.SeedData
     ModuleName = "Report",
     Description = "Print reports"
 },
+                new Permission
+{
+    PermissionName = "Employee.PrintProfile",
+    ModuleName = "Employee",
+    Description = "Print employee profile"
+},
 
 
                 new Permission
@@ -154,6 +160,12 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "Branch",
                     Description = "Delete branch"
                 },
+                new Permission
+{
+    PermissionName = "Branch.ViewDetails",
+    ModuleName = "Branch",
+    Description = "View branch details"
+},
 
                 new Permission
                 {
@@ -190,6 +202,12 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "Department",
                     Description = "Delete department"
                 },
+                new Permission
+{
+    PermissionName = "Department.ViewDetails",
+    ModuleName = "Department",
+    Description = "View department details"
+},
 
                 new Permission
                 {
@@ -226,6 +244,12 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "Designation",
                     Description = "Delete designation"
                 },
+                new Permission
+{
+    PermissionName = "Designation.ViewDetails",
+    ModuleName = "Designation",
+    Description = "View designation details"
+},
 
 
                 new Permission
@@ -298,6 +322,12 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "User",
                     Description = "Reset user password"
                 },
+                new Permission
+{
+    PermissionName = "User.GenerateAccount",
+    ModuleName = "User Management",
+    IsActive = true
+},
 
                 new Permission
                 {
@@ -377,7 +407,57 @@ namespace EmployeeManagementSystem.Data.SeedData
                     PermissionName = "Profile.ChangePassword",
                     ModuleName = "Profile",
                     Description = "Change password"
-                }
+                },
+                new Permission
+{
+    PermissionName = "Permission.View",
+    ModuleName = "Permission Management",
+    IsActive = true
+},
+
+new Permission
+{
+    PermissionName = "Permission.Create",
+    ModuleName = "Permission Management",
+    IsActive = true
+},
+
+new Permission
+{
+    PermissionName = "Permission.Edit",
+    ModuleName = "Permission Management",
+    IsActive = true
+},
+
+new Permission
+{
+    PermissionName = "Permission.Delete",
+    ModuleName = "Permission Management",
+    IsActive = true
+},new Permission
+{
+    PermissionName = "ActivityLog.View",
+    ModuleName = "ActivityLog",
+    Description = "View system activity logs",
+    IsActive = true
+},
+
+new Permission
+{
+    PermissionName = "ActivityLog.Details",
+    ModuleName = "ActivityLog",
+    Description = "View activity log details",
+    IsActive = true
+},
+
+new Permission
+{
+    PermissionName = "ActivityLog.Print",
+    ModuleName = "ActivityLog",
+    Description = "Print activity reports",
+    IsActive = true
+}
+
 
 
             };
@@ -389,13 +469,11 @@ namespace EmployeeManagementSystem.Data.SeedData
                 bool exists = context.Permissions
                     .Any(p => p.PermissionName == permission.PermissionName);
 
-
                 if (!exists)
                 {
                     context.Permissions.Add(permission);
                 }
             }
-
 
             context.SaveChanges();
         }

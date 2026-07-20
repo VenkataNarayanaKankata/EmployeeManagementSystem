@@ -1,5 +1,6 @@
 @model IEnumerable<EmployeeManagementSystem.ViewModels.BranchViewModel>
 
+
 @{
     ViewData["Title"] = "Branch Management";
 }
@@ -19,14 +20,17 @@
             </p>
         </div>
 
-        <a asp-action="Create"
-           class="btn btn-primary btn-lg">
+        @if (await PermissionService.HasPermissionAsync("Branch.Create"))
+        {
+            <a asp-action="Create"
+               class="btn btn-primary btn-lg">
 
-            <i class="fas fa-plus-circle"></i>
+                <i class="fas fa-plus-circle"></i>
 
-            Add Branch
+                Add Branch
 
-        </a>
+            </a>
+        }
 
     </div>
 
@@ -385,35 +389,38 @@
 
                                 <td>
 
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.BranchId"
-                                       class="btn btn-sm btn-info text-white">
+                                    @if (await PermissionService.HasPermissionAsync("Branch.ViewDetails"))
+                                    {
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.BranchId"
+                                           class="btn btn-sm btn-info text-white">
 
-                                        
+                                            View
 
-                                        View
+                                        </a>
+                                    }
 
-                                    </a>
+                                    @if (await PermissionService.HasPermissionAsync("Branch.Edit"))
+                                    {
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.BranchId"
+                                           class="btn btn-sm btn-warning text-dark">
 
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.BranchId"
-                                       class="btn btn-sm btn-warning text-dark">
+                                            Edit
 
-                                       
+                                        </a>
+                                    }
 
-                                        Edit
+                                    @if (await PermissionService.HasPermissionAsync("Branch.Delete"))
+                                    {
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.BranchId"
+                                           class="btn btn-sm btn-danger">
 
-                                    </a>
+                                            Delete
 
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.BranchId"
-                                       class="btn btn-sm btn-danger">
-
-                                     
-
-                                        Delete
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </td>
 

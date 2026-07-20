@@ -4,7 +4,8 @@
     ViewData["Title"] = "Permission Management";
 }
 
-
+@if(await PermissionService.HasPermissionAsync("Permission.View"))
+{
 <div class="container mt-4">
 
 
@@ -30,12 +31,15 @@
         <div class="employee-header-right">
 
 
-            <a asp-action="Create"
-               class="btn btn-primary">
+                @if (await PermissionService.HasPermissionAsync("Permission.Create"))
+                {
+                    <a asp-action="Create"
+                       class="btn btn-primary">
 
-                ➕ Add Permission
+                        ➕ Add Permission
 
-            </a>
+                    </a>
+                }
 
 
         </div>
@@ -412,33 +416,42 @@
                                 <td>
 
 
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.PermissionId"
-                                       class="btn btn-info btn-sm text-white">
+                                        @if (await PermissionService.HasPermissionAsync("Permission.View"))
+                                        {
+                                            <a asp-action="Details"
+                                               asp-route-id="@item.PermissionId"
+                                               class="btn btn-info btn-sm text-white">
 
-                                        Details
+                                                Details
 
-                                    </a>
-
-
-
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.PermissionId"
-                                       class="btn btn-warning btn-sm">
-
-                                        Edit
-
-                                    </a>
+                                            </a>
+                                        }
 
 
 
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.PermissionId"
-                                       class="btn btn-danger btn-sm">
+                                        @if (await PermissionService.HasPermissionAsync("Permission.Edit"))
+                                        {
+                                            <a asp-action="Edit"
+                                               asp-route-id="@item.PermissionId"
+                                               class="btn btn-warning btn-sm">
 
-                                        Delete
+                                                Edit
 
-                                    </a>
+                                            </a>
+                                        }
+
+
+
+                                        @if (await PermissionService.HasPermissionAsync("Permission.Delete"))
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@item.PermissionId"
+                                               class="btn btn-danger btn-sm">
+
+                                                Delete
+
+                                            </a>
+                                        }
 
 
                                 </td>
@@ -494,3 +507,10 @@
 
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to view permissions.
+    </div>
+}

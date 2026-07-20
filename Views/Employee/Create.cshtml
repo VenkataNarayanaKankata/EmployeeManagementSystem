@@ -24,7 +24,8 @@
 
 
     <div class="create-card">
-
+        @if (await PermissionService.HasPermissionAsync("Employee.Create"))
+{
         <form asp-action="Create"
               enctype="multipart/form-data">
 
@@ -202,20 +203,23 @@
 
 
 
-                        <div class="col-md-6">
+                        @if (await PermissionService.HasPermissionAsync("Employee.ChangeSalary"))
+                        {
+                            <div class="col-md-6">
 
-                            <label asp-for="Salary"
-                                   class="form-label">
-                            </label>
+                                <label asp-for="Salary"
+                                       class="form-label">
+                                </label>
 
-                            <input asp-for="Salary"
-                                   class="form-control" />
+                                <input asp-for="Salary"
+                                       class="form-control" />
 
-                            <span asp-validation-for="Salary"
-                                  class="text-danger">
-                            </span>
+                                <span asp-validation-for="Salary"
+                                      class="text-danger">
+                                </span>
 
-                        </div>
+                            </div>
+                        }
 
 
 
@@ -333,30 +337,27 @@
 
 
 
-                        <div class="col-md-6">
+                        @if (await PermissionService.HasPermissionAsync("Employee.AssignRole"))
+                        {
+                            <div class="col-md-6">
 
-                            <label asp-for="RoleId"
-                                   class="form-label">
-                                Role
-                            </label>
+                                <label asp-for="RoleId"
+                                       class="form-label">
+                                    Role
+                                </label>
 
+                                <select asp-for="RoleId"
+                                        asp-items="ViewBag.RoleId"
+                                        class="form-select">
 
-                            <select asp-for="RoleId"
-                                    asp-items="ViewBag.RoleId"
-                                    class="form-select">
+                                    <option value="">
+                                        -- Select Role --
+                                    </option>
 
-                                <option value="">
-                                    -- Select Role --
-                                </option>
+                                </select>
 
-                            </select>
-
-
-                            <span asp-validation-for="RoleId"
-                                  class="text-danger">
-                            </span>
-
-                        </div>
+                            </div>
+                        }
 
 
                     </div>
@@ -395,6 +396,13 @@
 
 
         </form>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                You don't have permission to create employees.
+            </div>
+        }
 
 
     </div>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class PermissionController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -93,8 +93,8 @@ namespace EmployeeManagementSystem.Controllers
                 bool exists =
                     await _context.Permissions
                     .AnyAsync(p =>
-                    p.PermissionName ==
-                    permission.PermissionName);
+p.PermissionName == permission.PermissionName &&
+p.ModuleName == permission.ModuleName);
 
 
                 if (exists)
@@ -224,27 +224,38 @@ namespace EmployeeManagementSystem.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(
-            int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
-            var permission =
-                await _context.Permissions
+            var permission = await _context.Permissions
                 .FindAsync(id);
 
-
-            if (permission != null)
+            if (permission == null)
             {
-
-                _context.Permissions.Remove(permission);
-
-                await _context.SaveChangesAsync();
-
+                return NotFound();
             }
 
 
+            bool assigned =
+                await _context.RolePermissions
+                .AnyAsync(rp => rp.PermissionId == id);
+
+
+            if (assigned)
+            {
+                TempData["Error"] =
+                "Cannot delete permission because it is assigned to roles.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            _context.Permissions.Remove(permission);
+
+            await _context.SaveChangesAsync();
+
+
             TempData["Success"] =
-                "Permission deleted successfully.";
+            "Permission deleted successfully.";
 
 
             return RedirectToAction(nameof(Index));

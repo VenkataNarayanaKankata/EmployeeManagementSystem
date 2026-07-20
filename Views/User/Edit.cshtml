@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Edit User";
 }
-
+@if(await PermissionService.HasPermissionAsync("User.Edit"))
+{
 <div class="container py-4">
 
     <div class="card border-0 shadow-lg rounded-4">
@@ -160,6 +161,13 @@
     </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to edit users.
+    </div>
+}
 
 @section Scripts
 {

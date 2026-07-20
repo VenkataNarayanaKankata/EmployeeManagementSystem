@@ -122,7 +122,6 @@ namespace EmployeeManagementSystem.Data
     .OnDelete(DeleteBehavior.Cascade);
 
 
-
             modelBuilder.Entity<RolePermission>()
                 .HasOne(rp => rp.Permission)
                 .WithMany(p => p.RolePermissions)
