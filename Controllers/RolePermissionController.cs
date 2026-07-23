@@ -1,6 +1,7 @@
 ﻿using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +9,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Super Admin")]
+    [Authorize]
     public class RolePermissionController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPermissionService _permissionService;
 
 
-        public RolePermissionController(ApplicationDbContext context)
+        public RolePermissionController(
+    ApplicationDbContext context,
+    IPermissionService permissionService)
         {
             _context = context;
+            _permissionService = permissionService;
         }
 
 
@@ -25,6 +30,11 @@ namespace EmployeeManagementSystem.Controllers
             int? roleId,
             List<string>? selectedModules)
         {
+            if (!await _permissionService
+        .HasPermissionAsync("Role.AssignPermission"))
+            {
+                return Forbid();
+            }
 
             var roles = await _context.Roles
     .Where(r =>

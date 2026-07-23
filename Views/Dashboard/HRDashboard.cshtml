@@ -1,0 +1,425 @@
+﻿@model EmployeeManagementSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="employee-dashboard-banner">
+
+        <div class="banner-content">
+
+            <span class="dashboard-badge">
+                <i class="bi bi-people-fill"></i>
+                HR Dashboard
+            </span>
+
+            <h1 class="mt-3">
+                Welcome Back, @User.Identity?.Name 👋
+            </h1>
+
+            <p>
+                Manage employees, departments and HR activities from one place.
+            </p>
+
+        </div>
+
+
+        <div class="banner-date">
+
+            <div class="date-card">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <h4>
+                    @DateTime.Now.ToString("dddd")
+                </h4>
+
+                <span>
+                    @DateTime.Now.ToString("dd MMM yyyy")
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row mt-4 g-4">
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="card-icon bg-primary">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+                        <h6 class="text-muted">
+                            Total Employees
+                        </h6>
+
+                        <h3 class="fw-bold">
+                            @Model.TotalEmployees
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="card-icon bg-success">
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+                        <h6 class="text-muted">
+                            Active Employees
+                        </h6>
+
+                        <h3 class="fw-bold">
+                            @Model.ActiveEmployees
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="card-icon bg-warning">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+                        <h6 class="text-muted">
+                            New Joiners
+                        </h6>
+
+                        <h3 class="fw-bold">
+                            @Model.JoinedThisMonth
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="card-icon bg-info">
+
+                        <i class="bi bi-building"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+                        <h6 class="text-muted">
+                            Departments
+                        </h6>
+
+                        <h3 class="fw-bold">
+                            @Model.TotalDepartments
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="row mt-5 g-4">
+
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <h4 class="fw-bold mb-3">
+
+                    Quick Actions
+
+                </h4>
+
+
+
+                <div class="d-flex flex-wrap gap-3">
+
+
+                    <a asp-controller="Employee"
+                       asp-action="Index"
+                       class="btn btn-primary rounded-pill">
+
+                        <i class="bi bi-people"></i>
+                        Manage Employees
+
+                    </a>
+
+
+
+                    <a asp-controller="Reports"
+                       asp-action="Index"
+                       class="btn btn-success rounded-pill">
+
+                        <i class="bi bi-file-earmark-text"></i>
+                        Reports
+
+                    </a>
+
+
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-info rounded-pill">
+
+                        <i class="bi bi-person"></i>
+                        My Profile
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <h4 class="fw-bold mb-3">
+
+                    HR Summary
+
+                </h4>
+
+
+
+                <table class="table table-borderless">
+
+                    <tbody>
+
+                        <tr>
+
+                            <th>
+                                Total Salary
+                            </th>
+
+                            <td>
+                                ₹ @Model.TotalSalary.ToString("N0")
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Average Salary
+                            </th>
+
+                            <td>
+                                ₹ @Model.AverageSalary.ToString("N0")
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Highest Salary
+                            </th>
+
+                            <td>
+                                ₹ @Model.HighestSalary.ToString("N0")
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Inactive Employees
+                            </th>
+
+                            <td>
+                                @Model.InactiveEmployees
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="card shadow border-0 rounded-4 mt-5 p-4">
+
+
+        <h4 class="fw-bold mb-3">
+
+            Recent Employees
+
+        </h4>
+
+
+        <div class="table-responsive">
+
+
+            <table class="table align-middle">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Designation
+                        </th>
+
+                        <th>
+                            Role
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    @foreach (var employee in Model.RecentEmployees)
+                    {
+
+                        <tr>
+
+                            <td>
+                                @employee.FullName
+                            </td>
+
+
+                            <td>
+                                @employee.Department?.DepartmentName
+                            </td>
+
+
+                            <td>
+                                @employee.Designation?.DesignationName
+                            </td>
+
+
+                            <td>
+                                @employee.Role?.RoleName
+                            </td>
+
+
+                        </tr>
+
+                    }
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>

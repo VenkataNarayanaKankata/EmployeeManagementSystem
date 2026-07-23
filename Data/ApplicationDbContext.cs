@@ -127,6 +127,11 @@ namespace EmployeeManagementSystem.Data
                 .WithMany(p => p.RolePermissions)
                 .HasForeignKey(rp => rp.PermissionId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Employee>()
+    .HasOne(e => e.ReportingManager)
+    .WithMany(e => e.TeamMembers)
+    .HasForeignKey(e => e.ReportingManagerId)
+    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

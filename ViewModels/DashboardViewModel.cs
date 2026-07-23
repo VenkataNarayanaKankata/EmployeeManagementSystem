@@ -73,5 +73,15 @@ namespace EmployeeManagementSystem.ViewModels
 
 
         public Employee? LoggedInEmployee { get; set; }
+        public int MyTeamCount { get; set; }
+
+        public int MyActiveTeamCount { get; set; }
+
+        public string? MyDepartment { get; set; }
+
+        public decimal MyTeamAverageSalary { get; set; }
+
+
+        public List<Employee> MyTeamEmployees { get; set; } = new();
     }
 }

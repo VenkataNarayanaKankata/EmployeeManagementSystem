@@ -376,3 +376,172 @@
 #roleChart {
     height: 320px !important;
 }
+/* ================================
+   MANAGER DASHBOARD
+================================ */
+
+
+.employee-dashboard-banner {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border-radius: 25px;
+    padding: 45px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+
+.dashboard-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 15px;
+}
+
+
+.banner-content h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-top: 20px;
+}
+
+
+.banner-content p {
+    font-size: 18px;
+    opacity: .9;
+}
+
+
+
+.date-card {
+    background: white;
+    color: #1e293b;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    min-width: 180px;
+}
+
+
+    .date-card i {
+        font-size: 35px;
+        color: #2563eb;
+    }
+
+
+    .date-card h4 {
+        margin-top: 15px;
+        font-weight: 700;
+    }
+
+
+
+/* ================================
+   STAT CARDS
+================================ */
+
+
+.card {
+    transition: .3s ease;
+}
+
+
+    .card:hover {
+        transform: translateY(-8px);
+    }
+
+
+.card-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+}
+
+
+
+.card h6 {
+    font-size: 15px;
+}
+
+
+.card h3,
+.card h5 {
+    color: #0f172a;
+}
+
+
+
+/* ================================
+   TEAM TABLE
+================================ */
+
+
+.table {
+    margin-top: 20px;
+}
+
+
+    .table thead {
+        background: #2563eb;
+        color: white;
+    }
+
+
+        .table thead th {
+            padding: 15px;
+        }
+
+
+    .table tbody tr {
+        transition: .2s;
+    }
+
+
+        .table tbody tr:hover {
+            background: #f1f5f9;
+        }
+
+
+
+.badge {
+    padding: 8px 14px;
+    border-radius: 20px;
+}
+
+
+
+
+.btn-primary {
+    background: #2563eb;
+    border: none;
+}
+
+
+    .btn-primary:hover {
+        background: #1d4ed8;
+    }
+
+
+
+/* Responsive */
+
+@media(max-width:768px) {
+
+    .employee-dashboard-banner {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+
+    .banner-content h1 {
+        font-size: 30px;
+    }
+}

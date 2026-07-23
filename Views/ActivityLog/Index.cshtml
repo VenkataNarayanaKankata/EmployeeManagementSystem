@@ -38,7 +38,8 @@
 @{
     ViewData["Title"] = "Activity Logs";
 }
-
+@if(await PermissionService.HasPermissionAsync("ActivityLog.View"))
+{
 <div class="container-fluid mt-4 mb-5 pb-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -66,25 +67,44 @@
     </a>
 
 
-                @if (await PermissionService.HasPermissionAsync("ActivityLog.Print"))
-                {
-                    <button type="button"
-                            class="btn btn-success"
-                            onclick="window.print();">
+                    @if (await PermissionService.HasPermissionAsync("ActivityLog.Export"))
+                    {
+                        <a asp-controller="ActivityLog"
+                           asp-action="Export"
+                           asp-route-username="@Model.Filter.Username"
+                           asp-route-activity="@Model.Filter.Activity"
+                           asp-route-fromDate="@Model.Filter.FromDate"
+                           asp-route-toDate="@Model.Filter.ToDate"
+                           class="btn btn-primary me-2">
 
-                        🖨 Print Report
+                            📥 Export
 
-                    </button>
-                }
+                        </a>
+                    }
+
+
+                    @if (await PermissionService.HasPermissionAsync("ActivityLog.Print"))
+                    {
+                        <button type="button"
+                                class="btn btn-success"
+                                onclick="window.print();">
+
+                            🖨 Print Report
+
+                        </button>
+                    }
 
 </div>
         </div>
 
     </div>
-   <form id="activityFilterForm"
-      asp-action="Index"
-      method="get"
-      class="no-print">
+        @if (await PermissionService.HasPermissionAsync("ActivityLog.Filter"))
+        {
+
+            <form id="activityFilterForm"
+                  asp-action="Index"
+                  method="get"
+                  class="no-print">
 
         <div class="card shadow border-0 mb-4">
 
@@ -176,7 +196,9 @@
 
         </div>
 
-    </form>
+            </form>
+
+        }
 
   <div id="reportContent"
      class="print-content">
@@ -186,6 +208,13 @@
 </div>
 
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        You don't have permission to view activity logs.
+    </div>
+}
 
 @section Scripts
 {

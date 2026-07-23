@@ -5,6 +5,8 @@ using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ClosedXML.Excel;
+using System.Data;
 
 namespace EmployeeManagementSystem.Controllers
 {
@@ -304,6 +306,102 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(model);
 
+        }
+        public async Task<IActionResult> Export(
+    string? username,
+    string? activity,
+    DateTime? fromDate,
+    DateTime? toDate)
+        {
+            if (!await _permissionService
+                .HasPermissionAsync("ActivityLog.Export"))
+            {
+                return Forbid();
+            }
+
+
+            var query = _context.ActivityLogs.AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                query = query.Where(x =>
+                    x.Username.Contains(username));
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(activity))
+            {
+                query = query.Where(x =>
+                    x.Action.Contains(activity));
+            }
+
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(x =>
+                    x.ActivityDate >= fromDate.Value.Date);
+            }
+
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(x =>
+                    x.ActivityDate < toDate.Value.Date.AddDays(1));
+            }
+
+
+            var logs = await query
+                .OrderByDescending(x => x.ActivityDate)
+                .ToListAsync();
+
+
+
+            using var workbook = new XLWorkbook();
+
+            var worksheet = workbook.Worksheets.Add("Activity Logs");
+
+
+            worksheet.Cell(1, 1).Value = "Username";
+            worksheet.Cell(1, 2).Value = "Activity";
+            worksheet.Cell(1, 3).Value = "Date & Time";
+
+
+            int row = 2;
+
+
+            foreach (var item in logs)
+            {
+                worksheet.Cell(row, 1).Value = item.Username;
+                worksheet.Cell(row, 2).Value = item.Action;
+                worksheet.Cell(row, 3).Value =
+                    item.ActivityDate.ToString("dd-MMM-yyyy hh:mm tt");
+
+                row++;
+            }
+
+
+            worksheet.Columns().AdjustToContents();
+
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+
+            stream.Position = 0;
+
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                "Exported Activity Logs");
+
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "ActivityLogs.xlsx");
         }
 
     }

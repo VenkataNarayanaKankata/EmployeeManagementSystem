@@ -352,6 +352,15 @@ public class EmployeeController : Controller
                 .Where(r => r.IsActive),
             "RoleId",
             "RoleName");
+        ViewData["ReportingManagerId"] =
+    new SelectList(
+        _context.Employees
+        .Include(e => e.Role)
+        .Where(e => e.Role.RoleName == "Manager"
+                    && e.IsActive
+                    && !e.IsDeleted),
+        "EmployeeId",
+        "FullName");
 
 
         return View(employee);
@@ -363,7 +372,7 @@ public class EmployeeController : Controller
     [Permission("Employee.Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("EmployeeId,EmployeeCode,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId")]
+        [Bind("EmployeeId,EmployeeCode,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId,ReportingManagerId")]
     Employee employee,
         IFormFile? PhotoFile)
     {
@@ -451,7 +460,16 @@ public class EmployeeController : Controller
             "RoleId",
             "RoleName",
             employee.RoleId);
-
+        ViewData["ReportingManagerId"] =
+    new SelectList(
+        _context.Employees
+        .Include(e => e.Role)
+        .Where(e => e.Role.RoleName == "Manager"
+                    && e.IsActive
+                    && !e.IsDeleted),
+        "EmployeeId",
+        "FullName",
+        employee.ReportingManagerId);
 
         return View(employee);
     }
@@ -469,6 +487,7 @@ public class EmployeeController : Controller
             .Include(e => e.Department)
             .Include(e => e.Designation)
             .Include(e => e.Role)
+            .Include(e => e.ReportingManager)
             .FirstOrDefaultAsync(e => e.EmployeeId == id);
 
         if (employee == null)
@@ -503,7 +522,17 @@ public class EmployeeController : Controller
             "RoleId",
             "RoleName",
             employee.RoleId);
-
+        ViewData["ReportingManagerId"] =
+    new SelectList(
+        _context.Employees
+        .Include(e => e.Role)
+        .Where(e => e.Role.RoleName == "Manager"
+                    && e.EmployeeId != employee.EmployeeId
+                    && e.IsActive
+                    && !e.IsDeleted),
+        "EmployeeId",
+        "FullName",
+        employee.ReportingManagerId);
 
         return View(employee);
     }
@@ -515,7 +544,7 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int id,
-        [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId,PhotoPath")]
+        [Bind("EmployeeId,FirstName,LastName,Email,Phone,Gender,Salary,JoiningDate,BranchId,DepartmentId,DesignationId,RoleId,ReportingManagerId,PhotoPath")]
     Employee employee,
         IFormFile? PhotoFile)
     {
@@ -551,6 +580,8 @@ public class EmployeeController : Controller
                 existingEmployee.DepartmentId = employee.DepartmentId;
                 existingEmployee.DesignationId = employee.DesignationId;
                 existingEmployee.RoleId = employee.RoleId;
+                existingEmployee.ReportingManagerId =
+    employee.ReportingManagerId;
 
 
                 if (PhotoFile != null && PhotoFile.Length > 0)

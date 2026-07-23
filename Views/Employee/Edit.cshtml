@@ -313,7 +313,24 @@
 
                 <div class="row g-3">
 
+                        <div class="col-md-6">
 
+                            <label asp-for="ReportingManagerId"
+                                   class="form-label">
+                                Reporting Manager
+                            </label>
+
+                            <select asp-for="ReportingManagerId"
+                                    asp-items="ViewBag.ReportingManagerId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Manager --
+                                </option>
+
+                            </select>
+
+                        </div>
 
                     <div class="col-md-6">
 

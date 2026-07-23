@@ -119,12 +119,7 @@ namespace EmployeeManagementSystem.Data.SeedData
     ModuleName = "Employee",
     Description = "Change employee salary"
 },
-                new Permission
-{
-    PermissionName = "Report.Print",
-    ModuleName = "Report",
-    Description = "Print reports"
-},
+                
                 new Permission
 {
     PermissionName = "Employee.PrintProfile",
@@ -322,10 +317,12 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "User",
                     Description = "Reset user password"
                 },
-                new Permission
+                
+new Permission
 {
-    PermissionName = "User.GenerateAccount",
-    ModuleName = "User Management",
+    PermissionName = "User.Generate",
+    ModuleName = "User",
+    Description = "Generate user accounts",
     IsActive = true
 },
 
@@ -371,22 +368,24 @@ namespace EmployeeManagementSystem.Data.SeedData
                     ModuleName = "Report",
                     Description = "Export reports"
                 },
-
-
                 new Permission
-                {
-                    PermissionName = "ActivityLog.View",
-                    ModuleName = "Activity Log",
-                    Description = "View activity logs"
-                },
+{
+    PermissionName = "Report.Joining",
+    ModuleName = "Report",
+    Description = "View joining reports",
+    IsActive = true
+},
 
-                new Permission
-                {
-                    PermissionName = "ActivityLog.Export",
-                    ModuleName = "Activity Log",
-                    Description = "Export activity logs"
-                },
+new Permission
+{
+    PermissionName = "Report.Export",
+    ModuleName = "Report",
+    Description = "Export reports",
+    IsActive = true
+},
 
+
+                
 
                 new Permission
                 {
@@ -434,30 +433,59 @@ new Permission
     PermissionName = "Permission.Delete",
     ModuleName = "Permission Management",
     IsActive = true
-},new Permission
+},
+new Permission
 {
-    PermissionName = "ActivityLog.View",
-    ModuleName = "ActivityLog",
-    Description = "View system activity logs",
+    PermissionName = "Profile.View",
+    ModuleName = "Profile",
+    Description = "View user profile",
     IsActive = true
 },
 
 new Permission
 {
-    PermissionName = "ActivityLog.Details",
-    ModuleName = "ActivityLog",
-    Description = "View activity log details",
+    PermissionName = "Profile.Edit",
+    ModuleName = "Profile",
+    Description = "Edit user profile information",
     IsActive = true
 },
 
 new Permission
 {
-    PermissionName = "ActivityLog.Print",
-    ModuleName = "ActivityLog",
-    Description = "Print activity reports",
+    PermissionName = "Profile.ChangePassword",
+    ModuleName = "Profile",
+    Description = "Change profile password",
     IsActive = true
+},
+new Permission
+{
+    PermissionName="ActivityLog.View",
+    ModuleName="ActivityLog"
+},
+
+new Permission
+{
+    PermissionName="ActivityLog.Export",
+    ModuleName="ActivityLog"
+},
+
+new Permission
+{
+    PermissionName="ActivityLog.Details",
+    ModuleName="ActivityLog"
+},
+
+new Permission
+{
+    PermissionName="ActivityLog.Filter",
+    ModuleName="ActivityLog"
+},
+
+new Permission
+{
+    PermissionName="ActivityLog.Print",
+    ModuleName="ActivityLog"
 }
-
 
 
             };

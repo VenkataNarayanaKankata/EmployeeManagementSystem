@@ -213,12 +213,14 @@ namespace EmployeeManagementSystem.Controllers
 
 
             ViewBag.CurrentRole =
-                User.FindFirstValue(
-                    ClaimTypes.Role);
+     User.FindFirstValue(
+         ClaimTypes.Role);
 
 
+            var role = User.FindFirstValue(
+                ClaimTypes.Role);
 
-            if (User.IsInRole("Employee"))
+            if (role == "Employee")
             {
                 var employeeIdClaim =
                     User.FindFirst("EmployeeId");
@@ -246,6 +248,80 @@ namespace EmployeeManagementSystem.Controllers
                     model);
             }
 
+            if (role == "HR")
+            {
+                return View(
+                    "HRDashboard",
+                    model);
+            }
+
+            if (role == "Manager")
+            {
+                var employeeIdClaim =
+                    User.FindFirst("EmployeeId");
+
+
+                if (employeeIdClaim != null)
+                {
+                    int managerId =
+                        int.Parse(employeeIdClaim.Value);
+
+
+                    var manager =
+                        await _context.Employees
+                        .Include(e => e.Department)
+                        .FirstOrDefaultAsync(
+                            e => e.EmployeeId == managerId);
+
+
+
+                    model.LoggedInEmployee = manager;
+
+
+
+                    model.MyTeamEmployees =
+                        await _context.Employees
+                        .Include(e => e.Department)
+                        .Include(e => e.Designation)
+                        .Include(e => e.Role)
+                        .Where(e =>
+                            e.ReportingManagerId == managerId
+                            &&
+                            !e.IsDeleted)
+                        .ToListAsync();
+
+
+
+                    model.MyTeamCount =
+                        model.MyTeamEmployees.Count;
+
+
+
+                    model.MyActiveTeamCount =
+                        model.MyTeamEmployees
+                        .Count(e => e.IsActive);
+
+
+
+                    model.MyDepartment =
+                        manager?.Department?.DepartmentName
+                        ?? "N/A";
+
+
+
+                    if (model.MyTeamEmployees.Any())
+                    {
+                        model.MyTeamAverageSalary =
+                            model.MyTeamEmployees
+                            .Average(e => e.Salary);
+                    }
+                }
+
+
+                return View(
+                    "ManagerDashboard",
+                    model);
+            }
 
             return View(model);
         }

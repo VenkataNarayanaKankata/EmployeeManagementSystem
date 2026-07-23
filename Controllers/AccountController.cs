@@ -82,7 +82,11 @@ namespace EmployeeManagementSystem.Controllers
 
     new Claim(
         "RoleId",
-        admin.RoleId.ToString())
+        admin.RoleId.ToString()),
+
+    new Claim(
+        "MustChangePassword",
+        admin.MustChangePassword.ToString().ToLower())
 };
 
             // Store EmployeeId for Employee users
@@ -115,43 +119,10 @@ namespace EmployeeManagementSystem.Controllers
             {
                 return RedirectToAction("ChangePassword");
             }
-
-
-            // Role based redirect
-            if (admin.Role != null)
-            {
-                switch (admin.Role.RoleName)
-                {
-                    case "Super Admin":
-                        return RedirectToAction(
-                            "Index",
-                            "Dashboard");
-
-
-                    case "HR":
-                        return RedirectToAction(
-                            "Index",
-                            "HRDashboard");
-
-
-                    case "Manager":
-                        return RedirectToAction(
-                            "Index",
-                            "ManagerDashboard");
-
-
-                    case "Employee":
-                        return RedirectToAction(
-                            "Index",
-                            "EmployeeDashboard");
-                }
-            }
-
-
-            // Default
+            // Redirect all roles to common dashboard
             return RedirectToAction(
                 "Index",
-                "Home");
+                "Dashboard");
         }
         [HttpGet]
         public async Task<IActionResult> ChangePassword()

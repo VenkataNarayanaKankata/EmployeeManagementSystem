@@ -1,0 +1,467 @@
+﻿@model EmployeeManagementSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Manager Dashboard";
+}
+
+<div class="container-fluid py-4">
+
+
+    <div class="employee-dashboard-banner">
+
+        <div class="banner-content">
+
+            <span class="dashboard-badge">
+
+                <i class="bi bi-person-workspace"></i>
+
+                Manager Dashboard
+
+            </span>
+
+
+            <h1 class="mt-3">
+
+                Welcome Back, @User.Identity?.Name 👋
+
+            </h1>
+
+
+            <p>
+
+                Manage your team members and monitor department activities.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="banner-date">
+
+            <div class="date-card">
+
+                <i class="bi bi-calendar-event"></i>
+
+
+                <h4>
+
+                    @DateTime.Now.ToString("dddd")
+
+                </h4>
+
+
+                <span>
+
+                    @DateTime.Now.ToString("dd MMM yyyy")
+
+                </span>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="row mt-4 g-4">
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <div class="d-flex align-items-center">
+
+
+                    <div class="card-icon bg-primary">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+
+                        <h6 class="text-muted">
+
+                            My Team Members
+
+                        </h6>
+
+
+                        <h3 class="fw-bold">
+
+                            @Model.MyTeamCount
+
+                        </h3>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <div class="d-flex align-items-center">
+
+
+                    <div class="card-icon bg-success">
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+
+                        <h6 class="text-muted">
+
+                            Active Members
+
+                        </h6>
+
+
+                        <h3 class="fw-bold">
+
+                            @Model.MyActiveTeamCount
+
+                        </h3>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <div class="d-flex align-items-center">
+
+
+                    <div class="card-icon bg-info">
+
+                        <i class="bi bi-building"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+
+                        <h6 class="text-muted">
+
+                            Department
+
+                        </h6>
+
+
+                        <h5 class="fw-bold">
+
+                            @Model.MyDepartment
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <div class="d-flex align-items-center">
+
+
+                    <div class="card-icon bg-warning">
+
+                        <i class="bi bi-cash-stack"></i>
+
+                    </div>
+
+
+                    <div class="ms-3">
+
+
+                        <h6 class="text-muted">
+
+                            Average Salary
+
+                        </h6>
+
+
+                        <h5 class="fw-bold">
+
+                            ₹ @Model.MyTeamAverageSalary.ToString("N0")
+
+                        </h5>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+    <div class="row mt-5 g-4">
+
+
+        <div class="col-lg-12">
+
+
+            <div class="card shadow border-0 rounded-4 p-4">
+
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+
+                    <h3 class="fw-bold">
+
+                        My Team
+
+                    </h3>
+
+
+                    <a asp-controller="Employee"
+                       asp-action="Index"
+                       class="btn btn-primary rounded-pill">
+
+                        View Employees
+
+                    </a>
+
+
+                </div>
+
+
+
+
+
+                <div class="table-responsive">
+
+
+                    <table class="table align-middle">
+
+
+                        <thead>
+
+
+                            <tr>
+
+
+                                <th>
+
+                                    Employee Name
+
+                                </th>
+
+
+                                <th>
+
+                                    Department
+
+                                </th>
+
+
+                                <th>
+
+                                    Designation
+
+                                </th>
+
+
+                                <th>
+
+                                    Role
+
+                                </th>
+
+
+                                <th>
+
+                                    Status
+
+                                </th>
+
+
+                            </tr>
+
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                            @if (Model.MyTeamEmployees != null
+                                && Model.MyTeamEmployees.Any())
+                            {
+
+                                foreach (var employee in Model.MyTeamEmployees)
+                                {
+
+                                    <tr>
+
+
+                                        <td>
+
+                                            @employee.FullName
+
+                                        </td>
+
+
+                                        <td>
+
+                                            @employee.Department?.DepartmentName
+
+                                        </td>
+
+
+                                        <td>
+
+                                            @employee.Designation?.DesignationName
+
+                                        </td>
+
+
+                                        <td>
+
+                                            @employee.Role?.RoleName
+
+                                        </td>
+
+
+                                        <td>
+
+
+                                            @if (employee.IsActive)
+                                            {
+
+                                                <span class="badge bg-success">
+
+                                                    Active
+
+                                                </span>
+
+                                            }
+                                            else
+                                            {
+
+                                                <span class="badge bg-danger">
+
+                                                    Inactive
+
+                                                </span>
+
+                                            }
+
+
+                                        </td>
+
+
+                                    </tr>
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                <tr>
+
+                                    <td colspan="5"
+                                        class="text-center text-muted">
+
+                                        No team members assigned.
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>

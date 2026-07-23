@@ -6,10 +6,6 @@ namespace EmployeeManagementSystem.Data.SeedData
     {
         public static void Seed(ApplicationDbContext context)
         {
-            if (context.RolePermissions.Any())
-            {
-                return;
-            }
 
 
             var roles = context.Roles.ToList();
@@ -97,7 +93,8 @@ namespace EmployeeManagementSystem.Data.SeedData
                             "Report.Employee",
 
                             "Profile.View",
-                            "Profile.Edit"
+"Profile.Edit",
+"Profile.ChangePassword"
                         };
 
                         break;
@@ -116,9 +113,9 @@ namespace EmployeeManagementSystem.Data.SeedData
                             "Department.View",
 
                             "Report.View",
-
-                            "Profile.View",
-                            "Profile.Edit"
+"Profile.View",
+"Profile.Edit",
+"Profile.ChangePassword",
                         };
 
                         break;

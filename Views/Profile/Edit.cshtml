@@ -1,0 +1,288 @@
+﻿@model EmployeeManagementSystem.ViewModels.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+
+<div class="container mt-4">
+
+
+    <div class="employee-header mb-4">
+
+        <h1 class="fw-bold">
+            ✏️ Edit Profile
+        </h1>
+
+        <p class="text-muted">
+            Update your personal information and profile details.
+        </p>
+
+    </div>
+
+
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+                Profile Information
+            </h3>
+
+        </div>
+
+
+
+        <div class="card-body p-4">
+
+
+            <form asp-action="Edit"
+                  method="post"
+                  enctype="multipart/form-data">
+
+
+                <input type="hidden" asp-for="AdminId" />
+
+                <input type="hidden" asp-for="EmployeeId" />
+
+
+
+                <div class="row g-4">
+
+
+                    <!-- First Name -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            First Name
+                        </label>
+
+                        <input asp-for="FirstName"
+                               class="form-control" />
+
+                        <span asp-validation-for="FirstName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+
+
+                    <!-- Last Name -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Last Name
+                        </label>
+
+                        <input asp-for="LastName"
+                               class="form-control" />
+
+                        <span asp-validation-for="LastName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+
+
+
+                    <!-- Email -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Email
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+
+
+
+                    <!-- Phone -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Phone Number
+                        </label>
+
+                        <input asp-for="Phone"
+                               class="form-control" />
+
+                        <span asp-validation-for="Phone"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+
+
+
+                    <!-- Gender -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-bold">
+                            Gender
+                        </label>
+
+
+                        <select asp-for="Gender"
+                                class="form-select">
+
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+
+
+                    <!-- Photo Upload -->
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label fw-bold">
+                            Profile Photo
+                        </label>
+
+
+                        <input asp-for="Photo"
+                               type="file"
+                               class="form-control" />
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                @if (!string.IsNullOrEmpty(Model.ExistingPhoto))
+                {
+
+                    <div class="mt-4">
+
+
+                        <label class="fw-bold">
+                            Current Photo
+                        </label>
+
+
+                        <br />
+
+
+                        <img src="@Model.ExistingPhoto"
+                             width="150"
+                             height="150"
+                             class="rounded shadow mt-2"
+                             style="object-fit:cover;" />
+
+
+                    </div>
+
+                }
+
+
+
+
+
+
+                <hr class="my-4" />
+
+
+
+
+
+                <div class="text-end">
+
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+
+                        ← Back
+
+
+                    </a>
+
+
+
+                    <button type="submit"
+                            class="btn btn-success ms-2">
+
+
+                        💾 Save Changes
+
+
+                    </button>
+
+
+
+                </div>
+
+
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -4,14 +4,53 @@
 
     bool isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 
-    bool isAdmin = User.IsInRole("Super Admin");
-    bool isHR = User.IsInRole("HR");
-    bool isManager = User.IsInRole("Manager");
-    bool isEmployee = User.IsInRole("Employee");
+    var permissionService =
+     Context.RequestServices.GetRequiredService<IPermissionService>();
 
-    bool canManageOrganization = isAdmin || isHR || isManager;
-    bool canManageWorkforce = isAdmin || isHR || isManager;
-    bool canManageAdministration = isAdmin;
+
+    bool canViewDashboard =
+        await permissionService.HasPermissionAsync("Dashboard.View");
+
+
+    bool canViewEmployee =
+        await permissionService.HasPermissionAsync("Employee.View");
+
+
+    bool canViewBranch =
+        await permissionService.HasPermissionAsync("Branch.View");
+
+
+    bool canViewDepartment =
+        await permissionService.HasPermissionAsync("Department.View");
+
+
+    bool canViewDesignation =
+        await permissionService.HasPermissionAsync("Designation.View");
+
+
+    bool canViewReports =
+        await permissionService.HasPermissionAsync("Report.View");
+
+
+    bool canViewUsers =
+        await permissionService.HasPermissionAsync("User.View");
+
+
+    bool canViewActivity =
+        await permissionService.HasPermissionAsync("ActivityLog.View");
+
+
+    bool canManagePermissions =
+        await permissionService.HasPermissionAsync("Role.AssignPermission");
+    bool canViewPermission =
+    await permissionService.HasPermissionAsync("Permission.View");
+
+
+    bool canViewProfile =
+        await permissionService.HasPermissionAsync("Profile.View");
+
+    bool canViewRole =
+        await permissionService.HasPermissionAsync("Role.View");
 }
 
 <nav class="ems-navbar">
@@ -86,29 +125,26 @@
 
                 </li>
 
-                @if (isAuthenticated)
-                {
+                @if (canViewDashboard){
+                        <li>
+                            <a asp-controller="Dashboard"
+                               asp-action="Index">
 
-                    <!-- DASHBOARD -->
+                                <i class="bi bi-speedometer2"></i>
 
-                    <li>
+                                Dashboard
 
-                        <a class="@(currentController == "Dashboard" ? "active" : "")"
-                           asp-controller="Dashboard"
-                           asp-action="Index">
-
-                            <i class="bi bi-speedometer2"></i>
-
-                            Dashboard
-
-                        </a>
-
-                    </li>
+                            </a>
+                        </li>
+                }
                     <!-- ======================================
                             ORGANIZATION
                     ======================================= -->
-                    @if (canManageOrganization)
-                    {
+                @if (canViewBranch ||
+ canViewDepartment ||
+ canViewDesignation ||
+ canViewRole)
+ {
                         <li class="nav-item dropdown">
 
                             <a class="nav-link dropdown-toggle
@@ -132,57 +168,60 @@
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "Branch" ? "active" : "")"
-                                       asp-controller="Branch"
-                                       asp-action="Index">
+                                    @if (canViewBranch)
+                                    {
+                                        <a asp-controller="Branch"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-building"></i>
+                                            Branches
 
-                                        Branches
-
-                                    </a>
-
-                                </li>
-
-                                <li>
-
-                                    <a class="dropdown-item @(currentController == "Department" ? "active" : "")"
-                                       asp-controller="Department"
-                                       asp-action="Index">
-
-                                        <i class="bi bi-diagram-2"></i>
-
-                                        Departments
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </li>
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "Designation" ? "active" : "")"
-                                       asp-controller="Designation"
-                                       asp-action="Index">
+                                    @if (canViewDepartment)
+                                    {
+                                        <a asp-controller="Department"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-person-badge"></i>
+                                            Departments
 
-                                        Designations
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </li>
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "Role" ? "active" : "")"
-                                       asp-controller="Role"
-                                       asp-action="Index">
+                                    @if (canViewDesignation)
+                                    {
+                                        <a asp-controller="Designation"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-shield-lock"></i>
+                                            Designations
 
-                                        Roles
+                                        </a>
+                                    }
 
-                                    </a>
+                                </li>
+
+                                <li>
+
+                                   @if(canViewRole)
+{
+    <a class="dropdown-item"
+       asp-controller="Role"
+       asp-action="Index">
+
+        <i class="bi bi-shield-lock"></i>
+
+        Roles
+
+    </a>
+}
 
                                 </li>
 
@@ -193,7 +232,7 @@
                     <!-- ======================================
                             WORKFORCE
                     ======================================= -->
-                    @if (canManageWorkforce)
+                    @if (canViewEmployee)
                     {
                         <li class="nav-item dropdown">
 
@@ -218,15 +257,15 @@
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "Employee" ? "active" : "")"
-                                       asp-controller="Employee"
-                                       asp-action="Index">
+                                    @if (canViewEmployee)
+                                    {
+                                        <a asp-controller="Employee"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-person-lines-fill"></i>
+                                            Employees
 
-                                        Employees
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </li>
 
@@ -274,13 +313,13 @@
                     <!-- ======================================
                             REPORTS
                     ======================================= -->
-                    @if (canManageWorkforce)
+                    @if (canViewReports)
                     {
                         <li>
 
-                            <a class="@(currentController == "Reports" ? "active" : "")"
-                               asp-controller="Reports"
-                               asp-action="Index">
+                        <a class="@(currentController == "Reports" ? "active" : "")"
+                           asp-controller="Reports"
+                           asp-action="Index">
 
                                 <i class="bi bi-bar-chart-fill"></i>
 
@@ -290,11 +329,15 @@
 
                         </li>
                     }
+                    
 
                     <!-- ======================================
                             SECURITY & ADMINISTRATION
                     ======================================= -->
-                    @if (canManageAdministration)
+                @if (canViewUsers ||
+ canViewActivity ||
+ canViewPermission ||
+ canManagePermissions)
                     {
                         <li class="nav-item dropdown">
 
@@ -317,63 +360,62 @@
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "User" ? "active" : "")"
-                                       asp-controller="User"
-                                       asp-action="Index">
+                                    @if (canViewUsers)
+                                    {
+                                        <a asp-controller="User"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-people-fill"></i>
+                                            Users
 
-                                        Users
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </li>
 
                                 <li>
 
-                                    <a class="dropdown-item @(currentController == "ActivityLog" ? "active" : "")"
-                                       asp-controller="ActivityLog"
-                                       asp-action="Index">
+                                    @if (canViewActivity)
+                                    {
+                                        <a asp-controller="ActivityLog"
+                                           asp-action="Index">
 
-                                        <i class="bi bi-clock-history"></i>
+                                            Activity Logs
 
-                                        Activity Logs
-
-                                    </a>
+                                        </a>
+                                    }
 
                                 </li>
                                 <li>
-                                    <a asp-controller="Permission"
-                                       asp-action="Index"
-                                       class="dropdown-item">
+                                    @if(canViewPermission)
+{
+    <a asp-controller="Permission"
+       asp-action="Index"
+       class="dropdown-item">
 
-                                        🔑 Permissions
+        Permissions
 
-                                    </a>
+    </a>
+}
                                 </li>
                                 <li>
-                                    <a asp-controller="RolePermission"
-                                       asp-action="Index"
-                                       class="dropdown-item">
+                                    @if (canManagePermissions)
+                                    {
+                                        <a asp-controller="RolePermission"
+                                           asp-action="Index">
 
-                                        🔐 Role Permissions
+                                            Role Permissions
 
-                                    </a>
+                                        </a>
+                                    }
                                 </li>
 
                             </ul>
 
                         </li>
                     }
-                }
-                else
+                @if (!isAuthenticated)
                 {
-                    <!-- ======================================
-                            PUBLIC MENU
-                    ======================================= -->
-
                     <li>
-
                         <a class="@(currentAction == "Features" ? "active" : "")"
                            asp-controller="Home"
                            asp-action="Features">
@@ -383,11 +425,10 @@
                             Features
 
                         </a>
-
                     </li>
 
-                    <li>
 
+                    <li>
                         <a class="@(currentAction == "About" ? "active" : "")"
                            asp-controller="Home"
                            asp-action="About">
@@ -397,7 +438,6 @@
                             About Us
 
                         </a>
-
                     </li>
                 }
 
@@ -451,66 +491,59 @@
 
                                 <small>
 
-                                    @(isAdmin ? "Administrator"
-                                        : isHR ? "HR"
-                                        : isManager ? "Manager"
-                                        : isEmployee ? "Employee"
-                                        : "User")
+                                    @(
+                                        User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+                                        ?? "User"
+                                    )
 
                                 </small>
 
                             </div>
 
                         </a>
-
                         <ul class="dropdown-menu dropdown-menu-end shadow">
 
                             <li>
+                                @if (canViewProfile)
+                                {
+                                    <a class="dropdown-item"
+                                       asp-controller="Profile"
+                                       asp-action="Index">
 
-                                <a class="dropdown-item"
-                                   asp-controller="Profile"
-                                   asp-action="Index">
+                                        <i class="bi bi-person-circle me-2"></i>
+                                        My Profile
 
-                                    <i class="bi bi-person-circle"></i>
-
-                                    My Profile
-
-                                </a>
-
+                                    </a>
+                                }
                             </li>
 
-                            <li>
 
+                            <li>
                                 <a class="dropdown-item"
                                    asp-controller="Account"
                                    asp-action="ChangePassword">
 
-                                    <i class="bi bi-key"></i>
-
+                                    <i class="bi bi-key me-2"></i>
                                     Change Password
 
                                 </a>
-
                             </li>
 
-                            <li>
 
+                            <li>
                                 <hr class="dropdown-divider" />
-
                             </li>
 
-                            <li>
 
+                            <li>
                                 <a class="dropdown-item text-danger"
                                    asp-controller="Account"
                                    asp-action="Logout">
 
-                                    <i class="bi bi-box-arrow-right"></i>
-
+                                    <i class="bi bi-box-arrow-right me-2"></i>
                                     Logout
 
                                 </a>
-
                             </li>
 
                         </ul>
@@ -522,15 +555,16 @@
                 {
                     <li>
 
-                        <a class="ems-login-btn"
-                           asp-controller="Account"
-                           asp-action="Login">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Account"
+                               asp-action="Login"
+                               class="btn btn-primary">
 
-                            <i class="bi bi-box-arrow-in-right"></i>
+                                Login
 
-                            Login
-
-                        </a>
+                            </a>
+                        }
 
                     </li>
                 }

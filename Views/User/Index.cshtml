@@ -35,7 +35,7 @@
                 </a>
             }
 
-            @if (await PermissionService.HasPermissionAsync("User.GenerateAccount"))
+                @if (await PermissionService.HasPermissionAsync("User.Generate"))
             {
                 <a asp-action="GenerateUsers"
                    class="btn btn-success">
@@ -246,34 +246,21 @@
                                     }
 
                                 </td>
-                                <td>
+                                    <td>
 
-                                    @if (user.Role?.RoleName == "Admin")
-                                    {
-                                        <span class="badge bg-danger">
-                                            Admin
-                                        </span>
-                                    }
-                                    else if (user.Role?.RoleName == "HR")
-                                    {
-                                        <span class="badge bg-success">
-                                            HR
-                                        </span>
-                                    }
-                                    else if (user.Role?.RoleName == "Manager")
-                                    {
-                                        <span class="badge bg-warning text-dark">
-                                            Manager
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-primary">
-                                            @user.Role?.RoleName
-                                        </span>
-                                    }
+                                        @if (user.Employee?.Role != null)
+                                        {
+                                            <span class="badge bg-success">
+                                                @user.Employee.Role.RoleName
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                N/A
+                                            </span>
+                                        }
 
-                                </td>
 
                                 <td>
 
@@ -332,6 +319,33 @@
                                 </td>
 
                                 <td class="text-center">
+                                        @if (await PermissionService.HasPermissionAsync("User.ChangeStatus"))
+                                        {
+                                            <form asp-action="ChangeStatus"
+                                                  asp-route-id="@user.AdminId"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-secondary">
+
+                                                    @if (user.IsActive)
+                                                    {
+                                                        <i class="bi bi-person-x"></i>
+                                                        <span>Deactivate</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="bi bi-person-check"></i>
+                                                        <span>Activate</span>
+                                                    }
+
+                                                </button>
+
+                                            </form>
+                                        }
 
                                     @if (await PermissionService.HasPermissionAsync("User.Edit"))
                                     {
@@ -364,6 +378,7 @@
 
                                         </a>
                                     }
+
 
                                 </td>
 

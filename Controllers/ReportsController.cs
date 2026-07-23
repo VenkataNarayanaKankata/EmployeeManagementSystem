@@ -1,5 +1,7 @@
-﻿using EmployeeManagementSystem.Data;
+﻿using ClosedXML.Excel;
+using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Helpers;
+using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,18 +10,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Super Admin,HR,Manager")]
+    [Authorize]
     public class ReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPermissionService _permissionService;
 
-        public ReportsController(ApplicationDbContext context)
+
+        public ReportsController(
+            ApplicationDbContext context,
+            IPermissionService permissionService)
         {
             _context = context;
+            _permissionService = permissionService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (!await HasPermission("Report.View"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
+
             return View();
         }
 
@@ -30,6 +44,12 @@ namespace EmployeeManagementSystem.Controllers
     string? sortBy,
     bool print = false)
         {
+            if (!await HasPermission("Report.Salary"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
             var query = _context.Employees
                 .Include(e => e.Department)
                 .AsQueryable();
@@ -116,6 +136,12 @@ namespace EmployeeManagementSystem.Controllers
     string? sortBy,
     bool print = false)
         {
+            if (!await HasPermission("Report.Employee"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
             var query = _context.Employees
                 .Include(e => e.Department)
                 .AsQueryable();
@@ -215,6 +241,12 @@ namespace EmployeeManagementSystem.Controllers
     string? sortBy,
     bool print = false)
         {
+            if (!await HasPermission("Report.Department"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
             var employees = await _context.Employees
                 .Include(e => e.Department)
                 .ToListAsync();
@@ -278,6 +310,12 @@ namespace EmployeeManagementSystem.Controllers
     DateTime? toDate,
     bool print = false)
         {
+            if (!await HasPermission("Report.Employee"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
             var query = _context.Employees
                 .Include(e => e.Department)
                 .AsQueryable();
@@ -361,6 +399,236 @@ namespace EmployeeManagementSystem.Controllers
     User.Identity?.Name,
     "Viewed Employee Report");
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ExportEmployeeExcel()
+        {
+            if (!await HasPermission("Report.Export"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
+
+
+            var employees = await _context.Employees
+                .Include(e => e.Department)
+                .Include(e => e.Designation)
+                .Include(e => e.Role)
+                .Where(e => !e.IsDeleted)
+                .ToListAsync();
+
+
+            using var workbook = new XLWorkbook();
+
+            var worksheet = workbook.Worksheets.Add("Employees");
+
+
+            worksheet.Cell(1, 1).Value = "Employee Name";
+            worksheet.Cell(1, 2).Value = "Department";
+            worksheet.Cell(1, 3).Value = "Designation";
+            worksheet.Cell(1, 4).Value = "Role";
+            worksheet.Cell(1, 5).Value = "Salary";
+
+
+            int row = 2;
+
+
+            foreach (var employee in employees)
+            {
+                worksheet.Cell(row, 1).Value = employee.FullName;
+                worksheet.Cell(row, 2).Value = employee.Department?.DepartmentName;
+                worksheet.Cell(row, 3).Value = employee.Designation?.DesignationName;
+                worksheet.Cell(row, 4).Value = employee.Role?.RoleName;
+                worksheet.Cell(row, 5).Value = employee.Salary;
+
+                row++;
+            }
+
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Employee_Report.xlsx");
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ExportDepartmentExcel()
+        {
+            if (!await HasPermission("Report.Export"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
+
+
+            var departments = await _context.Departments
+                .Include(d => d.Employees)
+                .ToListAsync();
+
+
+            using var workbook = new XLWorkbook();
+
+            var worksheet = workbook.Worksheets.Add("Departments");
+
+
+            worksheet.Cell(1, 1).Value = "Department";
+            worksheet.Cell(1, 2).Value = "Employees";
+
+
+            int row = 2;
+
+
+            foreach (var department in departments)
+            {
+                worksheet.Cell(row, 1).Value =
+                    department.DepartmentName;
+
+                worksheet.Cell(row, 2).Value =
+                    department.Employees.Count;
+
+                row++;
+            }
+
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Department_Report.xlsx");
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ExportSalaryExcel()
+        {
+            if (!await HasPermission("Report.Export"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
+
+
+            var employees = await _context.Employees
+                .Include(e => e.Department)
+                .Where(e => !e.IsDeleted)
+                .ToListAsync();
+
+
+            using var workbook = new XLWorkbook();
+
+            var worksheet = workbook.Worksheets.Add("Salary");
+
+
+            worksheet.Cell(1, 1).Value = "Employee";
+            worksheet.Cell(1, 2).Value = "Department";
+            worksheet.Cell(1, 3).Value = "Salary";
+
+
+            int row = 2;
+
+
+            foreach (var employee in employees)
+            {
+                worksheet.Cell(row, 1)
+                    .Value = employee.FullName;
+
+                worksheet.Cell(row, 2)
+                    .Value = employee.Department?.DepartmentName;
+
+                worksheet.Cell(row, 3)
+                    .Value = employee.Salary;
+
+                row++;
+            }
+
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Salary_Report.xlsx");
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ExportJoiningExcel()
+        {
+            if (!await HasPermission("Report.Export"))
+            {
+                return RedirectToAction(
+                    "AccessDenied",
+                    "Account");
+            }
+
+
+            var employees = await _context.Employees
+                .Where(e => !e.IsDeleted)
+                .OrderByDescending(e => e.JoiningDate)
+                .ToListAsync();
+
+
+            using var workbook = new XLWorkbook();
+
+            var worksheet = workbook.Worksheets.Add("Joining");
+
+
+            worksheet.Cell(1, 1).Value = "Employee";
+            worksheet.Cell(1, 2).Value = "Joining Date";
+
+
+            int row = 2;
+
+
+            foreach (var employee in employees)
+            {
+                worksheet.Cell(row, 1)
+                    .Value = employee.FullName;
+
+                worksheet.Cell(row, 2)
+                    .Value = employee.JoiningDate
+                    .ToString("dd-MM-yyyy");
+
+                row++;
+            }
+
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Joining_Report.xlsx");
+        }
+
+
+
+        private async Task<bool> HasPermission(string permission)
+        {
+            return await _permissionService
+                .HasPermissionAsync(permission);
         }
     }
 }

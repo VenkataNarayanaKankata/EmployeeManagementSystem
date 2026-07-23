@@ -63,18 +63,33 @@
                asp-action="Index"
                class="btn btn-secondary me-2">
 
-                ←Back to Reports
+                ← Back to Reports
 
             </a>
 
 
-            <button type="button"
-                    class="btn btn-success"
-                    onclick="window.print();">
+            @if (await PermissionService.HasPermissionAsync("Report.Print"))
+            {
+                <button type="button"
+                        class="btn btn-success me-2"
+                        onclick="window.print();">
 
-                🖨 Print Report
+                    🖨 Print Report
 
-            </button>
+                </button>
+            }
+
+
+            @if (await PermissionService.HasPermissionAsync("Report.Export"))
+            {
+                <a asp-controller="Reports"
+                   asp-action="ExportEmployeeExcel"
+                   class="btn btn-primary">
+
+                    📥 Export Excel
+
+                </a>
+            }
 
         </div>
 

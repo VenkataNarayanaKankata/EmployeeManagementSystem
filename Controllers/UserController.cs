@@ -11,22 +11,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    [Authorize(Roles = "Super Admin")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IPermissionService _permissionService;
 
         public UserController(
-            ApplicationDbContext context,
-            IEmailService emailService)
+    ApplicationDbContext context,
+    IEmailService emailService,
+    IPermissionService permissionService)
         {
             _context = context;
             _emailService = emailService;
+            _permissionService = permissionService;
         }
 
         public async Task<IActionResult> Index(string? search)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.View"))
+            {
+                return Forbid();
+            }
             var query = _context.Admins
                 .Include(a => a.Employee)
                     .ThenInclude(e => e.Department)
@@ -37,9 +45,14 @@ namespace EmployeeManagementSystem.Controllers
                 query = query.Where(x => x.Username.Contains(search));
             }
 
-            var users = await query
-                .OrderBy(x => x.Username)
-                .ToListAsync();
+            var users = await _context.Admins
+       .Include(a => a.Employee)
+           .ThenInclude(e => e.Department)
+       .Include(a => a.Employee)
+           .ThenInclude(e => e.Role)
+       .Include(a => a.Role)
+       .ToListAsync();
+
 
             var vm = new UserManagementViewModel
             {
@@ -55,6 +68,11 @@ namespace EmployeeManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Create"))
+            {
+                return Forbid();
+            }
             var model = new CreateUserViewModel();
 
             model.Roles = await _context.Roles
@@ -80,6 +98,11 @@ namespace EmployeeManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserViewModel model)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Create"))
+            {
+                return Forbid();
+            }
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -159,6 +182,11 @@ Employee Management System
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Edit"))
+            {
+                return Forbid();
+            }
             var user = await _context.Admins
     .Include(a => a.Role)
     .FirstOrDefaultAsync(a => a.AdminId == id);
@@ -193,6 +221,11 @@ Employee Management System
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Edit"))
+            {
+                return Forbid();
+            }
             if (!ModelState.IsValid)
             {
                 model.Employees = await _context.Employees
@@ -249,6 +282,11 @@ Employee Management System
         [HttpGet]
         public async Task<IActionResult> ResetPassword(int id)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.ResetPassword"))
+            {
+                return Forbid();
+            }
             var user = await _context.Admins.FindAsync(id);
 
             if (user == null)
@@ -266,6 +304,11 @@ Employee Management System
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.ResetPassword"))
+            {
+                return Forbid();
+            }
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -293,6 +336,11 @@ Employee Management System
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Delete"))
+            {
+                return Forbid();
+            }
             var user = await _context.Admins.FindAsync(id);
 
             if (user == null)
@@ -304,6 +352,11 @@ Employee Management System
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Delete"))
+            {
+                return Forbid();
+            }
             var user = await _context.Admins.FindAsync(id);
 
             if (user == null)
@@ -348,11 +401,18 @@ Employee Management System
         [HttpGet]
         public async Task<IActionResult> GenerateUsers()
         {
+            if (!await _permissionService
+    .HasPermissionAsync("User.Generate"))
+            {
+                return Forbid();
+            }
             // Employees without login accounts
             var employees = await _context.Employees
-                .Where(e => !e.IsDeleted &&
-                            !_context.Admins.Any(a => a.EmployeeId == e.EmployeeId))
-                .ToListAsync();
+      .Include(e => e.Department)
+      .Include(e => e.Role)
+      .Include(e => e.Designation)
+      .Where(e => e.Admin == null)
+      .ToListAsync();
 
             int createdUsers = 0;
 
@@ -469,22 +529,16 @@ Employee Management System
 
                     </tr>
 
-                    <tr>
+                   <tr>
+<td><b>Department</b></td>
+<td>{employee.Department?.DepartmentName ?? "N/A"}</td>
+</tr>
 
-                        <td><b>Department</b></td>
 
-                        <td>{employee.Department?.DepartmentName}</td>
-
-                    </tr>
-
-                    <tr style='background:#f8f9fa;'>
-
-                        <td><b>Role</b></td>
-
-                        <td>{employee.Role?.RoleName}</td>
-
-                    </tr>
-
+<tr>
+<td><b>Role</b></td>
+<td>{employee.Role?.RoleName ?? "N/A"}</td>
+</tr>
                     <tr>
 
                         <td><b>Username</b></td>
@@ -593,16 +647,65 @@ Employee Management System
 
 </html>";
 
-                await _emailService.SendEmailAsync(
-                    employee.Email,
-                    subject,
-                    body);
+                try
+                {
+                    await _emailService.SendEmailAsync(
+                        employee.Email,
+                        subject,
+                        body);
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = ex.Message;
+                }
             }
 
             await _context.SaveChangesAsync();
 
             TempData["Success"] =
                 $"{createdUsers} user account(s) generated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            if (!await _permissionService
+                .HasPermissionAsync("User.ChangeStatus"))
+            {
+                return Forbid();
+            }
+
+
+            var user = await _context.Admins
+                .FirstOrDefaultAsync(x => x.AdminId == id);
+
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            user.IsActive = !user.IsActive;
+
+
+            _context.Update(user);
+
+            await _context.SaveChangesAsync();
+
+
+            await ActivityLogger.LogAsync(
+                _context,
+                User.Identity?.Name,
+                $"Changed status of user {user.Username} to {(user.IsActive ? "Active" : "Inactive")}"
+            );
+
+
+            TempData["Success"] =
+                "User status updated successfully.";
+
 
             return RedirectToAction(nameof(Index));
         }

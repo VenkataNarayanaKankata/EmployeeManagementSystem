@@ -95,5 +95,13 @@ namespace EmployeeManagementSystem.Models
         public int BranchId { get; set; }
 
         public Branch? Branch { get; set; }
+        public int? ReportingManagerId { get; set; }
+
+        [ForeignKey(nameof(ReportingManagerId))]
+        public Employee? ReportingManager { get; set; }
+
+
+        public ICollection<Employee> TeamMembers { get; set; }
+            = new List<Employee>();
     }
 }

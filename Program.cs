@@ -6,11 +6,15 @@ using EmployeeManagementSystem.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
+using EmployeeManagementSystem.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<PasswordChangeFilter>();
+});
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -32,7 +36,7 @@ QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IPermissionService, PermissionService>();
-
+builder.Services.AddScoped<PasswordChangeFilter>();
 var app = builder.Build();
 
 await DatabaseSeeder.SeedAsync(app);

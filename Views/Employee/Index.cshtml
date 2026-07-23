@@ -267,6 +267,9 @@
                         <th>Department</th>
                         <th>Designation</th>
                         <th>Role</th>
+                            <th>
+                                Reporting Manager
+                            </th>
                             @if (await PermissionService.HasPermissionAsync("Employee.ViewSalary"))
                             {
                                 <th>Salary</th>
@@ -367,6 +370,22 @@
                                     </span>
 
                                 </td>
+                                    <td>
+
+                                        @if (item.ReportingManager != null)
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @item.ReportingManager.FullName
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                No Manager
+                                            </span>
+                                        }
+
+                                    </td>
 
 
                                     @if (await PermissionService.HasPermissionAsync("Employee.ViewSalary"))

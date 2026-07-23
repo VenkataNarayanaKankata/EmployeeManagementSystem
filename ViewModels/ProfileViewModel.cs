@@ -1,11 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EmployeeManagementSystem.ViewModels
+﻿namespace EmployeeManagementSystem.ViewModels
 {
     public class ProfileViewModel
     {
-        public string Username { get; set; }
+        public int AdminId { get; set; }
 
-        public string Role { get; set; } = "Administrator";
+        public string Username { get; set; } = string.Empty;
+
+        public string Role { get; set; } = string.Empty;
+
+
+        public string? EmployeeName { get; set; }
+
+        public string? EmployeeCode { get; set; }
+
+
+        public string? Department { get; set; }
+
+        public string? Designation { get; set; }
+
+
+        public string? Email { get; set; }
+
+        public string? Phone { get; set; }
+
+
+        public bool IsActive { get; set; }
+
+
+        public DateTime? LastLogin { get; set; }
     }
 }
